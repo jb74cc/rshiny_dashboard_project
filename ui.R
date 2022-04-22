@@ -14,7 +14,7 @@ ui <- dashboardPage(
   ),
   ## Body content
   dashboardBody(
-  tags$head(tags$style(HTML('
+    tags$head(tags$style(HTML('
   
        .content-wrapper {
         background-color: #8C8C8C;
@@ -59,8 +59,10 @@ ui <- dashboardPage(
          .skin-blue .main-header .navbar .sidebar-toggle:hover{
                               background-color: #8C8C8C;
                               }
-                              '))),
-  
+                              ')
+    )
+    ),
+    
     tabItems(
       # First tab content
       tabItem(tabName = "dashboard",
