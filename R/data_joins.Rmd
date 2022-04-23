@@ -1,0 +1,56 @@
+---
+title: "R Notebook"
+output: html_notebook
+---
+
+```{r}
+library(tidyverse)
+library(janitor)
+library(here)
+library(leaflet)
+library(sf)
+
+
+
+here::here()
+```
+
+## Read in the Activity data;
+
+```{r}
+age_sex <- read_csv(here("raw_data/activity_by_board_of_treatment_age_and_sex.csv")) %>% 
+  clean_names()
+
+deprivation <- read_csv(here("raw_data/activity_by_board_of_treatment_and_deprivation.csv")) %>% 
+  clean_names()
+
+speciality <- read_csv(here("raw_data/activity_by_board_of_treatment_and_speciality.csv")) %>% 
+  clean_names()
+```
+```{r}
+all_activity <- full_join(age_sex, deprivation)
+```
+
+
+```{r}
+all_activity <- full_join(all_activity, speciality)
+```
+```{r}
+all_activity <- all_activity %>% 
+  select(-ends_with("qf"))
+```
+## Note: Scottish Index of Multiple Deprivation (SIMD) quintile; 1(Most Deprived) 
+## - 5(Least Deprived); Most appropriate SIMD release used for each year
+
+Add in location details instead of code numbers;
+
+```{r}
+sites <- read_csv(here("raw_data/nhs_hospital_locations.csv")) %>% clean_names()
+
+boards <- read_csv(here("raw_data/phs_health_board_codes.csv")) %>% clean_names()
+
+```
+
+
+```
+

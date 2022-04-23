@@ -187,3 +187,5 @@ beds_by_hb_trim %>%
   theme(title = element_text(face = "bold"))
   
 ```
+
+
