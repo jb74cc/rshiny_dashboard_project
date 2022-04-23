@@ -3,6 +3,20 @@ title: "R Notebook"
 output: html_notebook
 ---
 
+acute care is 'any unplanned hospital attendance and admission', it includes 
+outpatients who (for example) come and have a chest xray before being given 
+antibiotics and leaving
+
+
+/* Color Theme Swatches in Hex */
+.phs-logo-1-hex { color: #C027B9; }
+.phs-logo-2-hex { color: #433685; }
+.phs-logo-3-hex { color: #1EA4D9; }
+.phs-logo-4-hex { color: #8FBF26; }
+.phs-logo-5-hex { color: #9B4393; }
+
+
+
 ```{r}
 library(tidyverse)
 library(janitor)
@@ -27,30 +41,32 @@ deprivation <- read_csv(here("raw_data/activity_by_board_of_treatment_and_depriv
 speciality <- read_csv(here("raw_data/activity_by_board_of_treatment_and_speciality.csv")) %>% 
   clean_names()
 ```
-```{r}
-all_activity <- full_join(age_sex, deprivation)
-```
-
 
 ```{r}
-all_activity <- full_join(all_activity, speciality)
+speciality <- speciality %>% 
+  select(quarter, hb, location, admission_type, specialty_name, episodes, 
+         length_of_episode, average_length_of_episode, spells, length_of_spell,
+         average_length_of_spell) %>% 
+  rename(stays = spells,
+         length_of_stay = length_of_spell,
+         average_length_of_stay = average_length_of_spell)
 ```
+
+
 ```{r}
-all_activity <- all_activity %>% 
-  select(-ends_with("qf"))
+deprivation <- deprivation %>% 
+  select(quarter, hb, location, admission_type, simd, episodes, 
+         length_of_episode, average_length_of_episode, stays, length_of_stay,
+         average_length_of_stay)
+  
 ```
-## Note: Scottish Index of Multiple Deprivation (SIMD) quintile; 1(Most Deprived) 
-## - 5(Least Deprived); Most appropriate SIMD release used for each year
 
-Add in location details instead of code numbers;
 
 ```{r}
-sites <- read_csv(here("raw_data/nhs_hospital_locations.csv")) %>% clean_names()
-
-boards <- read_csv(here("raw_data/phs_health_board_codes.csv")) %>% clean_names()
-
+age_sex <- age_sex %>% 
+  select(quarter, hb, location, admission_type, sex, age, episodes, 
+         length_of_episode, average_length_of_episode, stays, length_of_stay,
+         average_length_of_stay)
 ```
 
-
-```
 

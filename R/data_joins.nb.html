@@ -215,77 +215,178 @@ pre code {
 
 
 <!-- rnb-text-begin -->
+<p>acute care is ‘any unplanned hospital attendance and admission’, it includes outpatients who (for example) come and have a chest xray before being given antibiotics and leaving</p>
+<p>/* Color Theme Swatches in Hex */ .phs-logo-1-hex { color: #C027B9; } .phs-logo-2-hex { color: #433685; } .phs-logo-3-hex { color: #1EA4D9; } .phs-logo-4-hex { color: #8FBF26; } .phs-logo-5-hex { color: #9B4393; }</p>
 <!-- rnb-text-end -->
 <!-- rnb-chunk-begin -->
-<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxubGlicmFyeSh0aWR5dmVyc2UpXG5saWJyYXJ5KGphbml0b3IpXG5saWJyYXJ5KGhlcmUpXG5saWJyYXJ5KGxlYWZsZXQpXG5saWJyYXJ5KHNmKVxuXG5cblxuaGVyZTo6aGVyZSgpXG5gYGAifQ== -->
-<pre class="r"><code>library(tidyverse)
-library(janitor)
-library(here)
-library(leaflet)
-library(sf)
-
-
-
-here::here()</code></pre>
+<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxubGlicmFyeSh0aWR5dmVyc2UpXG5gYGAifQ== -->
+<pre class="r"><code>library(tidyverse)</code></pre>
 <!-- rnb-source-end -->
+<!-- rnb-output-begin eyJkYXRhIjoiUmVnaXN0ZXJlZCBTMyBtZXRob2RzIG92ZXJ3cml0dGVuIGJ5ICdkYnBseXInOlxuICBtZXRob2QgICAgICAgICBmcm9tXG4gIHByaW50LnRibF9sYXp5ICAgICBcbiAgcHJpbnQudGJsX3NxbCAgICAgIFxuLS0gQXR0YWNoaW5nIHBhY2thZ2VzIC0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0gdGlkeXZlcnNlIDEuMy4xIC0tXG52IGdncGxvdDIgMy4zLjUgICAgIHYgcHVycnIgICAwLjMuNFxudiB0aWJibGUgIDMuMS42ICAgICB2IGRwbHlyICAgMS4wLjdcbnYgdGlkeXIgICAxLjIuMCAgICAgdiBzdHJpbmdyIDEuNC4wXG52IHJlYWRyICAgMi4xLjIgICAgIHYgZm9yY2F0cyAwLjUuMVxuLS0gQ29uZmxpY3RzIC0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0gdGlkeXZlcnNlX2NvbmZsaWN0cygpIC0tXG54IGRwbHlyOjpmaWx0ZXIoKSBtYXNrcyBzdGF0czo6ZmlsdGVyKClcbnggZHBseXI6OmxhZygpICAgIG1hc2tzIHN0YXRzOjpsYWcoKVxuIn0= -->
+<pre><code>Registered S3 methods overwritten by &#39;dbplyr&#39;:
+  method         from
+  print.tbl_lazy     
+  print.tbl_sql      
+-- Attaching packages ------------------------------------------------------- tidyverse 1.3.1 --
+v ggplot2 3.3.5     v purrr   0.3.4
+v tibble  3.1.6     v dplyr   1.0.7
+v tidyr   1.2.0     v stringr 1.4.0
+v readr   2.1.2     v forcats 0.5.1
+-- Conflicts ---------------------------------------------------------- tidyverse_conflicts() --
+x dplyr::filter() masks stats::filter()
+x dplyr::lag()    masks stats::lag()</code></pre>
+<!-- rnb-output-end -->
+<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxubGlicmFyeShqYW5pdG9yKVxuYGBgIn0= -->
+<pre class="r"><code>library(janitor)</code></pre>
+<!-- rnb-source-end -->
+<!-- rnb-output-begin eyJkYXRhIjoiXG5BdHRhY2hpbmcgcGFja2FnZTog4oCYamFuaXRvcuKAmVxuXG5UaGUgZm9sbG93aW5nIG9iamVjdHMgYXJlIG1hc2tlZCBmcm9tIOKAmHBhY2thZ2U6c3RhdHPigJk6XG5cbiAgICBjaGlzcS50ZXN0LCBmaXNoZXIudGVzdFxuIn0= -->
+<pre><code>
+Attaching package: ‘janitor’
+
+The following objects are masked from ‘package:stats’:
+
+    chisq.test, fisher.test</code></pre>
+<!-- rnb-output-end -->
+<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxubGlicmFyeShoZXJlKVxuYGBgIn0= -->
+<pre class="r"><code>library(here)</code></pre>
+<!-- rnb-source-end -->
+<!-- rnb-output-begin eyJkYXRhIjoiV2FybmluZzogcGFja2FnZSDigJhoZXJl4oCZIHdhcyBidWlsdCB1bmRlciBSIHZlcnNpb24gNC4xLjNcbmhlcmUoKSBzdGFydHMgYXQgQzovVXNlcnMvY29saW4vRG9jdW1lbnRzL3JzaGlueV9kYXNoYm9hcmRfcHJvamVjdFxuIn0= -->
+<pre><code>Warning: package ‘here’ was built under R version 4.1.3
+here() starts at C:/Users/colin/Documents/rshiny_dashboard_project</code></pre>
+<!-- rnb-output-end -->
+<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxubGlicmFyeShsZWFmbGV0KVxuYGBgIn0= -->
+<pre class="r"><code>library(leaflet)</code></pre>
+<!-- rnb-source-end -->
+<!-- rnb-output-begin eyJkYXRhIjoiV2FybmluZzogcGFja2FnZSDigJhsZWFmbGV04oCZIHdhcyBidWlsdCB1bmRlciBSIHZlcnNpb24gNC4xLjNcblJlZ2lzdGVyZWQgUzMgbWV0aG9kcyBvdmVyd3JpdHRlbiBieSAnaHRtbHRvb2xzJzpcbiAgbWV0aG9kICAgICAgICAgICAgICAgZnJvbSAgICAgICAgIFxuICBwcmludC5odG1sICAgICAgICAgICB0b29sczpyc3R1ZGlvXG4gIHByaW50LnNoaW55LnRhZyAgICAgIHRvb2xzOnJzdHVkaW9cbiAgcHJpbnQuc2hpbnkudGFnLmxpc3QgdG9vbHM6cnN0dWRpb1xuUmVnaXN0ZXJlZCBTMyBtZXRob2Qgb3ZlcndyaXR0ZW4gYnkgJ2h0bWx3aWRnZXRzJzpcbiAgbWV0aG9kICAgICAgICAgICBmcm9tICAgICAgICAgXG4gIHByaW50Lmh0bWx3aWRnZXQgdG9vbHM6cnN0dWRpb1xuIn0= -->
+<pre><code>Warning: package ‘leaflet’ was built under R version 4.1.3
+Registered S3 methods overwritten by &#39;htmltools&#39;:
+  method               from         
+  print.html           tools:rstudio
+  print.shiny.tag      tools:rstudio
+  print.shiny.tag.list tools:rstudio
+Registered S3 method overwritten by &#39;htmlwidgets&#39;:
+  method           from         
+  print.htmlwidget tools:rstudio</code></pre>
+<!-- rnb-output-end -->
+<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxubGlicmFyeShzZilcbmBgYCJ9 -->
+<pre class="r"><code>library(sf)</code></pre>
+<!-- rnb-source-end -->
+<!-- rnb-output-begin eyJkYXRhIjoiV2FybmluZzogcGFja2FnZSDigJhzZuKAmSB3YXMgYnVpbHQgdW5kZXIgUiB2ZXJzaW9uIDQuMS4zXG5MaW5raW5nIHRvIEdFT1MgMy45LjEsIEdEQUwgMy4yLjEsIFBST0ogNy4yLjE7IHNmX3VzZV9zMigpIGlzIFRSVUVcbiJ9 -->
+<pre><code>Warning: package ‘sf’ was built under R version 4.1.3
+Linking to GEOS 3.9.1, GDAL 3.2.1, PROJ 7.2.1; sf_use_s2() is TRUE</code></pre>
+<!-- rnb-output-end -->
+<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxuaGVyZTo6aGVyZSgpXG5gYGAifQ== -->
+<pre class="r"><code>here::here()</code></pre>
+<!-- rnb-source-end -->
+<!-- rnb-output-begin eyJkYXRhIjoiWzFdIFwiQzovVXNlcnMvY29saW4vRG9jdW1lbnRzL3JzaGlueV9kYXNoYm9hcmRfcHJvamVjdFwiXG4ifQ== -->
+<pre><code>[1] &quot;C:/Users/colin/Documents/rshiny_dashboard_project&quot;</code></pre>
+<!-- rnb-output-end -->
 <!-- rnb-chunk-end -->
 <!-- rnb-text-begin -->
 <div id="read-in-the-activity-data" class="section level2">
 <h2>Read in the Activity data;</h2>
 <!-- rnb-text-end -->
 <!-- rnb-chunk-begin -->
-<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxuYWdlX3NleCA8LSByZWFkX2NzdihoZXJlKFwicmF3X2RhdGEvYWN0aXZpdHlfYnlfYm9hcmRfb2ZfdHJlYXRtZW50X2FnZV9hbmRfc2V4LmNzdlwiKSkgJT4lIFxuICBjbGVhbl9uYW1lcygpXG5cbmRlcHJpdmF0aW9uIDwtIHJlYWRfY3N2KGhlcmUoXCJyYXdfZGF0YS9hY3Rpdml0eV9ieV9ib2FyZF9vZl90cmVhdG1lbnRfYW5kX2RlcHJpdmF0aW9uLmNzdlwiKSkgJT4lIFxuICBjbGVhbl9uYW1lcygpXG5cbnNwZWNpYWxpdHkgPC0gcmVhZF9jc3YoaGVyZShcInJhd19kYXRhL2FjdGl2aXR5X2J5X2JvYXJkX29mX3RyZWF0bWVudF9hbmRfc3BlY2lhbGl0eS5jc3ZcIikpICU+JSBcbiAgY2xlYW5fbmFtZXMoKVxuYGBgIn0= -->
+<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxuYWdlX3NleCA8LSByZWFkX2NzdihoZXJlKFwicmF3X2RhdGEvYWN0aXZpdHlfYnlfYm9hcmRfb2ZfdHJlYXRtZW50X2FnZV9hbmRfc2V4LmNzdlwiKSkgJT4lIFxuICBjbGVhbl9uYW1lcygpXG5gYGAifQ== -->
 <pre class="r"><code>age_sex &lt;- read_csv(here(&quot;raw_data/activity_by_board_of_treatment_age_and_sex.csv&quot;)) %&gt;% 
-  clean_names()
-
-deprivation &lt;- read_csv(here(&quot;raw_data/activity_by_board_of_treatment_and_deprivation.csv&quot;)) %&gt;% 
-  clean_names()
-
-speciality &lt;- read_csv(here(&quot;raw_data/activity_by_board_of_treatment_and_speciality.csv&quot;)) %&gt;% 
   clean_names()</code></pre>
 <!-- rnb-source-end -->
-<!-- rnb-chunk-end -->
-<!-- rnb-chunk-begin -->
-<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxuYWxsX2FjdGl2aXR5IDwtIGZ1bGxfam9pbihhZ2Vfc2V4LCBkZXByaXZhdGlvbilcbmBgYCJ9 -->
-<pre class="r"><code>all_activity &lt;- full_join(age_sex, deprivation)</code></pre>
-<!-- rnb-source-end -->
-<!-- rnb-chunk-end -->
-<!-- rnb-text-begin -->
-<!-- rnb-text-end -->
-<!-- rnb-chunk-begin -->
-<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxuYWxsX2FjdGl2aXR5IDwtIGZ1bGxfam9pbihhbGxfYWN0aXZpdHksIHNwZWNpYWxpdHkpXG5gYGAifQ== -->
-<pre class="r"><code>all_activity &lt;- full_join(all_activity, speciality)</code></pre>
-<!-- rnb-source-end -->
-<!-- rnb-chunk-end -->
-<!-- rnb-chunk-begin -->
-<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxuYWxsX2FjdGl2aXR5IDwtIGFsbF9hY3Rpdml0eSAlPiUgXG4gIHNlbGVjdCgtZW5kc193aXRoKFwicWZcIikpXG5gYGAifQ== -->
-<pre class="r"><code>all_activity &lt;- all_activity %&gt;% 
-  select(-ends_with(&quot;qf&quot;))</code></pre>
-<!-- rnb-source-end -->
-<!-- rnb-chunk-end -->
-<!-- rnb-text-begin -->
-</div>
-<div id="note-scottish-index-of-multiple-deprivation-simd-quintile-1most-deprived" class="section level2">
-<h2>Note: Scottish Index of Multiple Deprivation (SIMD) quintile; 1(Most Deprived)</h2>
-</div>
-<div id="least-deprived-most-appropriate-simd-release-used-for-each-year" class="section level2">
-<h2>- 5(Least Deprived); Most appropriate SIMD release used for each year</h2>
-<p>Add in location details instead of code numbers;</p>
-<!-- rnb-text-end -->
-<!-- rnb-chunk-begin -->
-<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxuc2l0ZXMgPC0gcmVhZF9jc3YoaGVyZShcInJhd19kYXRhL25oc19ob3NwaXRhbF9sb2NhdGlvbnMuY3N2XCIpKSAlPiUgY2xlYW5fbmFtZXMoKVxuXG5ib2FyZHMgPC0gcmVhZF9jc3YoaGVyZShcInJhd19kYXRhL3Boc19oZWFsdGhfYm9hcmRfY29kZXMuY3N2XCIpKSAlPiUgY2xlYW5fbmFtZXMoKVxuXG5gYGAifQ== -->
-<pre class="r"><code>sites &lt;- read_csv(here(&quot;raw_data/nhs_hospital_locations.csv&quot;)) %&gt;% clean_names()
+<!-- rnb-output-begin eyJkYXRhIjoiUm93czogMTI5NTk5IENvbHVtbnM6IDE5XG4tLSBDb2x1bW4gc3BlY2lmaWNhdGlvbiAtLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS1cbkRlbGltaXRlcjogXCIsXCJcbmNociAoMTIpOiBRdWFydGVyLCBRdWFydGVyUUYsIEhCLCBIQlFGLCBMb2NhdGlvbiwgTG9jYXRpb25RRiwgQWRtaXNzaW9uVHlwZSwgQWRtaXNzaW9uVHlwZVFGLi4uXG5kYmwgICg3KTogX2lkLCBFcGlzb2RlcywgTGVuZ3RoT2ZFcGlzb2RlLCBBdmVyYWdlTGVuZ3RoT2ZFcGlzb2RlLCBTdGF5cywgTGVuZ3RoT2ZTdGF5LCBBdmVyYS4uLlxuXG5pIFVzZSBgc3BlYygpYCB0byByZXRyaWV2ZSB0aGUgZnVsbCBjb2x1bW4gc3BlY2lmaWNhdGlvbiBmb3IgdGhpcyBkYXRhLlxuaSBTcGVjaWZ5IHRoZSBjb2x1bW4gdHlwZXMgb3Igc2V0IGBzaG93X2NvbF90eXBlcyA9IEZBTFNFYCB0byBxdWlldCB0aGlzIG1lc3NhZ2UuXG4ifQ== -->
+<pre><code>Rows: 129599 Columns: 19
+-- Column specification ------------------------------------------------------------------------
+Delimiter: &quot;,&quot;
+chr (12): Quarter, QuarterQF, HB, HBQF, Location, LocationQF, AdmissionType, AdmissionTypeQF...
+dbl  (7): _id, Episodes, LengthOfEpisode, AverageLengthOfEpisode, Stays, LengthOfStay, Avera...
 
-boards &lt;- read_csv(here(&quot;raw_data/phs_health_board_codes.csv&quot;)) %&gt;% clean_names()
+i Use `spec()` to retrieve the full column specification for this data.
+i Specify the column types or set `show_col_types = FALSE` to quiet this message.</code></pre>
+<!-- rnb-output-end -->
+<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxuZGVwcml2YXRpb24gPC0gcmVhZF9jc3YoaGVyZShcInJhd19kYXRhL2FjdGl2aXR5X2J5X2JvYXJkX29mX3RyZWF0bWVudF9hbmRfZGVwcml2YXRpb24uY3N2XCIpKSAlPiUgXG4gIGNsZWFuX25hbWVzKClcbmBgYCJ9 -->
+<pre class="r"><code>deprivation &lt;- read_csv(here(&quot;raw_data/activity_by_board_of_treatment_and_deprivation.csv&quot;)) %&gt;% 
+  clean_names()</code></pre>
+<!-- rnb-source-end -->
+<!-- rnb-output-begin eyJkYXRhIjoiUm93czogNDA4OTQgQ29sdW1uczogMTlcbi0tIENvbHVtbiBzcGVjaWZpY2F0aW9uIC0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLVxuRGVsaW1pdGVyOiBcIixcIlxuY2hyICgxMSk6IFF1YXJ0ZXIsIFF1YXJ0ZXJRRiwgSEIsIEhCUUYsIExvY2F0aW9uLCBMb2NhdGlvblFGLCBBZG1pc3Npb25UeXBlLCBBZG1pc3Npb25UeXBlUUYuLi5cbmRibCAgKDgpOiBfaWQsIFNJTUQsIEVwaXNvZGVzLCBMZW5ndGhPZkVwaXNvZGUsIEF2ZXJhZ2VMZW5ndGhPZkVwaXNvZGUsIFN0YXlzLCBMZW5ndGhPZlN0YXksLi4uXG5cbmkgVXNlIGBzcGVjKClgIHRvIHJldHJpZXZlIHRoZSBmdWxsIGNvbHVtbiBzcGVjaWZpY2F0aW9uIGZvciB0aGlzIGRhdGEuXG5pIFNwZWNpZnkgdGhlIGNvbHVtbiB0eXBlcyBvciBzZXQgYHNob3dfY29sX3R5cGVzID0gRkFMU0VgIHRvIHF1aWV0IHRoaXMgbWVzc2FnZS5cbiJ9 -->
+<pre><code>Rows: 40894 Columns: 19
+-- Column specification ------------------------------------------------------------------------
+Delimiter: &quot;,&quot;
+chr (11): Quarter, QuarterQF, HB, HBQF, Location, LocationQF, AdmissionType, AdmissionTypeQF...
+dbl  (8): _id, SIMD, Episodes, LengthOfEpisode, AverageLengthOfEpisode, Stays, LengthOfStay,...
+
+i Use `spec()` to retrieve the full column specification for this data.
+i Specify the column types or set `show_col_types = FALSE` to quiet this message.</code></pre>
+<!-- rnb-output-end -->
+<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxuc3BlY2lhbGl0eSA8LSByZWFkX2NzdihoZXJlKFwicmF3X2RhdGEvYWN0aXZpdHlfYnlfYm9hcmRfb2ZfdHJlYXRtZW50X2FuZF9zcGVjaWFsaXR5LmNzdlwiKSkgJT4lIFxuICBjbGVhbl9uYW1lcygpXG5gYGAifQ== -->
+<pre class="r"><code>speciality &lt;- read_csv(here(&quot;raw_data/activity_by_board_of_treatment_and_speciality.csv&quot;)) %&gt;% 
+  clean_names()</code></pre>
+<!-- rnb-source-end -->
+<!-- rnb-output-begin eyJkYXRhIjoiUm93czogOTUyNDYgQ29sdW1uczogMTlcbi0tIENvbHVtbiBzcGVjaWZpY2F0aW9uIC0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLVxuRGVsaW1pdGVyOiBcIixcIlxuY2hyICgxMik6IFF1YXJ0ZXIsIFF1YXJ0ZXJRRiwgSEIsIEhCUUYsIExvY2F0aW9uLCBMb2NhdGlvblFGLCBBZG1pc3Npb25UeXBlLCBBZG1pc3Npb25UeXBlUUYuLi5cbmRibCAgKDcpOiBfaWQsIEVwaXNvZGVzLCBMZW5ndGhPZkVwaXNvZGUsIEF2ZXJhZ2VMZW5ndGhPZkVwaXNvZGUsIFNwZWxscywgTGVuZ3RoT2ZTcGVsbCwgQXZlLi4uXG5cbmkgVXNlIGBzcGVjKClgIHRvIHJldHJpZXZlIHRoZSBmdWxsIGNvbHVtbiBzcGVjaWZpY2F0aW9uIGZvciB0aGlzIGRhdGEuXG5pIFNwZWNpZnkgdGhlIGNvbHVtbiB0eXBlcyBvciBzZXQgYHNob3dfY29sX3R5cGVzID0gRkFMU0VgIHRvIHF1aWV0IHRoaXMgbWVzc2FnZS5cbiJ9 -->
+<pre><code>Rows: 95246 Columns: 19
+-- Column specification ------------------------------------------------------------------------
+Delimiter: &quot;,&quot;
+chr (12): Quarter, QuarterQF, HB, HBQF, Location, LocationQF, AdmissionType, AdmissionTypeQF...
+dbl  (7): _id, Episodes, LengthOfEpisode, AverageLengthOfEpisode, Spells, LengthOfSpell, Ave...
+
+i Use `spec()` to retrieve the full column specification for this data.
+i Specify the column types or set `show_col_types = FALSE` to quiet this message.</code></pre>
+<!-- rnb-output-end -->
+<!-- rnb-chunk-end -->
+<!-- rnb-text-begin -->
+<!-- rnb-text-end -->
+<!-- rnb-chunk-begin -->
+<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxuc3BlY2lhbGl0eSA8LSBzcGVjaWFsaXR5ICU+JSBcbiAgc2VsZWN0KHF1YXJ0ZXIsIGhiLCBsb2NhdGlvbiwgYWRtaXNzaW9uX3R5cGUsIHNwZWNpYWx0eV9uYW1lLCBlcGlzb2RlcywgXG4gICAgICAgICBsZW5ndGhfb2ZfZXBpc29kZSwgYXZlcmFnZV9sZW5ndGhfb2ZfZXBpc29kZSwgc3BlbGxzLCBsZW5ndGhfb2Zfc3BlbGwsXG4gICAgICAgICBhdmVyYWdlX2xlbmd0aF9vZl9zcGVsbCkgJT4lIFxuICByZW5hbWUoc3RheXMgPSBzcGVsbHMsXG4gICAgICAgICBsZW5ndGhfb2Zfc3RheSA9IGxlbmd0aF9vZl9zcGVsbHMsXG4gICAgICAgICBhdmVyYWdlX2xlbmd0aF9vZl9zdGF5ID0gYXZlcmFnZV9sZW5ndGhfb2Zfc3BlbGwpXG5cbmBgYCJ9 -->
+<pre class="r"><code>speciality &lt;- speciality %&gt;% 
+  select(quarter, hb, location, admission_type, specialty_name, episodes, 
+         length_of_episode, average_length_of_episode, spells, length_of_spell,
+         average_length_of_spell) %&gt;% 
+  rename(stays = spells,
+         length_of_stay = length_of_spells,
+         average_length_of_stay = average_length_of_spell)
 </code></pre>
 <!-- rnb-source-end -->
+<!-- rnb-output-begin eyJkYXRhIjoiRXJyb3IgaW4gYHN0b3Bfc3Vic2NyaXB0KClgOlxuISBDYW4ndCByZW5hbWUgY29sdW1ucyB0aGF0IGRvbid0IGV4aXN0LlxueCBDb2x1bW4gYGxlbmd0aF9vZl9zcGVsbHNgIGRvZXNuJ3QgZXhpc3QuXG5CYWNrdHJhY2U6XG4gIDEuIC4uLiAlPiUgLi4uXG4gIDMuIGRwbHlyOjo6cmVuYW1lLmRhdGEuZnJhbWUoLi4uKVxuICA0LiB0aWR5c2VsZWN0OjpldmFsX3JlbmFtZShleHByKGMoLi4uKSksIC5kYXRhKVxuICA1LiB0aWR5c2VsZWN0Ojo6cmVuYW1lX2ltcGwoLi4uKVxuICA2LiB0aWR5c2VsZWN0Ojo6ZXZhbF9zZWxlY3RfaW1wbCguLi4pXG4gICAgIC4uLlxuIDIxLiB0aWR5c2VsZWN0Ojo6Y2hyX2FzX2xvY2F0aW9ucyh4LCB2YXJzKVxuIDIyLiB2Y3Ryczo6dmVjX2FzX2xvY2F0aW9uKHgsIG4gPSBsZW5ndGgodmFycyksIG5hbWVzID0gdmFycylcbiAyMy4gdmN0cnMgYDxmbj5gKClcbiAyNC4gdmN0cnM6OjpzdG9wX3N1YnNjcmlwdF9vb2IoLi4uKVxuIDI1LiB2Y3Ryczo6OnN0b3Bfc3Vic2NyaXB0KC4uLilcbiJ9 -->
+<pre><code>Error in `stop_subscript()`:
+! Can&#39;t rename columns that don&#39;t exist.
+x Column `length_of_spells` doesn&#39;t exist.
+Backtrace:
+  1. ... %&gt;% ...
+  3. dplyr:::rename.data.frame(...)
+  4. tidyselect::eval_rename(expr(c(...)), .data)
+  5. tidyselect:::rename_impl(...)
+  6. tidyselect:::eval_select_impl(...)
+     ...
+ 21. tidyselect:::chr_as_locations(x, vars)
+ 22. vctrs::vec_as_location(x, n = length(vars), names = vars)
+ 23. vctrs `&lt;fn&gt;`()
+ 24. vctrs:::stop_subscript_oob(...)
+ 25. vctrs:::stop_subscript(...)</code></pre>
+<!-- rnb-output-end -->
 <!-- rnb-chunk-end -->
 <!-- rnb-text-begin -->
-<p>```</p>
+<!-- rnb-text-end -->
+<!-- rnb-chunk-begin -->
+<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxuZGVwcml2YXRpb24gPC0gZGVwcml2YXRpb24gJT4lIFxuICBzZWxlY3QocXVhcnRlciwgaGIsIGxvY2F0aW9uLCBhZG1pc3Npb25fdHlwZSwgc2ltZCwgZXBpc29kZXMsIFxuICAgICAgICAgbGVuZ3RoX29mX2VwaXNvZGUsIGF2ZXJhZ2VfbGVuZ3RoX29mX2VwaXNvZGUsIHN0YXlzLCBsZW5ndGhfb2Zfc3RheSxcbiAgICAgICAgIGF2ZXJhZ2VfbGVuZ3RoX29mX3N0YXkpXG4gIFxuYGBgIn0= -->
+<pre class="r"><code>deprivation &lt;- deprivation %&gt;% 
+  select(quarter, hb, location, admission_type, simd, episodes, 
+         length_of_episode, average_length_of_episode, stays, length_of_stay,
+         average_length_of_stay)
+  </code></pre>
+<!-- rnb-source-end -->
+<!-- rnb-chunk-end -->
+<!-- rnb-text-begin -->
+<!-- rnb-text-end -->
+<!-- rnb-chunk-begin -->
+<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxuYWdlX3NleCA8LSBhZ2Vfc2V4ICU+JSBcbiAgc2VsZWN0KHF1YXJ0ZXIsIGhiLCBsb2NhdGlvbiwgYWRtaXNzaW9uX3R5cGUsIHNleCwgYWdlLCBlcGlzb2RlcywgXG4gICAgICAgICBsZW5ndGhfb2ZfZXBpc29kZSwgYXZlcmFnZV9sZW5ndGhfb2ZfZXBpc29kZSwgc3RheXMsIGxlbmd0aF9vZl9zdGF5LFxuICAgICAgICAgYXZlcmFnZV9sZW5ndGhfb2Zfc3RheSlcbmBgYCJ9 -->
+<pre class="r"><code>age_sex &lt;- age_sex %&gt;% 
+  select(quarter, hb, location, admission_type, sex, age, episodes, 
+         length_of_episode, average_length_of_episode, stays, length_of_stay,
+         average_length_of_stay)</code></pre>
+<!-- rnb-source-end -->
+<!-- rnb-chunk-end -->
+<!-- rnb-text-begin -->
 <!-- rnb-text-end -->
 </div>
 
-<div id="rmd-source-code">LS0tDQp0aXRsZTogIlIgTm90ZWJvb2siDQpvdXRwdXQ6IGh0bWxfbm90ZWJvb2sNCi0tLQ0KDQpgYGB7cn0NCmxpYnJhcnkodGlkeXZlcnNlKQ0KbGlicmFyeShqYW5pdG9yKQ0KbGlicmFyeShoZXJlKQ0KbGlicmFyeShsZWFmbGV0KQ0KbGlicmFyeShzZikNCg0KDQoNCmhlcmU6OmhlcmUoKQ0KYGBgDQoNCiMjIFJlYWQgaW4gdGhlIEFjdGl2aXR5IGRhdGE7DQoNCmBgYHtyfQ0KYWdlX3NleCA8LSByZWFkX2NzdihoZXJlKCJyYXdfZGF0YS9hY3Rpdml0eV9ieV9ib2FyZF9vZl90cmVhdG1lbnRfYWdlX2FuZF9zZXguY3N2IikpICU+JSANCiAgY2xlYW5fbmFtZXMoKQ0KDQpkZXByaXZhdGlvbiA8LSByZWFkX2NzdihoZXJlKCJyYXdfZGF0YS9hY3Rpdml0eV9ieV9ib2FyZF9vZl90cmVhdG1lbnRfYW5kX2RlcHJpdmF0aW9uLmNzdiIpKSAlPiUgDQogIGNsZWFuX25hbWVzKCkNCg0Kc3BlY2lhbGl0eSA8LSByZWFkX2NzdihoZXJlKCJyYXdfZGF0YS9hY3Rpdml0eV9ieV9ib2FyZF9vZl90cmVhdG1lbnRfYW5kX3NwZWNpYWxpdHkuY3N2IikpICU+JSANCiAgY2xlYW5fbmFtZXMoKQ0KYGBgDQpgYGB7cn0NCmFsbF9hY3Rpdml0eSA8LSBmdWxsX2pvaW4oYWdlX3NleCwgZGVwcml2YXRpb24pDQpgYGANCg0KDQpgYGB7cn0NCmFsbF9hY3Rpdml0eSA8LSBmdWxsX2pvaW4oYWxsX2FjdGl2aXR5LCBzcGVjaWFsaXR5KQ0KYGBgDQpgYGB7cn0NCmFsbF9hY3Rpdml0eSA8LSBhbGxfYWN0aXZpdHkgJT4lIA0KICBzZWxlY3QoLWVuZHNfd2l0aCgicWYiKSkNCmBgYA0KIyMgTm90ZTogU2NvdHRpc2ggSW5kZXggb2YgTXVsdGlwbGUgRGVwcml2YXRpb24gKFNJTUQpIHF1aW50aWxlOyAxKE1vc3QgRGVwcml2ZWQpIA0KIyMgLSA1KExlYXN0IERlcHJpdmVkKTsgTW9zdCBhcHByb3ByaWF0ZSBTSU1EIHJlbGVhc2UgdXNlZCBmb3IgZWFjaCB5ZWFyDQoNCkFkZCBpbiBsb2NhdGlvbiBkZXRhaWxzIGluc3RlYWQgb2YgY29kZSBudW1iZXJzOw0KDQpgYGB7cn0NCnNpdGVzIDwtIHJlYWRfY3N2KGhlcmUoInJhd19kYXRhL25oc19ob3NwaXRhbF9sb2NhdGlvbnMuY3N2IikpICU+JSBjbGVhbl9uYW1lcygpDQoNCmJvYXJkcyA8LSByZWFkX2NzdihoZXJlKCJyYXdfZGF0YS9waHNfaGVhbHRoX2JvYXJkX2NvZGVzLmNzdiIpKSAlPiUgY2xlYW5fbmFtZXMoKQ0KDQpgYGANCg0KDQpgYGANCg0K</div>
+<div id="rmd-source-code">LS0tDQp0aXRsZTogIlIgTm90ZWJvb2siDQpvdXRwdXQ6IGh0bWxfbm90ZWJvb2sNCi0tLQ0KDQphY3V0ZSBjYXJlIGlzICdhbnkgdW5wbGFubmVkIGhvc3BpdGFsIGF0dGVuZGFuY2UgYW5kIGFkbWlzc2lvbicsIGl0IGluY2x1ZGVzIA0Kb3V0cGF0aWVudHMgd2hvIChmb3IgZXhhbXBsZSkgY29tZSBhbmQgaGF2ZSBhIGNoZXN0IHhyYXkgYmVmb3JlIGJlaW5nIGdpdmVuIA0KYW50aWJpb3RpY3MgYW5kIGxlYXZpbmcNCg0KDQovKiBDb2xvciBUaGVtZSBTd2F0Y2hlcyBpbiBIZXggKi8NCi5waHMtbG9nby0xLWhleCB7IGNvbG9yOiAjQzAyN0I5OyB9DQoucGhzLWxvZ28tMi1oZXggeyBjb2xvcjogIzQzMzY4NTsgfQ0KLnBocy1sb2dvLTMtaGV4IHsgY29sb3I6ICMxRUE0RDk7IH0NCi5waHMtbG9nby00LWhleCB7IGNvbG9yOiAjOEZCRjI2OyB9DQoucGhzLWxvZ28tNS1oZXggeyBjb2xvcjogIzlCNDM5MzsgfQ0KDQoNCg0KYGBge3J9DQpsaWJyYXJ5KHRpZHl2ZXJzZSkNCmxpYnJhcnkoamFuaXRvcikNCmxpYnJhcnkoaGVyZSkNCmxpYnJhcnkobGVhZmxldCkNCmxpYnJhcnkoc2YpDQoNCg0KDQpoZXJlOjpoZXJlKCkNCmBgYA0KDQojIyBSZWFkIGluIHRoZSBBY3Rpdml0eSBkYXRhOw0KDQpgYGB7cn0NCmFnZV9zZXggPC0gcmVhZF9jc3YoaGVyZSgicmF3X2RhdGEvYWN0aXZpdHlfYnlfYm9hcmRfb2ZfdHJlYXRtZW50X2FnZV9hbmRfc2V4LmNzdiIpKSAlPiUgDQogIGNsZWFuX25hbWVzKCkNCg0KZGVwcml2YXRpb24gPC0gcmVhZF9jc3YoaGVyZSgicmF3X2RhdGEvYWN0aXZpdHlfYnlfYm9hcmRfb2ZfdHJlYXRtZW50X2FuZF9kZXByaXZhdGlvbi5jc3YiKSkgJT4lIA0KICBjbGVhbl9uYW1lcygpDQoNCnNwZWNpYWxpdHkgPC0gcmVhZF9jc3YoaGVyZSgicmF3X2RhdGEvYWN0aXZpdHlfYnlfYm9hcmRfb2ZfdHJlYXRtZW50X2FuZF9zcGVjaWFsaXR5LmNzdiIpKSAlPiUgDQogIGNsZWFuX25hbWVzKCkNCmBgYA0KDQpgYGB7cn0NCnNwZWNpYWxpdHkgPC0gc3BlY2lhbGl0eSAlPiUgDQogIHNlbGVjdChxdWFydGVyLCBoYiwgbG9jYXRpb24sIGFkbWlzc2lvbl90eXBlLCBzcGVjaWFsdHlfbmFtZSwgZXBpc29kZXMsIA0KICAgICAgICAgbGVuZ3RoX29mX2VwaXNvZGUsIGF2ZXJhZ2VfbGVuZ3RoX29mX2VwaXNvZGUsIHNwZWxscywgbGVuZ3RoX29mX3NwZWxsLA0KICAgICAgICAgYXZlcmFnZV9sZW5ndGhfb2Zfc3BlbGwpICU+JSANCiAgcmVuYW1lKHN0YXlzID0gc3BlbGxzLA0KICAgICAgICAgbGVuZ3RoX29mX3N0YXkgPSBsZW5ndGhfb2Zfc3BlbGwsDQogICAgICAgICBhdmVyYWdlX2xlbmd0aF9vZl9zdGF5ID0gYXZlcmFnZV9sZW5ndGhfb2Zfc3BlbGwpDQpgYGANCg0KDQpgYGB7cn0NCmRlcHJpdmF0aW9uIDwtIGRlcHJpdmF0aW9uICU+JSANCiAgc2VsZWN0KHF1YXJ0ZXIsIGhiLCBsb2NhdGlvbiwgYWRtaXNzaW9uX3R5cGUsIHNpbWQsIGVwaXNvZGVzLCANCiAgICAgICAgIGxlbmd0aF9vZl9lcGlzb2RlLCBhdmVyYWdlX2xlbmd0aF9vZl9lcGlzb2RlLCBzdGF5cywgbGVuZ3RoX29mX3N0YXksDQogICAgICAgICBhdmVyYWdlX2xlbmd0aF9vZl9zdGF5KQ0KICANCmBgYA0KDQoNCmBgYHtyfQ0KYWdlX3NleCA8LSBhZ2Vfc2V4ICU+JSANCiAgc2VsZWN0KHF1YXJ0ZXIsIGhiLCBsb2NhdGlvbiwgYWRtaXNzaW9uX3R5cGUsIHNleCwgYWdlLCBlcGlzb2RlcywgDQogICAgICAgICBsZW5ndGhfb2ZfZXBpc29kZSwgYXZlcmFnZV9sZW5ndGhfb2ZfZXBpc29kZSwgc3RheXMsIGxlbmd0aF9vZl9zdGF5LA0KICAgICAgICAgYXZlcmFnZV9sZW5ndGhfb2Zfc3RheSkNCmBgYA0KDQoNCg==</div>
 
 
 
