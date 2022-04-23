@@ -15,10 +15,12 @@ library(sf)
 here::here()
 ```
 
-```{r}
-hospitals <- read_csv("../raw_data/nhs_hospital_locations.csv") %>% clean_names()
-```
+# Read in hospital location data;
 
+```{r}
+hospitals <- read_csv(here("../raw_data/nhs_hospital_locations.csv")) %>% clean_names()
+```
+## Plotting (work in progress!)
 ```{r}
 # hospitals %>% 
 #    st_transform('+proj=longlat +datum=WGS84') %>%  # reference coord structure from espg.io
@@ -41,10 +43,10 @@ hospitals %>%
 
 
 
-Occupied beds by area;
+## Occupied beds by area;
 ```{r}
 beds_by_health_board <- 
-  read_csv("../raw_data/beds_by_nhs_board_of_treatment_and_specialty.csv") %>% 
+  read_csv(here("../raw_data/beds_by_nhs_board_of_treatment_and_specialty.csv")) %>% 
   clean_names()
   
 ```
@@ -80,10 +82,7 @@ joined_beds_hb %>%
 ```
 Still lots of NAs in "Specialty" (almost 30% of all rows), but will leave them for now.
 
- 
-
-
-
+## Plot total Percentage Hospital Bed Occupancy (Acute)
 ```{r}
 # create a column with the average of the total % occupancy
 total_avg_acute_occupancy <- joined_beds_hb %>% 
@@ -111,7 +110,7 @@ total_avg_acute_occupancy %>%
         title = element_text(face = "bold"))
 ```
 
-% occupancy by health board;
+## Plot% occupancy by health board;
 
 ```{r}
 beds_by_hb_trim <- joined_beds_hb %>% 
@@ -119,6 +118,29 @@ beds_by_hb_trim <- joined_beds_hb %>%
   group_by(quarter, hb) %>% 
   summarise(hb_mean_occupancy = mean(percentage_occupancy, na.rm = TRUE))
 
+#Check NAs
+
+# beds_by_hb_trim %>% 
+#   summarise(across(.cols =everything(), ~ sum(is.na(.)))) 
+
+
+```
+
+Health board codes are not easy to understand - join in health board code definitions;
+
+```{r}
+hb_codes <- read_csv(here("../raw_data/phs_health_board_codes.csv")) %>% clean_names()
+```
+
+
+```{r}
+hb_joined <- left_join(beds_by_hb_trim, )
+```
+
+
+
+
+```{r}
 beds_by_hb_trim %>%
   ggplot() +
   aes(x = quarter, y = hb_mean_occupancy, colour = hb, group = hb) +
