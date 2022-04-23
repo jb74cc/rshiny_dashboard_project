@@ -134,21 +134,29 @@ hb_codes <- read_csv(here("raw_data/phs_health_board_codes.csv")) %>% clean_name
 
 
 ```{r}
-# hb_joined <- left_join(beds_by_hb_trim, )
+beds_by_hb_trim <- beds_by_hb_trim %>% 
+  #remove country codes from regional data;
+  filter(hb != "S92000003" & hb != "SB0801")
+  
+  
+  
+beds_by_hb_trim<- left_join(beds_by_hb_trim, hb_codes)
+
 ```
 
 
 ```{r}
 beds_by_hb_trim %>%
   ggplot() +
-  aes(x = quarter, y = hb_mean_occupancy, colour = hb, group = hb) +
+  aes(x = quarter, y = hb_mean_occupancy, colour = hb_name, group = hb) +
   geom_line() +
   theme_bw() +
   labs(title = "% Bed Occupancy by Health Board, Scotland, Q3|2016 - Q3|2021",
        x = "\nQuarter",
        y = "% Bed Occupancy") +
   theme(axis.text.x = element_text(angle = 270, vjust = 0.25),
-        title = element_text(face = "bold"))
+        title = element_text(face = "bold"),
+        legend.title = element_blank())
 
 ```
 
