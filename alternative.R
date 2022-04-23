@@ -12,9 +12,10 @@ ui <- fluidPage(
     direction = c("bottom", "right")
   ),
   
-  titlePanel("PHS Dashboard"),
+  titlePanel(img(src = "phs-logo.png", width = 250)),
   sidebarLayout(
     sidebarPanel(
+      
       sliderInput("obs",
                   "Number of observations:",
                   min = 0,
