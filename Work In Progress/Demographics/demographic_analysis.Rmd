@@ -334,13 +334,62 @@ gen_admissions_simd_per_quarter %>%
 
 #### Sex and gender by healthboard
 
+<br>
+
+NOTE 
+sex: "All" = 33951 rows, Female = 4782, Male = 4783 
+
+<br> 
 
 ```{r}
 # by healthboard
 
-# (3) All, Female, Male 
+# admission types are either emergncy or planned - that's good news for us
 covid_ads_HB_age_sex %>% 
-  distinct(sex)
+  distinct(admission_type)
 
+covid_acute_HB_age_sex <- covid_ads_HB_age_sex %>% 
+  filter(admission_type == "Emergency")
+
+# this is not neatly divided and there is an age group "41760" hmm
+covid_acute_HB_age_sex %>% 
+  group_by(age_group) %>% 
+  summarise(count_in_age_group = n())
+```
+
+<br>
+
+```{r}
+# nope
+covid_acute_HB_age_sex %>% 
+  group_by(age_group) %>% 
+  ggplot()+
+  aes(x = number_admissions, 
+      y = average20182019, 
+      fill = age_group)+
+  geom_point()
+  
+```
+
+
+```{r}
+covid_ads_HB_age_sex %>% 
+  group_by(sex) %>% 
+  summarise(total_of_each_sex = n())
+
+covid_ads_HB_demographics_sex <- covid_ads_HB_age_sex %>% 
+  group_by(week_ending, sex) %>% 
+  summarise(total_admissions_for_week_ending = n())
+covid_ads_HB_demographics_sex
+
+
+covid_ads_HB_demographics_sex %>% 
+  ggplot()+
+  aes(x = week_ending, 
+      y = total_admissions_for_week_ending, 
+      group = sex, 
+      colour = sex)+
+  geom_line()+
+  labs(title = "I AM AWARE THIS IS AWFUL")
 ```
 
