@@ -18,7 +18,7 @@ here::here()
 # Read in hospital location data;
 
 ```{r}
-hospitals <- read_csv(here("../raw_data/nhs_hospital_locations.csv")) %>% clean_names()
+hospitals <- read_csv(here("raw_data/nhs_hospital_locations.csv")) %>% clean_names()
 ```
 ## Plotting (work in progress!)
 ```{r}
@@ -46,7 +46,7 @@ hospitals %>%
 ## Occupied beds by area;
 ```{r}
 beds_by_health_board <- 
-  read_csv(here("../raw_data/beds_by_nhs_board_of_treatment_and_specialty.csv")) %>% 
+  read_csv(here("raw_data/beds_by_nhs_board_of_treatment_and_specialty.csv")) %>% 
   clean_names()
   
 ```
@@ -129,15 +129,13 @@ beds_by_hb_trim <- joined_beds_hb %>%
 Health board codes are not easy to understand - join in health board code definitions;
 
 ```{r}
-hb_codes <- read_csv(here("../raw_data/phs_health_board_codes.csv")) %>% clean_names()
+hb_codes <- read_csv(here("raw_data/phs_health_board_codes.csv")) %>% clean_names()
 ```
 
 
 ```{r}
-hb_joined <- left_join(beds_by_hb_trim, )
+# hb_joined <- left_join(beds_by_hb_trim, )
 ```
-
-
 
 
 ```{r}
