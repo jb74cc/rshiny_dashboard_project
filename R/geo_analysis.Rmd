@@ -126,7 +126,9 @@ beds_by_hb_trim <- joined_beds_hb %>%
 
 ```
 
-Health board codes are not easy to understand - join in health board code definitions;
+Health board codes are not easy to understand...
+
+## Join health board code definitions;
 
 ```{r}
 hb_codes <- read_csv(here("raw_data/phs_health_board_codes.csv")) %>% clean_names()
@@ -134,14 +136,23 @@ hb_codes <- read_csv(here("raw_data/phs_health_board_codes.csv")) %>% clean_name
 
 
 ```{r}
-beds_by_hb_trim <- beds_by_hb_trim %>% 
-  #remove country codes from regional data;
-  filter(hb != "S92000003" & hb != "SB0801")
-  
-  
-  
 beds_by_hb_trim<- left_join(beds_by_hb_trim, hb_codes)
 
+# and tidy up...
+
+beds_by_hb_trim <- beds_by_hb_trim %>% 
+  select(quarter, hb, hb_mean_occupancy, hb_name) %>% 
+  #remove country codes from regional data;
+  filter(hb != "S92000003" & hb != "SB0801") %>% 
+  ungroup()
+  
+
+```
+
+
+## Write cleaned 'Bed Occupancy by Health Board' data;
+```{r}
+write_csv(beds_by_hb_trim, "../clean_data/bed_occupancy_by_health_board_clean.csv")
 ```
 
 
@@ -150,6 +161,7 @@ beds_by_hb_trim %>%
   ggplot() +
   aes(x = quarter, y = hb_mean_occupancy, colour = hb_name, group = hb) +
   geom_line() +
+  geom_point(size = 0.75) +
   theme_bw() +
   labs(title = "% Bed Occupancy by Health Board, Scotland, Q3|2016 - Q3|2021",
        x = "\nQuarter",
