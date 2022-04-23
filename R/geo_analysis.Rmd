@@ -1,0 +1,92 @@
+---
+title: "Public Health Scotland Group Project"
+output: html_notebook
+---
+
+```{r}
+library(tidyverse)
+library(janitor)
+library(here)
+library(leaflet)
+library(sf)
+
+
+here::here()
+```
+
+```{r}
+hospitals <- read_csv("../raw_data/nhs_hospital_locations.csv") %>% clean_names()
+```
+
+```{r}
+# hospitals %>% 
+#   st_transform('+proj=longlat +datum=WGS84') %>%  # reference coord structure from espg.io
+
+
+
+
+
+
+hospitals %>% 
+  leaflet() %>% 
+  addTiles() %>% 
+  addCircleMarkers(lng = -5.1155000,     # attempt to convert from degrees to lat/long
+                   lat = 55.5430000,     # conversion was poor - had to adjust manually
+                   radius = 5)
+```
+
+
+
+
+Occupied beds by area
+```{r}
+beds_by_health_board <- read_csv("../raw_data/beds_by_nhs_board_of_treatment_and_specialty.csv") %>% 
+  clean_names()
+  
+```
+
+```{r}
+# Remove "qualifier" columns full of NAs
+beds_by_health_board <- beds_by_health_board %>% 
+  select(!ends_with("qf"))
+  
+# check NA count across all columns
+beds_by_health_board %>% 
+  summarise(across(.cols =everything(), ~ sum(is.na(.)))) 
+```
+Still lots of NAs in "Specialty", but will leave them for now.
+
+
+
+```{r}
+# create a column with the average of the total % occupancy
+total_avg_occupancy <- beds_by_health_board %>% 
+  select(quarter, location, specialty_name, percentage_occupancy) %>% 
+  filter(specialty_name == "All Acute") %>% 
+  group_by(quarter) %>% 
+  summarise(median_total_occupancy = mean(percentage_occupancy)) 
+# is 'mean' the correct measure here?
+
+```
+
+
+
+```{r}
+total_avg_occupancy %>% 
+  ggplot() +
+  aes(x = quarter, y = median_total_occupancy) +
+  geom_line(colour = "#433685", group = 1) +
+  geom_point(colour = "#433685", size = 1) +
+  theme_bw() +
+  labs(title = "Percentage Hospital Bed Occupancy Scotland, 2016 - 2021",
+       x = "\nQuarter",
+       y = "% Bed Occupancy") +
+  theme(axis.text.x = element_text(angle = 270, vjust = 0.25),
+        title = element_text(face = "bold"))
+```
+
+
+```{r}
+
+```
+
