@@ -11,6 +11,7 @@ library(leaflet)
 library(sf)
 
 
+
 here::here()
 ```
 
@@ -20,8 +21,11 @@ hospitals <- read_csv("../raw_data/nhs_hospital_locations.csv") %>% clean_names(
 
 ```{r}
 # hospitals %>% 
-#   st_transform('+proj=longlat +datum=WGS84') %>%  # reference coord structure from espg.io
-
+#    st_transform('+proj=longlat +datum=WGS84') %>%  # reference coord structure from espg.io
+# 
+#   
+#    hospitals %>% 
+#   st_crs(x_coordinate)
 
 
 
@@ -37,34 +41,56 @@ hospitals %>%
 
 
 
-
-Occupied beds by area
+Occupied beds by area;
 ```{r}
-beds_by_health_board <- read_csv("../raw_data/beds_by_nhs_board_of_treatment_and_specialty.csv") %>% 
+beds_by_health_board <- 
+  read_csv("../raw_data/beds_by_nhs_board_of_treatment_and_specialty.csv") %>% 
   clean_names()
   
 ```
 
+Remove unwanted info from hospital locations in preparation for joining;
+
+```{r}
+hospitals_trim <- hospitals %>% 
+  select(location, location_name)
+
+```
+
+Join decoded hospital locations to beds by health board data;
+
+```{r}
+joined_beds_hb <- left_join(beds_by_health_board, hospitals_trim, by = "location")
+
+# then remove duplicate rows
+joined_beds_hb_trim <-  joined_beds_hb %>% 
+  filter(location != hb )
+```
+
+
+
 ```{r}
 # Remove "qualifier" columns full of NAs
-beds_by_health_board <- beds_by_health_board %>% 
+joined_beds_hb <- joined_beds_hb %>% 
   select(!ends_with("qf"))
   
 # check NA count across all columns
-beds_by_health_board %>% 
+joined_beds_hb %>% 
   summarise(across(.cols =everything(), ~ sum(is.na(.)))) 
 ```
-Still lots of NAs in "Specialty", but will leave them for now.
+Still lots of NAs in "Specialty" (almost 30% of all rows), but will leave them for now.
+
+ 
 
 
 
 ```{r}
 # create a column with the average of the total % occupancy
-total_avg_occupancy <- beds_by_health_board %>% 
-  select(quarter, location, specialty_name, percentage_occupancy) %>% 
+total_avg_acute_occupancy <- joined_beds_hb %>% 
+  select(quarter, location_name, specialty_name, percentage_occupancy) %>% 
   filter(specialty_name == "All Acute") %>% 
   group_by(quarter) %>% 
-  summarise(median_total_occupancy = mean(percentage_occupancy)) 
+  summarise(mean_total_acute_occupancy = mean(percentage_occupancy, na.rm = TRUE)) 
 # is 'mean' the correct measure here?
 
 ```
@@ -72,21 +98,52 @@ total_avg_occupancy <- beds_by_health_board %>%
 
 
 ```{r}
-total_avg_occupancy %>% 
+total_avg_acute_occupancy %>% 
   ggplot() +
-  aes(x = quarter, y = median_total_occupancy) +
+  aes(x = quarter, y = mean_total_acute_occupancy) +
   geom_line(colour = "#433685", group = 1) +
   geom_point(colour = "#433685", size = 1) +
   theme_bw() +
-  labs(title = "Percentage Hospital Bed Occupancy Scotland, 2016 - 2021",
+  labs(title = "Percentage Hospital Bed Occupancy (Acute) Scotland, Q3|2016 - Q3|2021",
        x = "\nQuarter",
        y = "% Bed Occupancy") +
   theme(axis.text.x = element_text(angle = 270, vjust = 0.25),
         title = element_text(face = "bold"))
 ```
 
+% occupancy by health board;
 
 ```{r}
+beds_by_hb_trim <- joined_beds_hb %>% 
+  select(quarter, hb, location_name, specialty_name, percentage_occupancy) %>% 
+  group_by(quarter, hb) %>% 
+  summarise(hb_mean_occupancy = mean(percentage_occupancy, na.rm = TRUE))
+
+beds_by_hb_trim %>%
+  ggplot() +
+  aes(x = quarter, y = hb_mean_occupancy, colour = hb, group = hb) +
+  geom_line() +
+  theme_bw() +
+  labs(title = "% Bed Occupancy by Health Board, Scotland, Q3|2016 - Q3|2021",
+       x = "\nQuarter",
+       y = "% Bed Occupancy") +
+  theme(axis.text.x = element_text(angle = 270, vjust = 0.25),
+        title = element_text(face = "bold"))
 
 ```
 
+Is there an overall seasonal pattern to bed occupancy in all the data Q32016 - Q32021?
+
+```{r}
+beds_by_hb_trim %>% 
+  separate(quarter, into = c("year", "quarter"), sep = "Q") %>% 
+  ggplot() +
+  aes(x = quarter, y = hb_mean_occupancy) +
+  geom_boxplot(fill = "#433685", alpha = 0.3) +
+  theme_bw() +
+  labs(title = "% Overall Bed Occupancy by Quarter, Scotland, Q3|2016 - Q3|2021",
+       x = "\nQuarter",
+       y = "% Bed Occupancy") +
+  theme(title = element_text(face = "bold"))
+  
+```
