@@ -1,9 +1,14 @@
 ---
 title: "Demographics analysis 2"
-subtitle: "COVID Admissions"
-output: html_notebook
+subtitle: COVID Admissions - January 2020 to Febraury 2022
+output:
+  html_document:
+    df_print: paged
 ---
+HSCP - 9-digit code for Health and Social Care Partnerships (2016) of residence
 
+HB - 9-digit code for health board of treatment based on boundaries as at 1st 
+April 2019
 
 ```{r}
 library(tidyverse)
@@ -12,6 +17,7 @@ library(readxl)
 library(janitor)
 library(ggplot2)
 library(lubridate)
+library(stringr)
 ```
 <br> 
 
@@ -27,4 +33,449 @@ covid_admissions_HSCP_agesex <- read_csv(here("../../raw_data/covid_data/hospita
 covid_admissions_HSCP_simd <- read_csv(here("../../raw_data/covid_data/hospital_admissions_hscp_simd_20220302.csv"))
 
 ```
+
+**Clean Names**
+
+```{r}
+covid_admissions_HB_agesex <- janitor::clean_names(covid_admissions_HB_agesex)
+covid_admissions_HB_simd <- janitor::clean_names(covid_admissions_HB_simd)
+covid_admissions_HSCP_agesex <- janitor::clean_names(covid_admissions_HSCP_agesex)
+covid_admissions_HSCP_simd <- janitor::clean_names(covid_admissions_HSCP_simd)
+```
+
+**Change week_ending column to a date and creating new day, month, year AND ** 
+**a month and year col**
+```{r}
+# Health Board x Age sex
+covid_admissions_HB_agesex <- covid_admissions_HB_agesex %>%
+  mutate(week_ending = ymd(week_ending))
+
+covid_admissions_HB_agesex <- covid_admissions_HB_agesex %>%
+  mutate(
+    wk_ending_day = day(week_ending),
+    wk_ending_month = month(week_ending, label = TRUE, abbr = FALSE),
+    wk_ending_year = year(week_ending)
+  ) %>% 
+  unite(wk_ending_yr_month, 
+        wk_ending_month, wk_ending_year, 
+        remove = FALSE, 
+        sep = " ")
+covid_admissions_HB_agesex
+
+
+#Health board x simd
+covid_admissions_HB_simd <- covid_admissions_HB_simd %>%
+  mutate(week_ending = ymd(week_ending))
+
+covid_admissions_HB_simd <- covid_admissions_HB_simd %>%
+  mutate(
+    wk_ending_day = day(week_ending),
+    wk_ending_month = month(week_ending, label = TRUE, abbr = FALSE),
+    wk_ending_year = year(week_ending)
+  ) %>% 
+  unite(wk_ending_yr_month, 
+        wk_ending_month, wk_ending_year, 
+        remove = FALSE, 
+        sep = " ")
+covid_admissions_HB_simd
+
+#HSCP x age sex
+covid_admissions_HSCP_agesex <- covid_admissions_HSCP_agesex %>%
+  mutate(week_ending = ymd(week_ending))
+
+covid_admissions_HSCP_agesex <- covid_admissions_HSCP_agesex %>%
+  mutate(
+    wk_ending_day = day(week_ending),
+    wk_ending_month = month(week_ending, label = TRUE, abbr = FALSE),
+    wk_ending_year = year(week_ending)
+  ) %>% 
+  unite(wk_ending_yr_month, 
+        wk_ending_month, wk_ending_year, 
+        remove = FALSE, 
+        sep = " ")
+covid_admissions_HSCP_agesex
+
+#HSCP x simd
+covid_admissions_HSCP_simd <- covid_admissions_HSCP_simd %>%
+  mutate(week_ending = ymd(week_ending))
+
+covid_admissions_HSCP_simd <- covid_admissions_HSCP_simd %>%
+  mutate(
+    wk_ending_day = day(week_ending),
+    wk_ending_month = month(week_ending, label = TRUE, abbr = FALSE),
+    wk_ending_year = year(week_ending)
+  ) %>% 
+  unite(wk_ending_yr_month, 
+        wk_ending_month, wk_ending_year, 
+        remove = FALSE, 
+        sep = " ")
+covid_admissions_HSCP_simd
+```
+
+
+<hr>
+
+<br>
+
+#### What are we working with?
+**Looking to see if i can join data? Probably??? All the HSPC corresponding **
+**health board values are S08000015 - s08000032 **
+**https://www.opendata.nhs.scot/dataset/geography-codes-and-labels/resource/944765d7-d0d9-46a0-b377-abb3de51d08e**
+
+**The HB data set is all S08000015 - s08000032** 
+
+```{r}
+covid_admissions_HB_agesex %>% 
+  distinct(hb)
+
+covid_admissions_HSCP_agesex %>% 
+  distinct(hscp)
+```
+
+We only need ACUTE patients: 
+
+admission_type has: All, Emergency and Planned
+* all and emergency always have similar figures compared with planned.
+```{r}
+covid_admissions_HB_agesex %>% 
+  group_by(admission_type) %>% 
+  summarise(total = n())
+covid_admissions_HB_agesex %>% 
+  group_by(age_group) %>% 
+  summarise(total = n())
+
+covid_admissions_HB_simd%>% 
+  group_by(admission_type) %>% 
+  summarise(total = n())
+covid_admissions_HB_simd %>% 
+  group_by(simd_quintile) %>% 
+  summarise(total = n())
+
+covid_admissions_HSCP_agesex%>% 
+  group_by(admission_type) %>% 
+  summarise(total = n())
+covid_admissions_HSCP_agesex %>% 
+  group_by(age_group) %>% 
+  summarise(total = n())
+
+covid_admissions_HSCP_simd%>% 
+  group_by(admission_type) %>% 
+  summarise(total = n())
+covid_admissions_HSCP_simd %>% 
+  group_by(simd_quintile) %>% 
+  summarise(total = n())
+```
+
+
+* let's remove "all" as we only want acute 
+```{r}
+covid_admissions_HB_agesex <- covid_admissions_HB_agesex %>% 
+  filter(admission_type == "Emergency")
+
+covid_admissions_HB_simd <- covid_admissions_HB_simd %>% 
+  filter(admission_type == "Emergency")
+
+covid_admissions_HSCP_agesex <- covid_admissions_HSCP_agesex %>% 
+  filter(admission_type == "Emergency")
+
+covid_admissions_HSCP_simd <- covid_admissions_HSCP_simd %>% 
+  filter(admission_type == "Emergency")
+```
+
+ANd we don't need ALL ages either... 
+```{r}
+covid_admissions_HB_agesex <- covid_admissions_HB_agesex %>% 
+  filter(age_group != "All ages")
+
+covid_admissions_HSCP_agesex <- covid_admissions_HSCP_agesex %>% 
+  filter(age_group != "All ages")
+```
+
+<hr>
+
+<br>
+
+## HEALTH BOARD - sex and age
+
+### HB - Age - Total Covid admissions
+
+
+```{r}
+covid_ads_HB_age <- covid_admissions_HB_agesex %>% 
+  group_by(wk_ending_yr_month, age_group) %>%
+  summarise(total_admissions = n())
+covid_ads_HB_age
+# April 2020 is shown first and ages are a mess. So:
+
+covid_ads_HB_age %>% 
+  distinct(wk_ending_yr_month)
+dates <- c("January 2020", "February 2020", "March 2020", "April 2020", "May 2020", 
+           "June 2020", "July 2020", "August 2020", "September 2020", 
+           "October 2020", "November 2020", "December 2020", "January 2021", 
+           "February 2021", "March 2021", "April 2021", "May 2021", "June 2021",
+           "July 2021", "August 2021", "September 2021", "October 2021", 
+           "November 2021", "December 2021", "January 2022", "February 2022")
+
+summer_dates <- c("April 2020", "May 2020", "June 2020", "July 2020", 
+                  "August 2020", "September 2020", "April 2021", "May 2021", 
+                  "June 2021", "July 2021", "August 2021", "September 2021")
+
+winter_dates <- c("January 2020", "February 2020", "March 2020", "October 2020",
+                  "November 2020", "December 2020", "January 2021", 
+                  "February 2021", "March 2021", "October 2021", 
+                  "November 2021", "December 2021", "January 2022", 
+                  "February 2022")
+  
+covid_ads_HB_age %>% 
+  distinct(age_group)
+# USE THIS
+# covid_admissions_HB_agesex %>% 
+#   mutate(age_group = fct_relevel(age_group, "Under 5", "5 - 14", "15 - 44", 
+#                                  "45 - 64", "65 - 74", "75 - 84", "85 and over"))
+```
+
+
+
+```{r}
+covid_ads_HB_age %>% 
+  mutate(age_group = fct_relevel(age_group, 
+                                 "Under 5", "5 - 14", "15 - 44", 
+                                 "45 - 64", "65 - 74", "75 - 84", 
+                                 "85 and over")) %>%
+  ggplot()+
+  aes(x = wk_ending_yr_month, 
+      y = total_admissions, 
+      group = age_group, 
+      colour = age_group)+
+  scale_x_discrete(limits = dates) +
+  geom_point()+
+  geom_line()+
+  labs(x = "Month",
+       y = "Total COVID admissions",
+       title = "Total COVID admissions per month by age group",
+       subtitle = "January, 2020 to February",
+       colour = "Age Group") +
+  theme_bw()+
+  theme(axis.text.x = element_text(angle = 45, hjust = 0.9))
+```
+
+The above to see if there's difference in age groups and seasons
+* Winter = Q4 and Q1 
+```{r}
+highlight_winter_HB_agesex <- covid_admissions_HSCP_agesex %>% 
+  filter(str_detect(wk_ending_yr_month, 
+                    "October|November|December|January|February|March"))
+
+highlight_summer_HB_agesex <- covid_admissions_HSCP_agesex %>% 
+  filter(str_detect(wk_ending_yr_month, 
+                    "April|May|June|July|August|September"))
+```
+
+
+```{r}
+covid_ads_HB_age %>% 
+  mutate(age_group = fct_relevel(age_group, 
+                                 "Under 5", "5 - 14", "15 - 44", 
+                                 "45 - 64", "65 - 74", "75 - 84", 
+                                 "85 and over")) %>%
+  ggplot()+
+  aes(x = wk_ending_yr_month, 
+      y = total_admissions, 
+      group = age_group, 
+      fill = age_group)+
+  scale_x_discrete(limits = dates) +
+  geom_col()+
+  facet_wrap(~age_group)+
+  labs(x = "Month",
+       y = "Total COVID admissions",
+       title = "Total COVID admissions per month by age group",
+       subtitle = "January, 2020 - February 2022",
+       fill = "Age Group") +
+  theme_bw()+
+  theme(axis.text.x = element_text(angle = 45, hjust = 0.9))
+```
+
+**THE ABOVE BUT WINTER vs SUMMER**
+```{r}
+covid_ads_HB_age_highlight_summer <- highlight_summer_HB_agesex %>% 
+  group_by(wk_ending_yr_month, age_group) %>%
+  summarise(total_admissions = n())
+covid_ads_HB_age_highlight_summer
+
+
+covid_ads_HB_age_highlight_summer %>% 
+  mutate(age_group = fct_relevel(age_group, 
+                                 "Under 5", "5 - 14", "15 - 44", 
+                                 "45 - 64", "65 - 74", "75 - 84", 
+                                 "85 and over")) %>%
+  ggplot()+
+  aes(x = wk_ending_yr_month, 
+      y = total_admissions, 
+      group = age_group, 
+      fill = age_group)+
+  scale_x_discrete(limits = summer_dates) +
+  geom_col()+
+  facet_wrap(~age_group)+
+  labs(x = "Month",
+       y = "Total COVID admissions",
+       title = "Total COVID admissions per month by age group",
+       subtitle = "January, 2020 to February",
+       fill = "Age Group") +
+  theme_bw()+
+  theme(axis.text.x = element_text(angle = 45, hjust = 0.9))
+```
+**WINTER**
+```{r}
+covid_ads_HB_age_highlight_winter <- highlight_winter_HB_agesex %>% 
+  group_by(wk_ending_yr_month, age_group) %>%
+  summarise(total_admissions = n())
+covid_ads_HB_age_highlight_winter
+
+
+covid_ads_HB_age_highlight_winter %>% 
+  mutate(age_group = fct_relevel(age_group, 
+                                 "Under 5", "5 - 14", "15 - 44", 
+                                 "45 - 64", "65 - 74", "75 - 84", 
+                                 "85 and over")) %>%
+  ggplot()+
+  aes(x = wk_ending_yr_month, 
+      y = total_admissions, 
+      group = age_group, 
+      fill = age_group)+
+  scale_x_discrete(limits = winter_dates) +
+  geom_col()+
+  facet_wrap(~age_group)+
+  labs(x = "Month",
+       y = "Total COVID admissions",
+       title = "Total COVID admissions per month by age group",
+       subtitle = "January, 2020 to February",
+       fill = "Age Group") +
+  theme_bw()+
+  theme(axis.text.x = element_text(angle = 45, hjust = 0.9))
+```
+
+<hr>
+<br>
+
+### HB - Age - Weekly COVID admissions agains the average admissions in 2018 & 19
+
+```{r}
+covid_admissions_HB_agesex %>% 
+  mutate(age_group = fct_relevel(age_group, 
+                                 "Under 5", "5 - 14", "15 - 44", 
+                                 "45 - 64", "65 - 74", "75 - 84", 
+                                 "85 and over")) %>%
+  group_by(age_group) %>% 
+  ggplot()+
+  aes(x = number_admissions, 
+      y = average20182019, 
+      colour = age_group)+
+  geom_point() +
+  labs(x = "Weekly number of COVID admissions",
+       y = "Average weekly admissions to hospital in 2018-2019",
+       title = "Weekly COVID admissions per age group against the average weekly 
+       admissions in previous years",
+       subtitle = "COVID: January, 2020 to February, 2022 / Previous years: 2018 - 2019",
+       colour = "Age Group") +
+  theme_bw()+
+  theme(axis.text.x = element_text(angle = 45, hjust = 0.9))
+```
+
+**The above just looking to see if there are differences in age groups**
+
+```{r}
+covid_admissions_HB_agesex %>% 
+  mutate(age_group = fct_relevel(age_group, 
+                                 "Under 5", "5 - 14", "15 - 44", 
+                                 "45 - 64", "65 - 74", "75 - 84", 
+                                 "85 and over")) %>% 
+  group_by(age_group) %>% 
+  ggplot()+
+  aes(x = number_admissions, 
+      y = average20182019, 
+      colour = age_group)+
+  geom_point() +
+  facet_wrap(~age_group) +
+  labs(x = "Weekly number of COVID admissions",
+       y = "Average weekly admissions to hospital in 2018-2019",
+       title = "Weekly COVID admissions per age group against the average weekly 
+       admissions in previous years",
+       subtitle = "COVID: January, 2020 - February, 2022 / Previous years: 2018 - 2019",
+       colour = "Age Group") +
+  theme_bw()+
+  theme(axis.text.x = element_text(angle = 45, hjust = 0.9))
+```
+
+<hr>
+
+### HB - Sex - Average Covid Admissions vs Average 2018 and 2019 admissions
+
+```{r}
+covid_admissions_HB_sex <- covid_admissions_HB_agesex %>% 
+  filter(sex != "All") %>% 
+  group_by(week_ending, sex) %>% 
+  summarise(total_admissions_for_week_ending = n())
+covid_admissions_HB_sex
+
+
+covid_admissions_HB_sex %>% 
+  ggplot()+
+  aes(x = week_ending, 
+      y = total_admissions_for_week_ending,
+      colour = sex)+
+  geom_line()+
+  labs(title = "I AM AWARE THIS IS AWFUL")
+```
+```{r}
+covid_admissions_HB_sex %>% 
+  ggplot()+
+  aes(x = week_ending, 
+      y = total_admissions_for_week_ending,
+      fill = sex)+
+  geom_col(position = "dodge")+
+  labs(title = "I AM AWARE THIS IS AWFUL")
+```
+```{r}
+covid_admissions_HB_agesex %>% 
+  filter(sex != "All") %>% 
+  group_by(sex) %>% 
+  ggplot()+
+  aes(x = number_admissions, 
+      y = average20182019, 
+      colour = sex)+
+  geom_point()+
+  labs(x = "Weekly number of COVID admissions",
+       y = "Average weekly admissions to hospital in 2018-2019",
+       title = "Weekly COVID admissions per sex against the average weekly 
+       admissions in previous years",
+       subtitle = "COVID: January, 2020 to February, 2022 / Previous years: 2018 - 2019",
+       colour = "Sex") +
+  theme_bw()+
+  theme(axis.text.x = element_text(angle = 45, hjust = 0.9))
+```  
+
+
+
+<hr> 
+
+## HEALTH BOARD - SIMD 
+### HB - SIMD - Average Covid Admissions vs Average 2018 and 2019 admissions
+
+<hr>
+<hr>
+
+## HSCP - sex and age
+### HSCP - Age - Average Covid Admissions vs Average 2018 and 2019 admissions
+
+* Take out age group "all"
+
+<hr>
+
+### HSCP - Sex - Average Covid Admissions vs Average 2018 and 2019 admissions
+
+<hr>
+
+## HSCP - SIMD 
+### HSCP - SIMD - Average Covid Admissions vs Average 2018 and 2019 admissions
+
 
