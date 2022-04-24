@@ -336,7 +336,7 @@ Generate and visualise the null distribution with observed_stat overlaid;
 null_distribution <- seasonal_postcovid_total_avg_acute_occupancy %>% 
   specify(mean_total_acute_occupancy ~ season) %>% 
   hypothesize(null = "independence") %>% 
-  generate(reps = 30000, type = "permute") %>% 
+  generate(reps = 10000, type = "permute") %>% 
   calculate(stat = "diff in means", order = c("winter", "summer"))
 ```
 
@@ -356,3 +356,81 @@ p_value <- null_distribution %>%
 p_value
 ```
 
+## Third Hypothesis Test; 
+## For all data available in before and during the covid pandemic, is the average acute 
+## bed occupancy in winter (Q4 + Q1) significantly greater than in summer (Q2 + Q3)?
+
+Use all data (2016 - 2021);
+```{r}
+seasonal_total_avg_acute_occupancy <- total_avg_acute_occupancy %>% 
+  separate(quarter, into = c("year", "quarter"), sep = "Q") %>% 
+  mutate(season = if_else(quarter == 1 | quarter == 4, "winter", "summer"), 
+         .after = "quarter")
+
+seasonal_total_avg_acute_occupancy %>% 
+  ggplot() +
+  aes(x = season, y = mean_total_acute_occupancy) +
+  geom_boxplot(fill = "#433685", alpha = 0.5) +
+  stat_boxplot(geom = "errorbar", width = 0.25) +
+  theme_bw() +
+  labs(title = "% Overall Acute Bed Occupancy by Season, Scotland, Q3|2016 - Q3|2021",
+       x = "\nSeason",
+       y = "% Bed Occupancy") +
+  theme(title = element_text(face = "bold"))
+```
+
+Set α = 0.05.
+
+Null hypothesis H0: Average acute bed occupancy between 2016 - 2021 is the same in 
+the summer months as in the winter months;
+$$
+H_0: μ_{winter2016 - 2021} − μ_{summer2016 - 2021} = 0
+$$
+
+Alternative hypothesis H1: Average acute bed occupancy between 2016 - 2021 is 
+greater in winter than in summer;
+$$
+H_1: μ_{winter2016 - 2021} − μ_{summer2016 - 2021} > 0
+$$
+
+Generation of null distribution: under H0, where xs and ys are independent, it 
+wouldn’t matter how you split the observations into group 1 or group 2, there 
+wouldn’t be a statistically significant difference between the means or proportions 
+of the 2 groups. So randomly shuffle (permute) the labels (the ys) of the 
+observations to randomly assign the observations into groups 1 and 2. We then 
+calculate the difference in sample means or proportions for the two groups. This 
+is repeated many times (e.g. 10,000) to create the null distribution.
+
+
+```{r}
+observed_stat <- seasonal_total_avg_acute_occupancy %>% 
+  specify(mean_total_acute_occupancy ~ season) %>%
+  calculate(stat = "diff in means", order = c("winter", "summer"))
+
+observed_stat
+```
+Generate and visualise the null distribution with observed_stat overlaid;
+
+```{r}
+null_distribution <- seasonal_total_avg_acute_occupancy %>% 
+  specify(mean_total_acute_occupancy ~ season) %>% 
+  hypothesize(null = "independence") %>% 
+  generate(reps = 10000, type = "permute") %>% 
+  calculate(stat = "diff in means", order = c("winter", "summer"))
+```
+
+```{r}
+null_distribution %>% 
+  visualise() +
+  shade_p_value(obs_stat = observed_stat, direction = "right")
+```
+
+
+
+Calculate the p-value;
+```{r}
+p_value <- null_distribution %>%
+  get_p_value(obs_stat = observed_stat, direction = "right")
+
+p_value
+```
