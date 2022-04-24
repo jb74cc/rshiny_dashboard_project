@@ -1,5 +1,5 @@
 ---
-title: "Demographics analysis 2"
+title: "Demographics analysis 1 - General Admissions"
 subtitle: General Admissions
 output:
   html_document:

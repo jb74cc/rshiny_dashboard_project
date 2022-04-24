@@ -424,8 +424,8 @@ library(lubridate)
 ```
 
 
-Changing the week ending column to a date column and pulling out the specific
-dates:
+Changing the week ending column to a date column and pulling out the day, month 
+and year:
 ```{r}
 covid_ads_HB_age_sex <- covid_ads_HB_age_sex %>%
   mutate(week_ending = ymd(week_ending))

@@ -1,0 +1,130 @@
+---
+title: "Demographics analysis 3 - HSCP and COVID"
+subtitle: "COVID Admissions - January 2020 to Febraury 2022"
+output:
+  html_document:
+    df_print: paged
+---
+HSCP - 9-digit code for Health and Social Care Partnerships (2016) of residence
+
+HB - 9-digit code for health board of treatment based on boundaries as at 1st 
+April 2019
+
+```{r}
+library(tidyverse)
+library(here)
+library(readxl)
+library(janitor)
+library(ggplot2)
+library(lubridate)
+library(stringr)
+```
+<br> 
+
+Read In Data
+
+```{r}
+covid_admissions_HSCP_agesex <- read_csv(here("../../raw_data/covid_data/hospital_admissions_hscp_agesex_20220302.csv"))
+
+covid_admissions_HSCP_simd <- read_csv(here("../../raw_data/covid_data/hospital_admissions_hscp_simd_20220302.csv"))
+
+```
+
+**Clean Names**
+
+```{r}
+covid_admissions_HSCP_agesex <- janitor::clean_names(covid_admissions_HSCP_agesex)
+covid_admissions_HSCP_simd <- janitor::clean_names(covid_admissions_HSCP_simd)
+```
+
+**Change week_ending column to a date and creating new day, month, year AND ** 
+**a month and year col**
+```{r}
+#HSCP x age sex
+covid_admissions_HSCP_agesex <- covid_admissions_HSCP_agesex %>%
+  mutate(week_ending = ymd(week_ending))
+
+covid_admissions_HSCP_agesex <- covid_admissions_HSCP_agesex %>%
+  mutate(
+    wk_ending_day = day(week_ending),
+    wk_ending_month = month(week_ending, label = TRUE, abbr = FALSE),
+    wk_ending_year = year(week_ending)
+  ) %>% 
+  unite(wk_ending_yr_month, 
+        wk_ending_month, wk_ending_year, 
+        remove = FALSE, 
+        sep = " ")
+covid_admissions_HSCP_agesex
+
+#HSCP x simd
+covid_admissions_HSCP_simd <- covid_admissions_HSCP_simd %>%
+  mutate(week_ending = ymd(week_ending))
+
+covid_admissions_HSCP_simd <- covid_admissions_HSCP_simd %>%
+  mutate(
+    wk_ending_day = day(week_ending),
+    wk_ending_month = month(week_ending, label = TRUE, abbr = FALSE),
+    wk_ending_year = year(week_ending)
+  ) %>% 
+  unite(wk_ending_yr_month, 
+        wk_ending_month, wk_ending_year, 
+        remove = FALSE, 
+        sep = " ")
+covid_admissions_HSCP_simd
+```
+
+
+<hr>
+
+<br>
+
+#### What are we working with?
+**Looking to see if i can join data? Probably??? All the HSPC corresponding **
+**health board values are S08000015 - s08000032 **
+**https://www.opendata.nhs.scot/dataset/geography-codes-and-labels/resource/944765d7-d0d9-46a0-b377-abb3de51d08e**
+
+**The HB data set is all S08000015 - s08000032** 
+
+```{r}
+covid_admissions_HSCP_agesex %>% 
+  distinct(hscp)
+```
+
+We only need ACUTE patients: 
+
+admission_type has: All, Emergency and Planned
+* all and emergency always have similar figures compared with planned.
+
+```{r}
+covid_admissions_HSCP_agesex%>% 
+  group_by(admission_type) %>% 
+  summarise(total = n())
+covid_admissions_HSCP_agesex %>% 
+  group_by(age_group) %>% 
+  summarise(total = n())
+
+covid_admissions_HSCP_simd%>% 
+  group_by(admission_type) %>% 
+  summarise(total = n())
+covid_admissions_HSCP_simd %>% 
+  group_by(simd_quintile) %>% 
+  summarise(total = n())
+```
+
+
+* let's remove "all" as we only want acute 
+```{r}
+covid_admissions_HSCP_agesex <- covid_admissions_HSCP_agesex %>% 
+  filter(admission_type == "Emergency")
+
+covid_admissions_HSCP_simd <- covid_admissions_HSCP_simd %>% 
+  filter(admission_type == "Emergency")
+```
+
+ANd we don't need ALL ages either... 
+```{r}
+covid_admissions_HSCP_agesex <- covid_admissions_HSCP_agesex %>% 
+  filter(age_group != "All ages")
+```
+
+<hr>
