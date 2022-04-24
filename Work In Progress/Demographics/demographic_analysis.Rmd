@@ -565,3 +565,25 @@ covid_acute_HB_age_sex %>%
 ```
 
 
+
+
+
+
+```{r}
+covid_ads_HB_deprivation %>% 
+  group_by(simd_quintile) %>% 
+  summarise(total = n())
+
+covid_ads_HSCP_deprivation  %>% 
+  group_by(simd_quintile) %>% 
+  summarise(total = n())
+
+covid_ads_HSCP_age_sex %>% 
+  group_by(age_group) %>% 
+  summarise(total = n())
+
+covid_ads_HSCP_age_sex %>% 
+  group_by(sex) %>% 
+  summarise(total = n())
+```
+

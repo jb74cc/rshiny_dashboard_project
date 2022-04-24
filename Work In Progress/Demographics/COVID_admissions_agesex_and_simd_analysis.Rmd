@@ -1,0 +1,30 @@
+---
+title: "Demographics analysis 2"
+subtitle: "COVID Admissions"
+output: html_notebook
+---
+
+
+```{r}
+library(tidyverse)
+library(here)
+library(readxl)
+library(janitor)
+library(ggplot2)
+library(lubridate)
+```
+<br> 
+
+Read In Data
+
+```{r}
+covid_admissions_HB_agesex <- read_csv(here("../../raw_data/covid_data/hospital_admissions_hb_agesex_20220302.csv"))
+
+covid_admissions_HB_simd <- read_csv(here("../../raw_data/covid_data/hospital_admissions_hb_simd_20220302.csv"))
+
+covid_admissions_HSCP_agesex <- read_csv(here("../../raw_data/covid_data/hospital_admissions_hscp_agesex_20220302.csv"))
+
+covid_admissions_HSCP_simd <- read_csv(here("../../raw_data/covid_data/hospital_admissions_hscp_simd_20220302.csv"))
+
+```
+
