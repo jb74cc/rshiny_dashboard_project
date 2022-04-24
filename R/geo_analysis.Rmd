@@ -195,14 +195,28 @@ Is the mean bed occupancy in winter (Q4 + Q1) significantly greater than in summ
 total_avg_acute_occupancy %>% 
   separate(quarter, into = c("year", "quarter"), sep = "Q") %>% 
   mutate(season = if_else(quarter == 1 | quarter == 4, "winter", "summer"), .after = "quarter") %>% 
+  filter(year <= 2019) %>% 
   ggplot() +
   aes(x = season, y = mean_total_acute_occupancy) +
   geom_boxplot(fill = "#433685", alpha = 0.5) +
   stat_boxplot(geom = "errorbar", width = 0.25) +
   theme_bw() +
-  labs(title = "% Overall Acute Bed Occupancy by Season, Scotland, Q3|2016 - Q3|2021",
+  labs(title = "% Overall Acute Bed Occupancy by Season, Scotland, Q3|2016 - Q4|2019",
        x = "\nSeason",
        y = "% Bed Occupancy") +
   theme(title = element_text(face = "bold"))
 ```
+
+Null hypothesis H0: Mean acute bed occupancy is the same in the summer months as 
+in the winter months;
+$$
+H_0: μ_{winter} − μ_{summer} = 0
+$$
+
+Alternative hypothesis H1: Mean acute bed occupancy is greater in winter than in 
+summer;
+$$
+H_1: μ_{winter} − μ_{summer} > 0
+$$
+
 
