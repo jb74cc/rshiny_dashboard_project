@@ -339,33 +339,44 @@ general_admissions_acute_deprivation
 
 SIMD Types
 * note there are 962 NAs: there are codes in the simdqf column as to why 
-* sometimes it's just a general geographical group 
+* sometimes it's just a general geographical groupings 
 ```{r}
 general_admissions_acute_deprivation %>% 
   group_by(simd) %>% 
   summarise(total_for_each_simd = n())
 ```
+<br>
+
+Drop NAs
+
 ```{r}
 gen_admissions_simd_per_quarter <- general_admissions_acute_deprivation %>% 
   group_by(quarter, simd) %>% 
   drop_na(simd) %>% 
   summarise(total_admission_per_quarter = n())
 gen_admissions_simd_per_quarter
+```
 
+**PLOTS total general admissions (emergency inpatient only) & deprivation**
 
+```{r}
 gen_admissions_simd_per_quarter %>% 
   ggplot() + 
   aes(x = quarter, 
       y = total_admission_per_quarter, 
       fill = simd) + 
-  geom_col(position = "dodge") + #why won' it dodge? Not enough space??
+  geom_col(position = "dodge") + #why won' it dodge? Not enough space?? 
+  #also ignoring bin width
+  scale_color_brewer("Diamond\nclarity") + #this didn't work either...
   labs(x = "Yearly Quarter", 
        y = "Total Admissions", 
-       title = "Total Emergency Inpatient Admissions by Deprivation Level")+#, 
-       #colour = "SIMD Level: (1 = Most Deprived : 5 = Least Deprived")+
+       title = "Total Emergency Inpatient Admissions by Deprivation Level",
+       subtitle = "Q3 2016 to Q3 2021",
+       colour = "SIMD Level: (1 = Most Deprived : 5 = Least Deprived")+# where is this!?
   theme_bw()+
   theme(axis.text.x = element_text(angle = 45, hjust = 0.9))
 
+# here they are facet wraped by SIMD
 gen_admissions_simd_per_quarter %>% 
   ggplot() + 
   aes(x = quarter, 
@@ -375,8 +386,9 @@ gen_admissions_simd_per_quarter %>%
   facet_wrap(~simd)+
   labs(x = "Yearly Quarter", 
        y = "Total Admissions", 
-       title = "Total Emergency Inpatient Admissions by Deprivation Level", 
-       colour = "SIMD Level: (1 = Most Deprived : 5 = Least Deprived")+
+       title = "Total Emergency Inpatient Admissions by Deprivation Level",
+       subtitle = "Q3 2016 to Q3 2021",
+       colour = "SIMD Level: (1 = Most Deprived : 5 = Least Deprived")+ #where is this?!
   theme_bw()+
   theme(axis.text.x = element_text(angle = 45, hjust = 0.9))
 
@@ -391,12 +403,12 @@ gen_admissions_simd_per_quarter %>%
   geom_line() +
   labs(x = "Yearly Quarter", 
        y = "Total Admissions", 
-       title = "Total Emergency Inpatient Admissions by Deprivation Level")+#, 
+       title = "Total Emergency Inpatient Admissions by Deprivation Level",
+        subtitle = "Q3 2016 to Q3 2021")+#, 
        #colour = "SIMD Level: (1 = Most Deprived : 5 = Least Deprived")+
   theme_bw()+
   theme(axis.text.x = element_text(angle = 45, hjust = 0.9))
 ```
-
 
 
 
@@ -407,19 +419,40 @@ gen_admissions_simd_per_quarter %>%
 
 ### May 21st 2020 - March 2nd, 2022
 
+```{r}
+library(lubridate)
+```
+
+
+Changing the week ending column to a date column and pulling out the specific
+dates:
+```{r}
+covid_ads_HB_age_sex <- covid_ads_HB_age_sex %>%
+  mutate(week_ending = ymd(week_ending))
+
+covid_ads_HB_age_sex <- covid_ads_HB_age_sex %>%
+  mutate(
+    wk_ending_day = day(week_ending),
+    wk_ending_month = month(week_ending, label = TRUE, abbr = FALSE),
+    wk_ending_year = year(week_ending)
+  )
+covid_ads_HB_age_sex
+```
+
+
 #### Sex and gender by healthboard
 
 <br>
 
 NOTE 
-sex: "All" = 33951 rows, Female = 4782, Male = 4783 
+Sex: "All" = 33951 rows, Female = 4782, Male = 4783 
 
 <br> 
 
 ```{r}
 # by healthboard
 
-# admission types are either emergncy or planned - that's good news for us
+# admission types are either emergency or planned - that's good news for us
 covid_ads_HB_age_sex %>% 
   distinct(admission_type)
 
@@ -434,37 +467,101 @@ covid_acute_HB_age_sex %>%
 
 <br>
 
+
+
+**Weekly COVID admissions per age group against the average weekly admissions**
+**in previous years**
+**NOTE: by healthboard data**
+<br>
 ```{r}
-# nope
+# Take out age group = all ages... still not sure about 41760
 covid_acute_HB_age_sex %>% 
+  filter(age_group != "All ages") %>% 
   group_by(age_group) %>% 
   ggplot()+
   aes(x = number_admissions, 
       y = average20182019, 
-      fill = age_group)+
-  geom_point()
+      colour = age_group)+
+  geom_point() +
+  labs(x = "Weekly number of COVID admissions",
+       y = "Average weekly admissions to hospital in 2018-2019",
+       title = "Weekly COVID admissions per age group against the average weekly 
+       admissions in previous years",
+       subtitle = "COVID: January, 2020 to February, 2022 / Previous years: 2018 - 2019",
+       colour = "Age Group") +
+  theme_bw()+
+  theme(axis.text.x = element_text(angle = 45, hjust = 0.9))
   
 ```
 
+**The above just looking to see if there are differences in months**
 
 ```{r}
-covid_ads_HB_age_sex %>% 
+
+# Take out age group = all ages... still not sure about 41760
+covid_acute_HB_age_sex %>% 
+  filter(age_group != "All ages") %>% 
+  group_by(age_group) %>% 
+  ggplot()+
+  aes(x = number_admissions, 
+      y = average20182019, 
+      colour = age_group)+
+  geom_point() +
+  facet_wrap(~wk_ending_month) +
+  labs(x = "Weekly number of COVID admissions",
+       y = "Average weekly admissions to hospital in 2018-2019",
+       title = "Weekly COVID admissions per age group against the average weekly 
+       admissions in previous years",
+       subtitle = "COVID: January, 2020 to February, 2022 / Previous years: 2018 - 2019",
+       colour = "Age Group") +
+  theme_bw()+
+  theme(axis.text.x = element_text(angle = 45, hjust = 0.9))
+```
+
+
+
+```{r}
+covid_acute_HB_age_sex %>% 
   group_by(sex) %>% 
   summarise(total_of_each_sex = n())
+```
 
-covid_ads_HB_demographics_sex <- covid_ads_HB_age_sex %>% 
+```{r}
+covid_acute_ads_HB_demographics_sex <- covid_acute_HB_age_sex %>% 
+  #filter(sex != "All") %>% 
   group_by(week_ending, sex) %>% 
   summarise(total_admissions_for_week_ending = n())
 covid_ads_HB_demographics_sex
 
 
-covid_ads_HB_demographics_sex %>% 
+covid_acute_ads_HB_demographics_sex %>% 
   ggplot()+
   aes(x = week_ending, 
-      y = total_admissions_for_week_ending, 
-      group = sex, 
+      y = total_admissions_for_week_ending,
       colour = sex)+
   geom_line()+
   labs(title = "I AM AWARE THIS IS AWFUL")
 ```
+
+```{r}
+covid_acute_HB_age_sex %>% 
+  filter(sex != "All") %>% 
+  group_by(sex) %>% 
+  ggplot()+
+  aes(x = number_admissions, 
+      y = average20182019, 
+      colour = sex)+
+  geom_point()+
+  labs(x = "Weekly number of COVID admissions",
+       y = "Average weekly admissions to hospital in 2018-2019",
+       title = "Weekly COVID admissions per sex against the average weekly 
+       admissions in previous years",
+       subtitle = "COVID: January, 2020 to February, 2022 / Previous years: 2018 - 2019",
+       colour = "Sex") +
+  theme_bw()+
+  theme(axis.text.x = element_text(angle = 45, hjust = 0.9))
+  
+
+```
+
 
