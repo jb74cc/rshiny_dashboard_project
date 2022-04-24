@@ -190,13 +190,16 @@ beds_by_hb_trim %>%
   
 ```
 
-Is the mean bed occupancy in winter (Q4 + Q1) significantly greater than in summer (Q2 + Q3)?
+## First Hypothesis Test; 
+## For data available in the years before the covid pandemic, is the average acute 
+## bed occupancy in winter (Q4 + Q1) significantly greater than in summer (Q2 + Q3)?
 
 Focus on pre-covid timeline (2016 - 2019) to set a benchmark;
 ```{r}
 seasonal_precovid_total_avg_acute_occupancy <- total_avg_acute_occupancy %>% 
   separate(quarter, into = c("year", "quarter"), sep = "Q") %>% 
-  mutate(season = if_else(quarter == 1 | quarter == 4, "winter", "summer"), .after = "quarter") %>% 
+  mutate(season = if_else(quarter == 1 | quarter == 4, "winter", "summer"), 
+         .after = "quarter") %>% 
   filter(year <= 2019) 
 
 seasonal_precovid_total_avg_acute_occupancy %>% 
@@ -267,7 +270,89 @@ p_value <- null_distribution %>%
 p_value
 ```
 
+## Conclusion of first hypothesis test;
 The p-value for this test is below α = 0.05.  In this case we reject H0 and 
 conclude that there is enough evidence in our data to suggest that the average 
 acute bed occupancy in winter is statistically significantly greater than in 
 summer.
+
+## Second Hypothesis Test; 
+## For data available in the years during the covid pandemic, is the average acute 
+## bed occupancy in winter (Q4 + Q1) significantly greater than in summer (Q2 + Q3)?
+
+Focus on covid-affected timeline (2019 - 2021);
+```{r}
+seasonal_postcovid_total_avg_acute_occupancy <- total_avg_acute_occupancy %>% 
+  separate(quarter, into = c("year", "quarter"), sep = "Q") %>% 
+  mutate(season = if_else(quarter == 1 | quarter == 4, "winter", "summer"), 
+         .after = "quarter") %>% 
+  filter(year > 2019) 
+
+seasonal_postcovid_total_avg_acute_occupancy %>% 
+  ggplot() +
+  aes(x = season, y = mean_total_acute_occupancy) +
+  geom_boxplot(fill = "#433685", alpha = 0.5) +
+  stat_boxplot(geom = "errorbar", width = 0.25) +
+  theme_bw() +
+  labs(title = "% Overall Acute Bed Occupancy by Season, Scotland, Q1|2020 - Q3|2021",
+       x = "\nSeason",
+       y = "% Bed Occupancy") +
+  theme(title = element_text(face = "bold"))
+```
+
+Set α = 0.05.
+
+Null hypothesis H0: Mean acute bed occupancy between 2020 - 2021 is the same in 
+the summer months as in the winter months;
+$$
+H_0: μ_{winter2020 - 2021} − μ_{summer2020 - 2021} = 0
+$$
+
+Alternative hypothesis H1: Mean acute bed occupancy between 2020 - 2021 is 
+greater in winter than in summer;
+$$
+H_1: μ_{winter2020 - 2021} − μ_{summer2020 - 2021} > 0
+$$
+
+Generation of null distribution: under H0, where xs and ys are independent, it 
+wouldn’t matter how you split the observations into group 1 or group 2, there 
+wouldn’t be a statistically significant difference between the means or proportions 
+of the 2 groups. So randomly shuffle (permute) the labels (the ys) of the 
+observations to randomly assign the observations into groups 1 and 2. We then 
+calculate the difference in sample means or proportions for the two groups. This 
+is repeated many times (e.g. 10,000) to create the null distribution.
+
+
+```{r}
+observed_stat <- seasonal_postcovid_total_avg_acute_occupancy %>% 
+  specify(mean_total_acute_occupancy ~ season) %>%
+  calculate(stat = "diff in means", order = c("winter", "summer"))
+
+observed_stat
+```
+Generate and visualise the null distribution with observed_stat overlaid;
+
+```{r}
+null_distribution <- seasonal_postcovid_total_avg_acute_occupancy %>% 
+  specify(mean_total_acute_occupancy ~ season) %>% 
+  hypothesize(null = "independence") %>% 
+  generate(reps = 30000, type = "permute") %>% 
+  calculate(stat = "diff in means", order = c("winter", "summer"))
+```
+
+```{r}
+null_distribution %>% 
+  visualise() +
+  shade_p_value(obs_stat = observed_stat, direction = "right")
+```
+
+
+
+Calculate the p-value;
+```{r}
+p_value <- null_distribution %>%
+  get_p_value(obs_stat = observed_stat, direction = "right")
+
+p_value
+```
+
