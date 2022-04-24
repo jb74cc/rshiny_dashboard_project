@@ -2,7 +2,12 @@ library(shiny)
 library(shinyWidgets)
 
 ui <- fluidPage(
-  
+  # colour tabs and text
+  tags$style(HTML("
+        .tabbable > .nav > li > a {
+           background-color: #433685;
+           color: #FFF;
+        }")),
   # use a gradient in background
   setBackgroundColor(
     color = c("#265C4B", "#589A8D"),
@@ -20,11 +25,11 @@ ui <- fluidPage(
     sidebarPanel(
       
       # Input: Select the random distribution type ----
-      radioButtons("dist", "Distribution type:",
-                   c("Normal" = "norm",
-                     "Uniform" = "unif",
-                     "Log-normal" = "lnorm",
-                     "Exponential" = "exp")),
+      radioButtons("dist", "Bed Occupancy:",
+                   c("Year" = "norm",
+                     "Quarter" = "unif",
+                     "Pre Covid" = "lnorm",
+                     "Post Covid" = "exp")),
       
       # br() element to introduce extra vertical spacing ----
       br(),
@@ -42,7 +47,7 @@ ui <- fluidPage(
     mainPanel(
       
       # Output: Tabset w/ plot, summary, and table ----
-      tabsetPanel(type = "pills",
+      tabsetPanel(type = "tabs",
                   tabPanel("Plot", plotOutput("plot")),
                   tabPanel("Summary", verbatimTextOutput("summary")),
                   tabPanel("Table", tableOutput("table"))
@@ -75,12 +80,19 @@ server <- function(input, output) {
   # both tracked, and all expressions are called in the sequence
   # implied by the dependency graph.
   output$plot <- renderPlot({
-    dist <- input$dist
-    n <- input$n
     
-    hist(d(),
-         main = paste("r", dist, "(", n, ")", sep = ""),
-         col = "#75AADB", border = "white")
+    beds_by_hb_trim %>%
+      ggplot() +
+      aes(x = quarter, y = hb_mean_occupancy, colour = hb_name, group = hb) +
+      geom_line() +
+      geom_point(size = 0.75) +
+      theme_bw() +
+      labs(title = "% Bed Occupancy by Health Board, Scotland, Q3|2016 - Q3|2021",
+           x = "\nQuarter",
+           y = "% Bed Occupancy") +
+      theme(axis.text.x = element_text(angle = 270, vjust = 0.25),
+            title = element_text(face = "bold"),
+            legend.title = element_blank())
   })
   
   # Generate a summary of the data ----
