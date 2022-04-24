@@ -64,7 +64,7 @@ covid_ads_HSCP_age_sex <-
 ```
 
 
-Do they match? 
+
 ```{r}
 names(hosp_activity_and_demographics)
 names(hosp_activity_and_deprivation)
@@ -125,6 +125,13 @@ covid_ads_HSCP_age_sex %>%
 
 ### November 14th 2019 - February 22nd 2020
 
+* **This data is by QUARTER (COVID admissions is by week ending from May 2020 to** 
+**March 2022**
+* **SEX here is "Male", "Female", COVID data also has Male, Female, and All**
+* **AGE groups are in 10 year increments with (from "0-10 to "90 and over")**
+  **COVID data is a lot dirtier**
+* **These are general hospital admissions - not by health board etc**
+
 <br>
 
 #### Sex 
@@ -152,9 +159,9 @@ Filter for acute services:
 # Others = Elective Inpatients, Transfers, All Day cases, All Inpatients, All 
 # Inpatients and Day cases, Not Specified
 
-general_admissions_acute <- hosp_activity_and_demographics %>% 
+general_admissions_acute_age_sex <- hosp_activity_and_demographics %>% 
   filter(admission_type == "Emergency Inpatients")
-general_admissions_acute
+general_admissions_acute_age_sex
 ```
 
 
@@ -162,7 +169,7 @@ Now group by and create graphs over time:
 
 ```{r}
 
-gen_admissions_sex_per_quarter <- general_admissions_acute %>% 
+gen_admissions_sex_per_quarter <- general_admissions_acute_age_sex %>% 
   group_by(quarter, sex) %>% 
   summarise(total_admissions_per_quarter = n())
   
@@ -175,12 +182,53 @@ gen_admissions_sex_per_quarter %>%
   labs(x = "Quarter", 
        y = "Total Admissions", 
        title = "Total Emergency Inpatient Admissions",
-       subtitle = "November 2019 to February 2022", 
+       subtitle = "Q3 2016 to Q3 2021", 
        colour = "Sex") +
   theme_bw()+
   theme(axis.text.x = element_text(angle=45, hjust=0.9))
 
 ```
+
+<br>
+
+#### Average length of stay by sex - general admissions
+
+```{r}
+
+#this has negative numbers in it (?)
+# general_admissions_acute_age_sex %>% 
+#   drop_na(average_length_of_stay) %>% 
+#   distinct(desc(average_length_of_stay))
+
+# highlight_winter <- general_admissions_acute_age_sex %in% c("2016Q4", 
+# "2017Q1", "2017Q4", "2018Q1", "2018Q4", "2019Q1", "2019Q4", "2020Q1", 
+# "2020Q4", "2021Q1")
+# 
+# library(gghighlight)
+
+#Might be best to split into quarters? Have one of those sliding scales for time
+# Would also like to highlight the winter months 
+general_admissions_acute_age_sex %>% 
+  drop_na(average_length_of_stay) %>% 
+  group_by(quarter, sex, average_length_of_stay) %>% 
+  ggplot()+
+  aes(x = quarter, 
+      y = average_length_of_stay, 
+      fill = sex)+
+  geom_col(position = "dodge")+ 
+  labs(x = "Quarter of each year", 
+       y = "Average Length of stay (days)", 
+       title = "Average Length of Stay for Emergency Inpatient Admissions By 
+       Gender",
+       subtitle = "Q3 2016 to Q3 2021", 
+       colour = "Sex") +
+  theme_bw()+
+  theme(axis.text.x = element_text(angle=45, hjust=0.9))
+
+```
+
+
+
 
 <br>
 
@@ -198,8 +246,8 @@ hosp_activity_and_demographics %>%
 ```
 
 ```{r}
-gen_admissions_age_per_quarter <- general_admissions_acute %>% # remember this 
-  #is only looking at Emergency Inpatients but there are 7 groups
+gen_admissions_age_per_quarter <- general_admissions_acute_age_sex %>% 
+  # remember this is only looking at Emergency Inpatients but there are 7 groups
   group_by(quarter, age) %>% 
   summarise(total_admissions_per_quarter = n())
   
@@ -210,10 +258,10 @@ gen_admissions_age_per_quarter %>%
       y = total_admissions_per_quarter, 
       group = age, colour = age)+
   geom_line() + 
-  labs(x = "Quarter", 
+  labs(x = "Yearly Quarter", 
        y = "Total Admissions", 
        title = "Total Emergency Inpatient Admissions",
-       subtitle = "November 2019 to February 2022", 
+       subtitle = "Q3 2016 to Q3 2021", 
        colour = "Age Group") +
   theme_bw()+
   theme(axis.text.x = element_text(angle=45, hjust=0.9))
@@ -225,12 +273,295 @@ gen_admissions_age_per_quarter %>%
       group = age)+
   geom_col() + 
   facet_wrap(~age)+
-  labs(x = "Quarter", 
+  labs(x = "Yearly Quarter", 
        y = "Total Admissions", 
        title = "JUST MADE THIS TO SEE THE DIFFERENCE - AWARE IT'S MESSY - 
        Total Emergency Inpatient Admissions",
-       subtitle = "November 2019 to February 2022") +
+       subtitle = "Q3 2016 to Q3 2021") +
   theme_bw()+
   theme(axis.text.x = element_text(angle=45, hjust=0.9))
 ```
+<br> 
+#### average length of stay - general admissions - age 
+
+```{r}
+
+# as before, this has negative numbers in it (?)
+# general_admissions_acute_age_sex %>% 
+#   drop_na(average_length_of_stay) %>% 
+#   distinct(desc(average_length_of_stay))
+
+
+#Might be best to split into years?
+# Have one of those sliding scales for time
+# Would also like to highlight the winter months 
+general_admissions_acute_age_sex %>% 
+  drop_na(average_length_of_stay) %>% 
+  group_by(quarter, age, average_length_of_stay) %>% 
+  ggplot()+
+  aes(x = quarter, 
+      y = average_length_of_stay, 
+      fill = age)+
+  geom_col(position = "dodge") +  
+  facet_wrap(~age)+
+  labs(x = "Quarter of each year", 
+       y = "Average Length of stay (days)", 
+       title = "Average Length of Stay for Emergency Inpatient Admissions By 
+       Age Group",
+       subtitle = "Q3 2016 to Q3 2021", 
+       colour = "Age Group") +
+  theme_bw()+
+  theme(axis.text.x = element_text(angle=45, hjust=0.9))
+
+```
+
+
+<hr> 
+#### SIMD (Scottish Index of Multiple Deprivation)
+
+* This is a quintile scale (1 = "Most Deprived", 5 = "Least Deprived")
+* The most appropriate SIMD released for each year is used. 
+
+<br>
+
+```{r}
+# We have the same admission types here as above so I'll do the same - i.e. only
+# include the Emergency Inpatients though there are 7 groups
+hosp_activity_and_deprivation %>% 
+  distinct(admission_type)
+
+
+general_admissions_acute_deprivation <- hosp_activity_and_deprivation %>% 
+  filter(admission_type == "Emergency Inpatients")
+general_admissions_acute_deprivation
+
+```
+
+SIMD Types
+* note there are 962 NAs: there are codes in the simdqf column as to why 
+* sometimes it's just a general geographical groupings 
+```{r}
+general_admissions_acute_deprivation %>% 
+  group_by(simd) %>% 
+  summarise(total_for_each_simd = n())
+```
+<br>
+
+Drop NAs
+
+```{r}
+gen_admissions_simd_per_quarter <- general_admissions_acute_deprivation %>% 
+  group_by(quarter, simd) %>% 
+  drop_na(simd) %>% 
+  summarise(total_admission_per_quarter = n())
+gen_admissions_simd_per_quarter
+```
+
+**PLOTS total general admissions (emergency inpatient only) & deprivation**
+
+```{r}
+gen_admissions_simd_per_quarter %>% 
+  ggplot() + 
+  aes(x = quarter, 
+      y = total_admission_per_quarter, 
+      fill = simd) + 
+  geom_col(position = "dodge") + #why won' it dodge? Not enough space?? 
+  #also ignoring bin width
+  scale_color_brewer("Diamond\nclarity") + #this didn't work either...
+  labs(x = "Yearly Quarter", 
+       y = "Total Admissions", 
+       title = "Total Emergency Inpatient Admissions by Deprivation Level",
+       subtitle = "Q3 2016 to Q3 2021",
+       colour = "SIMD Level: (1 = Most Deprived : 5 = Least Deprived")+# where is this!?
+  theme_bw()+
+  theme(axis.text.x = element_text(angle = 45, hjust = 0.9))
+
+# here they are facet wraped by SIMD
+gen_admissions_simd_per_quarter %>% 
+  ggplot() + 
+  aes(x = quarter, 
+      y = total_admission_per_quarter, 
+      fill = simd) + 
+  geom_col(position = "dodge") + 
+  facet_wrap(~simd)+
+  labs(x = "Yearly Quarter", 
+       y = "Total Admissions", 
+       title = "Total Emergency Inpatient Admissions by Deprivation Level",
+       subtitle = "Q3 2016 to Q3 2021",
+       colour = "SIMD Level: (1 = Most Deprived : 5 = Least Deprived")+ #where is this?!
+  theme_bw()+
+  theme(axis.text.x = element_text(angle = 45, hjust = 0.9))
+
+
+# hmmm, that's not a very nice line graph:
+gen_admissions_simd_per_quarter %>% 
+  ggplot() + 
+  aes(x = quarter, 
+      y = total_admission_per_quarter, 
+      group = simd, 
+      colour = simd) + 
+  geom_line() +
+  labs(x = "Yearly Quarter", 
+       y = "Total Admissions", 
+       title = "Total Emergency Inpatient Admissions by Deprivation Level",
+        subtitle = "Q3 2016 to Q3 2021")+#, 
+       #colour = "SIMD Level: (1 = Most Deprived : 5 = Least Deprived")+
+  theme_bw()+
+  theme(axis.text.x = element_text(angle = 45, hjust = 0.9))
+```
+
+
+
+
+<hr>
+<br>
+## COVID ADMISSIONS 
+
+### May 21st 2020 - March 2nd, 2022
+
+```{r}
+library(lubridate)
+```
+
+
+Changing the week ending column to a date column and pulling out the specific
+dates:
+```{r}
+covid_ads_HB_age_sex <- covid_ads_HB_age_sex %>%
+  mutate(week_ending = ymd(week_ending))
+
+covid_ads_HB_age_sex <- covid_ads_HB_age_sex %>%
+  mutate(
+    wk_ending_day = day(week_ending),
+    wk_ending_month = month(week_ending, label = TRUE, abbr = FALSE),
+    wk_ending_year = year(week_ending)
+  )
+covid_ads_HB_age_sex
+```
+
+
+#### Sex and gender by healthboard
+
+<br>
+
+NOTE 
+Sex: "All" = 33951 rows, Female = 4782, Male = 4783 
+
+<br> 
+
+```{r}
+# by healthboard
+
+# admission types are either emergency or planned - that's good news for us
+covid_ads_HB_age_sex %>% 
+  distinct(admission_type)
+
+covid_acute_HB_age_sex <- covid_ads_HB_age_sex %>% 
+  filter(admission_type == "Emergency")
+
+# this is not neatly divided and there is an age group "41760" hmm
+covid_acute_HB_age_sex %>% 
+  group_by(age_group) %>% 
+  summarise(count_in_age_group = n())
+```
+
+<br>
+
+
+
+**Weekly COVID admissions per age group against the average weekly admissions**
+**in previous years**
+**NOTE: by healthboard data**
+<br>
+```{r}
+# Take out age group = all ages... still not sure about 41760
+covid_acute_HB_age_sex %>% 
+  filter(age_group != "All ages") %>% 
+  group_by(age_group) %>% 
+  ggplot()+
+  aes(x = number_admissions, 
+      y = average20182019, 
+      colour = age_group)+
+  geom_point() +
+  labs(x = "Weekly number of COVID admissions",
+       y = "Average weekly admissions to hospital in 2018-2019",
+       title = "Weekly COVID admissions per age group against the average weekly 
+       admissions in previous years",
+       subtitle = "COVID: January, 2020 to February, 2022 / Previous years: 2018 - 2019",
+       colour = "Age Group") +
+  theme_bw()+
+  theme(axis.text.x = element_text(angle = 45, hjust = 0.9))
+  
+```
+
+**The above just looking to see if there are differences in months**
+
+```{r}
+
+# Take out age group = all ages... still not sure about 41760
+covid_acute_HB_age_sex %>% 
+  filter(age_group != "All ages") %>% 
+  group_by(age_group) %>% 
+  ggplot()+
+  aes(x = number_admissions, 
+      y = average20182019, 
+      colour = age_group)+
+  geom_point() +
+  facet_wrap(~wk_ending_month) +
+  labs(x = "Weekly number of COVID admissions",
+       y = "Average weekly admissions to hospital in 2018-2019",
+       title = "Weekly COVID admissions per age group against the average weekly 
+       admissions in previous years",
+       subtitle = "COVID: January, 2020 to February, 2022 / Previous years: 2018 - 2019",
+       colour = "Age Group") +
+  theme_bw()+
+  theme(axis.text.x = element_text(angle = 45, hjust = 0.9))
+```
+
+
+
+```{r}
+covid_acute_HB_age_sex %>% 
+  group_by(sex) %>% 
+  summarise(total_of_each_sex = n())
+```
+
+```{r}
+covid_acute_ads_HB_demographics_sex <- covid_acute_HB_age_sex %>% 
+  #filter(sex != "All") %>% 
+  group_by(week_ending, sex) %>% 
+  summarise(total_admissions_for_week_ending = n())
+covid_ads_HB_demographics_sex
+
+
+covid_acute_ads_HB_demographics_sex %>% 
+  ggplot()+
+  aes(x = week_ending, 
+      y = total_admissions_for_week_ending,
+      colour = sex)+
+  geom_line()+
+  labs(title = "I AM AWARE THIS IS AWFUL")
+```
+
+```{r}
+covid_acute_HB_age_sex %>% 
+  filter(sex != "All") %>% 
+  group_by(sex) %>% 
+  ggplot()+
+  aes(x = number_admissions, 
+      y = average20182019, 
+      colour = sex)+
+  geom_point()+
+  labs(x = "Weekly number of COVID admissions",
+       y = "Average weekly admissions to hospital in 2018-2019",
+       title = "Weekly COVID admissions per sex against the average weekly 
+       admissions in previous years",
+       subtitle = "COVID: January, 2020 to February, 2022 / Previous years: 2018 - 2019",
+       colour = "Sex") +
+  theme_bw()+
+  theme(axis.text.x = element_text(angle = 45, hjust = 0.9))
+  
+
+```
+
 
