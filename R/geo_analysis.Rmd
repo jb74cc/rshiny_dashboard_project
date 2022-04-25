@@ -1,6 +1,8 @@
 ---
 title: "Public Health Scotland Group Project"
-output: html_notebook
+output:
+  html_document:
+    df_print: paged
 ---
 
 ```{r}
@@ -127,9 +129,9 @@ beds_by_hb_trim <- joined_beds_hb %>%
 
 ```
 
-Health board codes are not easy to understand...
+### Health board codes are not easy to understand...
 
-## Join health board code definitions;
+Join health board code definitions;
 
 ```{r}
 hb_codes <- read_csv(here("raw_data/phs_health_board_codes.csv")) %>% clean_names()
@@ -191,8 +193,7 @@ beds_by_hb_trim %>%
 ```
 
 ## First Hypothesis Test; 
-## For data available in the years before the covid pandemic, is the average acute 
-## bed occupancy in winter (Q4 + Q1) significantly greater than in summer (Q2 + Q3)?
+## For data available in the years before the covid pandemic, is the average acute bed occupancy in winter (Q4 + Q1) significantly greater than in summer (Q2 + Q3)?
 
 Focus on pre-covid timeline (2016 - 2019) to set a benchmark;
 ```{r}
@@ -277,8 +278,7 @@ acute bed occupancy in winter is statistically significantly greater than in
 summer.
 
 ## Second Hypothesis Test; 
-## For data available in the years during the covid pandemic, is the average acute 
-## bed occupancy in winter (Q4 + Q1) significantly greater than in summer (Q2 + Q3)?
+## For data available in the years during the covid pandemic, is the average acute ## bed occupancy in winter (Q4 + Q1) significantly greater than in summer (Q2 + Q3)?
 
 Focus on covid-affected timeline (2020 - 2021);
 ```{r}
@@ -299,6 +299,17 @@ seasonal_postcovid_total_avg_acute_occupancy %>%
        y = "% Bed Occupancy") +
   theme(title = element_text(face = "bold"))
 ```
+It looks like there's a really low value in the summer distribution; is this an
+outlier > 3σ from the mean?  Check the z-score;
+```{r}
+seasonal_postcovid_total_avg_acute_occupancy %>% 
+  filter(season == "summer") %>% 
+  mutate(z_occupancy = scale(mean_total_acute_occupancy))
+  
+```
+So within the context of 2020-2021 seasonal data there are no data points more
+than 3σ from the mean.  The closest point to this is the data point for 2020 Q2,
+at -1.44σ.
 
 Set α = 0.05.
 
@@ -355,6 +366,14 @@ p_value <- null_distribution %>%
 
 p_value
 ```
+
+## Conclusion of second hypothesis test
+In this case our p-value is much larger than our α value, so we fail to reject H0
+with the data available.  
+
+# Is this a valid statement based on the appearance of the null distribution...?
+
+
 
 ## Third Hypothesis Test; 
 ## For all data available in before and during the covid pandemic, is the average acute 
