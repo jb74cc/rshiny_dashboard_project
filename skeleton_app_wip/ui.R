@@ -4,7 +4,6 @@ library(shinyWidgets)
 
 
 
-
 ui <- fluidPage(
   # colour tabs and text
   tags$style(HTML("
@@ -29,19 +28,42 @@ ui <- fluidPage(
     sidebarPanel(
       
       # Input: Select the random distribution type ----
-      radioButtons("dist", "Bed Occupancy:",
-                   c("Year" = "norm",
-                     "Quarter" = "unif",
-                     "Pre Covid" = "lnorm",
-                     "Post Covid" = "exp")),
+      # selectInput("hb_input", 
+      #             label = tags$b("Select Health Board"),
+      #             choices = sort(unique(beds_by_hb_trim$hb_name)),
+      #             multiple = TRUE,
+      #             selected = unique(beds_by_hb_trim$hb_name)
+      #             ),
+      
+      checkboxGroupInput("hb_input", label = h4("Select Health Board"), 
+                         choices = sort(unique(beds_by_hb_trim$hb_name)),
+                         selected = sort(unique(beds_by_hb_trim$hb_name))),
+      
+    
       
       # br() element to introduce extra vertical spacing ----
       br(),
+      # drop down select dates
+      selectInput("select_start", label = h4("Select start date"), 
+                  choices = sort(unique(beds_by_hb_trim$quarter)), 
+                  selected = min(beds_by_hb_trim$quarter)),
       
-      # Input: Slider for the number of observations to generate ----
-      sliderInput("slider2", label = h3("Slider Range"), min = 0, 
-                  max = 100, value = c(40, 60))
-          
+      selectInput("select_end", label = h4("Select end date"), 
+                  choices = sort(unique(beds_by_hb_trim$quarter)), 
+                  selected = max(beds_by_hb_trim$quarter))
+      
+      #Input: Slider for the number of observations to generate ----
+      # dateRangeInput("daterange3", "Date range:",
+      #                start  = "2016-07-01",
+      #                end    = "2020-01-01",
+      #                min    = "2016-07-01",
+      #                max    = "2021-10-31",
+      #                format = "dd/mm/yy",
+      #                separator = " - ")
+      
+      # sliderInput("format", label = h3("Date Range"), min = 2016, 
+      #             max = 2021, pre = "Q", sep = ",", value = c(2016, 2021))
+      #     
     ),
     
     # Main panel for displaying outputs ----
