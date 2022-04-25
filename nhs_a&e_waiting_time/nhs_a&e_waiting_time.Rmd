@@ -25,6 +25,9 @@ ae_waiting_time_prior <- read_csv(here::here("data/monthly_ae_waitingtimes_A&E a
 
 ```{r}
 
+ae_waiting_time_prior %>% 
+  left_join(ae_waiting_time_prior, location_code, by = "treatment_location", all.x = TRUE)
+
 ae_waiting_time_prior <- ae_waiting_time_prior %>% 
   mutate(year = str_c(
     str_sub(month, start = 1, end = 4)), .before = 1) %>% 
@@ -60,10 +63,11 @@ ae_waiting_time_subset <- ae_waiting_time_subset %>%
 ae_waiting_time_subset <- ae_waiting_time_subset %>% 
   mutate(year_quarter = str_c(year, year_quarter))
 
-ae_waiting_time_clean <- ae_waiting_time_subset %>% 
-  filter(year != "2022") %>% 
-   filter(year_quarter != "2021Q4") %>% 
-   select(c(1:9))
+ae_waiting_time_clean <- ae_waiting_time_subset %>%   
+   select(c(1:9))                                     
+
+# filter(year != "2022") %>% 
+# filter(year_quarter != "2021Q4") %>% 
 
 ae_waiting_time_clean <- ae_waiting_time_clean %>% 
   mutate(number_meeting_target_aggregate = coalesce(number_meeting_target_aggregate, 0)) %>% 
@@ -83,48 +87,138 @@ library(ggplot2)
 
 ```{r}
 
-
-
-colnames(ae_waiting_time_clean)
-  
-  sum_attendances_aggregate <- ae_waiting_time_clean %>% 
-  group_by(year_quarter) %>% 
-  summarise_at(vars(number_of_attendances_aggregate),
-  list(sum_attendances_aggregate = sum))
-
-  sum_target_aggregate <- ae_waiting_time_clean %>% 
-  group_by(year_quarter) %>% 
-  summarise_at(vars(number_meeting_target_aggregate),
-  list(sum_target_aggregate = sum))
-  
-  sum_greater_8hrs <- ae_waiting_time_clean %>% 
-  group_by(year_quarter)%>% 
-  summarise_at(vars(attendance_greater8hrs),
-  list(sum_greater_8hrs = sum))
-  
-  sum_greater_12hrs <- ae_waiting_time_clean %>% 
-  group_by(year_quarter)%>% 
-  summarise_at(vars(attendance_greater12hrs),
-  list(sum_greater_12hrs = sum))
-  
+ae_waiting_time_clean <- ae_waiting_time_clean %>% 
+  mutate(year_quarter = as_factor(year_quarter)) 
 
   
-  
- 
+  avg_ae_waiting_time <- ae_waiting_time_clean %>% 
+    group_by(year_quarter) %>% 
+    summarise(mean(number_of_attendances_aggregate),
+              mean(number_meeting_target_aggregate),
+              mean(attendance_greater8hrs),
+              mean(attendance_greater12hrs))
     
-  
-
- 
-  
-  group_by(fall) %>% 
-  summarise_at(vars(mass_g),
-  list(avg_mass_g = mean))
-  
-  
-  ae_waiting_time_clean %>% 
-    mutate(year_quarter = as.factor(year_quarter)) %>% 
-    geom_line(aes(x=year_quarter))
-  
 
 ```
+
+
+```{r}
+
+ae_waiting_time_clean_long <- ae_waiting_time_clean %>% 
+  rename("hrs_waiting_4" = number_meeting_target_aggregate,
+         "hrs_more_waiting_8" = attendance_greater8hrs,
+         "hrs_more_waiting_12" = attendance_greater12hrs) 
+
+ae_waiting_time_clean_long_p <-ae_waiting_time_clean_long %>%
+  pivot_longer(cols = c(hrs_waiting_4,hrs_more_waiting_8, hrs_more_waiting_12), names_to =  "hrs_waiting", values_to = "number_attendances") %>%
+  mutate( year = as.numeric(year))
+
+```
+
+
+```{r}
+location_code <- ae_waiting_time %>% 
+  select(4:5) %>% 
+  rename("treatment_location" = "treatment_location_code")
+```
+
+```{r}
+
+ae_waiting_time_clean_long_p <- left_join(ae_waiting_time_clean_long_p, location_code, by = "treatment_location") %>% 
+  unique() %>% 
+  relocate(treatment_location_name, .after = 4) 
+  
+
+ae_waiting_time_clean_long_p <- ae_waiting_time_clean_long_p %>% 
+  filter(department_type == "Emergency Department")
+
+
+
+```
+
+```{r}
+
+unique(ae_waiting_time_clean_long_p$year_quarter)
+
+```
+
+
+```{r}
+
+#3 lines in one plot
+
+ plot_data_4hrs <- ae_waiting_time_clean_long_p %>% 
+  group_by(year_quarter) %>% 
+  filter(hrs_waiting == "hrs_waiting_4") %>% 
+  summarise(total_attendances = sum(number_attendances)) %>% 
+  mutate(time_waiting = "4hrs", .after = 1)
+
+plot_data_8hrs <- ae_waiting_time_clean_long_p %>% 
+  group_by(year_quarter) %>% 
+  filter(hrs_waiting == "hrs_more_waiting_8") %>% 
+  summarise(total_attendances = sum(number_attendances)) %>% 
+  mutate(time_waiting = "8hrs", .after = 1)
+
+plot_data_12hrs <- ae_waiting_time_clean_long_p %>% 
+  group_by(year_quarter) %>% 
+  filter(hrs_waiting == "hrs_more_waiting_12") %>% 
+  summarise(total_attendances = sum(number_attendances)) %>% 
+  mutate(time_waiting = "12hrs", .after = 1)
+
+plot_data_waiting_time <- rbind(plot_data_4hrs, plot_data_8hrs, plot_data_12hrs)
+
+plot_data_waiting_time %>% 
+  group_by(year_quarter) %>% 
+  ggplot()+
+  aes(x = year_quarter, y = total_attendances, group = time_waiting, colour = time_waiting)+
+  geom_point()+
+  geom_line()
+
+
+
+```
+
+
+
+```{r}
+
+# all attendances
+ae_waiting_time_clean_long_p %>% 
+  group_by(year_quarter) %>% 
+  # filter(hrs_waiting == "hrs_waiting_4") %>% 
+  summarise(total_attendances = sum(number_attendances)) %>% 
+  ggplot()+
+  aes(x = year_quarter, y = total_attendances)+
+  geom_point()+
+  geom_line(group = 1)
+#
+
+ae_waiting_time_clean_long_p %>% 
+  group_by(year_quarter) %>% 
+  filter(hrs_waiting) %>% 
+  summarise(total_attendances_4rs = sum(number_attendances),
+            total_attendances_8hr = sum())
+  ggplot(aes(x = year_quarter, y = number_attendances, group_by = hrs_waiting))+
+  geom_line()+
+  geom_point()
+  
+ae_waiting_time_clean_long_p %>% 
+  ggplot(aes(x = year_quarter, y = number_attendances, group = hrs_waiting))+
+  geom_line()+
+  geom_point()
+  
+  
+# ggplot(ae_waiting_time_clean_long_p, aes(year_quarter, colour = number_attendances,, stat = "count")) +geom_freqpoly(binwidth = 500)
+
+```
+
+
+
+
+
+
+
+
+
+
 

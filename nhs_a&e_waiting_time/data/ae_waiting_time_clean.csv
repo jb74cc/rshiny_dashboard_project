@@ -5178,3 +5178,249 @@ year,year_quarter,month,treatment_location,department_type,number_of_attendances
 2021,2021Q3,09,W106H,Minor Injury Unit or Other,23,23,0,0
 2021,2021Q3,09,W107H,Emergency Department,340,333,0,0
 2021,2021Q3,09,W108H,Minor Injury Unit or Other,79,78,0,0
+2021,2021Q4,10,A101H,Minor Injury Unit or Other,226,217,0,0
+2021,2021Q4,10,A110H,Minor Injury Unit or Other,81,81,0,0
+2021,2021Q4,10,A111H,Emergency Department,5147,3844,604,361
+2021,2021Q4,10,A210H,Emergency Department,2538,1834,285,136
+2021,2021Q4,10,A216H,Minor Injury Unit or Other,55,55,0,0
+2021,2021Q4,10,B118H,Minor Injury Unit or Other,23,23,0,0
+2021,2021Q4,10,B120H,Emergency Department,2353,1786,182,98
+2021,2021Q4,10,Y144H,Emergency Department,955,861,20,5
+2021,2021Q4,10,Y146H,Emergency Department,2555,1937,72,11
+2021,2021Q4,10,F704H,Emergency Department,5039,3536,373,62
+2021,2021Q4,10,F708H,Minor Injury Unit or Other,138,134,1,0
+2021,2021Q4,10,F709H,Minor Injury Unit or Other,218,217,0,0
+2021,2021Q4,10,F805H,Minor Injury Unit or Other,970,968,0,0
+2021,2021Q4,10,V201H,Minor Injury Unit or Other,1877,1874,0,0
+2021,2021Q4,10,V217H,Emergency Department,5034,2380,730,161
+2021,2021Q4,10,N101H,Emergency Department,4223,2785,194,24
+2021,2021Q4,10,N121H,Emergency Department,1177,1113,8,0
+2021,2021Q4,10,N333H,Minor Injury Unit or Other,337,335,0,0
+2021,2021Q4,10,N334H,Minor Injury Unit or Other,475,473,0,0
+2021,2021Q4,10,N335H,Minor Injury Unit or Other,222,221,0,0
+2021,2021Q4,10,N337H,Minor Injury Unit or Other,20,20,0,0
+2021,2021Q4,10,N411H,Emergency Department,2066,1680,93,13
+2021,2021Q4,10,C206H,Minor Injury Unit or Other,1166,1067,14,2
+2021,2021Q4,10,C313H,Emergency Department,2325,1767,69,14
+2021,2021Q4,10,C418H,Emergency Department,4751,3027,556,139
+2021,2021Q4,10,G107H,Emergency Department,7204,4741,440,57
+2021,2021Q4,10,G207H,Minor Injury Unit or Other,1731,1728,0,0
+2021,2021Q4,10,G306H,Minor Injury Unit or Other,1917,1914,1,0
+2021,2021Q4,10,G405H,Emergency Department,7331,3845,894,268
+2021,2021Q4,10,G513H,Emergency Department,6234,5744,3,0
+2021,2021Q4,10,C106H,Minor Injury Unit or Other,557,552,0,0
+2021,2021Q4,10,C108H,Minor Injury Unit or Other,60,57,0,0
+2021,2021Q4,10,C113H,Minor Injury Unit or Other,234,229,0,0
+2021,2021Q4,10,C121H,Emergency Department,662,611,7,0
+2021,2021Q4,10,C122H,Minor Injury Unit or Other,300,271,4,1
+2021,2021Q4,10,H101H,Minor Injury Unit or Other,4,4,0,0
+2021,2021Q4,10,H103H,Emergency Department,752,666,10,2
+2021,2021Q4,10,H106H,Minor Injury Unit or Other,24,24,0,0
+2021,2021Q4,10,H202H,Emergency Department,2861,2213,128,20
+2021,2021Q4,10,H208H,Minor Injury Unit or Other,174,173,0,0
+2021,2021Q4,10,H212H,Emergency Department,738,675,4,0
+2021,2021Q4,10,H214H,Minor Injury Unit or Other,318,318,0,0
+2021,2021Q4,10,H215H,Minor Injury Unit or Other,66,66,0,0
+2021,2021Q4,10,H219H,Minor Injury Unit or Other,3,3,0,0
+2021,2021Q4,10,H224H,Minor Injury Unit or Other,284,282,0,0
+2021,2021Q4,10,H227B,Minor Injury Unit or Other,70,70,0,0
+2021,2021Q4,10,H227H,Minor Injury Unit or Other,101,99,0,0
+2021,2021Q4,10,L106H,Emergency Department,5507,3875,334,89
+2021,2021Q4,10,L302H,Emergency Department,5099,3414,207,42
+2021,2021Q4,10,L308H,Emergency Department,5950,3471,857,148
+2021,2021Q4,10,S116H,Minor Injury Unit or Other,3343,2163,269,102
+2021,2021Q4,10,S308H,Emergency Department,4694,3110,466,219
+2021,2021Q4,10,S314H,Emergency Department,10212,5733,1451,661
+2021,2021Q4,10,S319H,Emergency Department,5068,4806,6,0
+2021,2021Q4,10,R103H,Emergency Department,457,436,1,0
+2021,2021Q4,10,Z102H,Emergency Department,544,521,1,0
+2021,2021Q4,10,T101H,Emergency Department,4874,4430,3,0
+2021,2021Q4,10,T202H,Emergency Department,1717,1611,10,3
+2021,2021Q4,10,T304H,Minor Injury Unit or Other,560,560,0,0
+2021,2021Q4,10,T319H,Minor Injury Unit or Other,276,276,0,0
+2021,2021Q4,10,W106H,Minor Injury Unit or Other,38,38,0,0
+2021,2021Q4,10,W107H,Emergency Department,334,326,0,0
+2021,2021Q4,10,W108H,Minor Injury Unit or Other,66,65,0,0
+2021,2021Q4,11,A101H,Minor Injury Unit or Other,166,162,0,0
+2021,2021Q4,11,A110H,Minor Injury Unit or Other,44,42,0,0
+2021,2021Q4,11,A111H,Emergency Department,4861,3567,578,322
+2021,2021Q4,11,A210H,Emergency Department,2165,1592,236,107
+2021,2021Q4,11,A216H,Minor Injury Unit or Other,61,61,0,0
+2021,2021Q4,11,B120H,Emergency Department,2217,1543,260,135
+2021,2021Q4,11,Y144H,Emergency Department,852,773,18,3
+2021,2021Q4,11,Y146H,Emergency Department,2407,1868,96,11
+2021,2021Q4,11,F704H,Emergency Department,5046,3762,189,21
+2021,2021Q4,11,F708H,Minor Injury Unit or Other,143,137,0,0
+2021,2021Q4,11,F709H,Minor Injury Unit or Other,217,217,0,0
+2021,2021Q4,11,F805H,Minor Injury Unit or Other,939,939,0,0
+2021,2021Q4,11,V201H,Minor Injury Unit or Other,1690,1689,0,0
+2021,2021Q4,11,V217H,Emergency Department,4750,2582,482,92
+2021,2021Q4,11,N101H,Emergency Department,3972,2327,286,29
+2021,2021Q4,11,N121H,Emergency Department,1306,1199,4,1
+2021,2021Q4,11,N333H,Minor Injury Unit or Other,360,359,0,0
+2021,2021Q4,11,N334H,Minor Injury Unit or Other,407,406,0,0
+2021,2021Q4,11,N335H,Minor Injury Unit or Other,218,213,0,0
+2021,2021Q4,11,N411H,Emergency Department,2023,1673,63,18
+2021,2021Q4,11,C206H,Minor Injury Unit or Other,1135,1067,4,0
+2021,2021Q4,11,C313H,Emergency Department,2286,1762,56,4
+2021,2021Q4,11,C418H,Emergency Department,4406,2916,345,59
+2021,2021Q4,11,G107H,Emergency Department,6720,5103,163,10
+2021,2021Q4,11,G207H,Minor Injury Unit or Other,1687,1684,0,0
+2021,2021Q4,11,G306H,Minor Injury Unit or Other,1872,1872,0,0
+2021,2021Q4,11,G405H,Emergency Department,7037,4245,356,55
+2021,2021Q4,11,G513H,Emergency Department,6486,5606,17,1
+2021,2021Q4,11,C106H,Minor Injury Unit or Other,538,530,0,0
+2021,2021Q4,11,C108H,Minor Injury Unit or Other,46,43,0,0
+2021,2021Q4,11,C113H,Minor Injury Unit or Other,255,249,0,0
+2021,2021Q4,11,C121H,Emergency Department,595,570,3,0
+2021,2021Q4,11,C122H,Minor Injury Unit or Other,273,253,4,1
+2021,2021Q4,11,H101H,Minor Injury Unit or Other,2,2,0,0
+2021,2021Q4,11,H103H,Emergency Department,773,680,19,5
+2021,2021Q4,11,H106H,Minor Injury Unit or Other,9,9,0,0
+2021,2021Q4,11,H202H,Emergency Department,2621,2074,88,21
+2021,2021Q4,11,H208H,Minor Injury Unit or Other,144,144,0,0
+2021,2021Q4,11,H212H,Emergency Department,630,562,8,2
+2021,2021Q4,11,H214H,Minor Injury Unit or Other,256,256,0,0
+2021,2021Q4,11,H215H,Minor Injury Unit or Other,40,40,0,0
+2021,2021Q4,11,H219H,Minor Injury Unit or Other,32,32,0,0
+2021,2021Q4,11,H224H,Minor Injury Unit or Other,231,231,0,0
+2021,2021Q4,11,H227B,Minor Injury Unit or Other,67,67,0,0
+2021,2021Q4,11,H227H,Minor Injury Unit or Other,76,76,0,0
+2021,2021Q4,11,L106H,Emergency Department,5380,4174,157,23
+2021,2021Q4,11,L302H,Emergency Department,4810,3592,143,25
+2021,2021Q4,11,L308H,Emergency Department,5696,3750,569,111
+2021,2021Q4,11,S116H,Minor Injury Unit or Other,3206,1972,349,168
+2021,2021Q4,11,S308H,Emergency Department,4335,3232,239,61
+2021,2021Q4,11,S314H,Emergency Department,9853,5541,1369,666
+2021,2021Q4,11,S319H,Emergency Department,5059,4765,5,0
+2021,2021Q4,11,R103H,Emergency Department,456,441,0,0
+2021,2021Q4,11,Z102H,Emergency Department,566,547,0,0
+2021,2021Q4,11,T101H,Emergency Department,4516,4186,4,0
+2021,2021Q4,11,T202H,Emergency Department,1650,1594,6,3
+2021,2021Q4,11,T304H,Minor Injury Unit or Other,532,532,0,0
+2021,2021Q4,11,T319H,Minor Injury Unit or Other,239,239,0,0
+2021,2021Q4,11,W106H,Minor Injury Unit or Other,54,54,0,0
+2021,2021Q4,11,W107H,Emergency Department,324,315,0,0
+2021,2021Q4,11,W108H,Minor Injury Unit or Other,81,80,0,0
+2021,2021Q4,12,A101H,Minor Injury Unit or Other,131,125,0,0
+2021,2021Q4,12,A110H,Minor Injury Unit or Other,58,58,0,0
+2021,2021Q4,12,A111H,Emergency Department,4493,3363,512,294
+2021,2021Q4,12,A210H,Emergency Department,2124,1557,228,110
+2021,2021Q4,12,A216H,Minor Injury Unit or Other,37,37,0,0
+2021,2021Q4,12,B120H,Emergency Department,2264,1509,341,201
+2021,2021Q4,12,Y144H,Emergency Department,878,783,17,4
+2021,2021Q4,12,Y146H,Emergency Department,2232,1783,56,9
+2021,2021Q4,12,F704H,Emergency Department,4864,3472,241,24
+2021,2021Q4,12,F708H,Minor Injury Unit or Other,119,116,0,0
+2021,2021Q4,12,F709H,Minor Injury Unit or Other,138,137,1,0
+2021,2021Q4,12,F805H,Minor Injury Unit or Other,723,723,0,0
+2021,2021Q4,12,V201H,Minor Injury Unit or Other,1476,1466,0,0
+2021,2021Q4,12,V217H,Emergency Department,4530,2640,293,43
+2021,2021Q4,12,N101H,Emergency Department,4183,2518,308,58
+2021,2021Q4,12,N121H,Emergency Department,1124,1086,1,1
+2021,2021Q4,12,N333H,Minor Injury Unit or Other,359,359,0,0
+2021,2021Q4,12,N334H,Minor Injury Unit or Other,424,421,0,0
+2021,2021Q4,12,N335H,Minor Injury Unit or Other,213,209,0,0
+2021,2021Q4,12,N411H,Emergency Department,2056,1648,94,23
+2021,2021Q4,12,C206H,Minor Injury Unit or Other,1024,949,5,0
+2021,2021Q4,12,C313H,Emergency Department,2152,1761,50,3
+2021,2021Q4,12,C418H,Emergency Department,4169,2745,387,39
+2021,2021Q4,12,G107H,Emergency Department,6175,4402,194,11
+2021,2021Q4,12,G207H,Minor Injury Unit or Other,1347,1344,0,0
+2021,2021Q4,12,G306H,Minor Injury Unit or Other,1516,1506,0,0
+2021,2021Q4,12,G405H,Emergency Department,6792,4549,260,34
+2021,2021Q4,12,G513H,Emergency Department,5602,5108,7,0
+2021,2021Q4,12,C106H,Minor Injury Unit or Other,537,534,0,0
+2021,2021Q4,12,C108H,Minor Injury Unit or Other,50,46,0,0
+2021,2021Q4,12,C113H,Minor Injury Unit or Other,173,170,0,0
+2021,2021Q4,12,C121H,Emergency Department,590,566,1,0
+2021,2021Q4,12,C122H,Minor Injury Unit or Other,275,255,2,0
+2021,2021Q4,12,H101H,Minor Injury Unit or Other,3,3,0,0
+2021,2021Q4,12,H103H,Emergency Department,662,583,9,4
+2021,2021Q4,12,H106H,Minor Injury Unit or Other,18,18,0,0
+2021,2021Q4,12,H202H,Emergency Department,2618,1964,113,25
+2021,2021Q4,12,H208H,Minor Injury Unit or Other,220,220,0,0
+2021,2021Q4,12,H212H,Emergency Department,645,577,6,1
+2021,2021Q4,12,H214H,Minor Injury Unit or Other,286,286,0,0
+2021,2021Q4,12,H215H,Minor Injury Unit or Other,36,36,0,0
+2021,2021Q4,12,H219H,Minor Injury Unit or Other,23,23,0,0
+2021,2021Q4,12,H224H,Minor Injury Unit or Other,200,198,0,0
+2021,2021Q4,12,H227B,Minor Injury Unit or Other,55,55,0,0
+2021,2021Q4,12,H227H,Minor Injury Unit or Other,99,98,0,0
+2021,2021Q4,12,L106H,Emergency Department,4963,3837,178,22
+2021,2021Q4,12,L302H,Emergency Department,4602,3284,156,41
+2021,2021Q4,12,L308H,Emergency Department,5444,3277,539,85
+2021,2021Q4,12,S116H,Minor Injury Unit or Other,2951,1785,330,172
+2021,2021Q4,12,S308H,Emergency Department,4351,3154,266,83
+2021,2021Q4,12,S314H,Emergency Department,9093,5359,1133,551
+2021,2021Q4,12,S319H,Emergency Department,4062,3863,7,2
+2021,2021Q4,12,R103H,Emergency Department,458,436,1,0
+2021,2021Q4,12,Z102H,Emergency Department,603,585,0,0
+2021,2021Q4,12,T101H,Emergency Department,4128,3883,3,0
+2021,2021Q4,12,T202H,Emergency Department,1536,1410,11,1
+2021,2021Q4,12,T304H,Minor Injury Unit or Other,473,473,0,0
+2021,2021Q4,12,T319H,Minor Injury Unit or Other,227,227,0,0
+2021,2021Q4,12,W106H,Minor Injury Unit or Other,41,41,0,0
+2021,2021Q4,12,W107H,Emergency Department,325,313,1,0
+2021,2021Q4,12,W108H,Minor Injury Unit or Other,69,69,0,0
+2022,2022Q1,01,A101H,Minor Injury Unit or Other,184,178,0,0
+2022,2022Q1,01,A110H,Minor Injury Unit or Other,91,90,0,0
+2022,2022Q1,01,A111H,Emergency Department,4351,3263,594,432
+2022,2022Q1,01,A210H,Emergency Department,2138,1490,287,131
+2022,2022Q1,01,A216H,Minor Injury Unit or Other,56,56,0,0
+2022,2022Q1,01,B120H,Emergency Department,2142,1487,213,113
+2022,2022Q1,01,Y144H,Emergency Department,801,721,17,4
+2022,2022Q1,01,Y146H,Emergency Department,2163,1721,101,16
+2022,2022Q1,01,F704H,Emergency Department,4795,3445,255,33
+2022,2022Q1,01,F708H,Minor Injury Unit or Other,108,106,0,0
+2022,2022Q1,01,F709H,Minor Injury Unit or Other,163,163,0,0
+2022,2022Q1,01,F805H,Minor Injury Unit or Other,817,817,0,0
+2022,2022Q1,01,V201H,Minor Injury Unit or Other,1616,1612,0,0
+2022,2022Q1,01,V217H,Emergency Department,4416,3069,145,33
+2022,2022Q1,01,N101H,Emergency Department,4194,2524,265,34
+2022,2022Q1,01,N121H,Emergency Department,1083,1041,1,0
+2022,2022Q1,01,N333H,Minor Injury Unit or Other,444,442,0,0
+2022,2022Q1,01,N334H,Minor Injury Unit or Other,460,460,0,0
+2022,2022Q1,01,N335H,Minor Injury Unit or Other,178,175,0,0
+2022,2022Q1,01,N411H,Emergency Department,1994,1610,69,12
+2022,2022Q1,01,C206H,Minor Injury Unit or Other,1053,986,8,4
+2022,2022Q1,01,C313H,Emergency Department,2111,1657,68,19
+2022,2022Q1,01,C418H,Emergency Department,4204,2783,524,149
+2022,2022Q1,01,G107H,Emergency Department,6282,4553,317,32
+2022,2022Q1,01,G207H,Minor Injury Unit or Other,1619,1616,0,0
+2022,2022Q1,01,G306H,Minor Injury Unit or Other,1743,1742,0,0
+2022,2022Q1,01,G405H,Emergency Department,6735,3851,686,205
+2022,2022Q1,01,G513H,Emergency Department,5003,4923,0,0
+2022,2022Q1,01,C106H,Minor Injury Unit or Other,547,544,0,0
+2022,2022Q1,01,C108H,Minor Injury Unit or Other,59,57,0,0
+2022,2022Q1,01,C113H,Minor Injury Unit or Other,210,204,0,0
+2022,2022Q1,01,C121H,Emergency Department,623,604,4,1
+2022,2022Q1,01,C122H,Minor Injury Unit or Other,235,221,5,1
+2022,2022Q1,01,H101H,Minor Injury Unit or Other,4,4,0,0
+2022,2022Q1,01,H103H,Emergency Department,587,525,6,1
+2022,2022Q1,01,H106H,Minor Injury Unit or Other,17,17,0,0
+2022,2022Q1,01,H202H,Emergency Department,2543,1980,93,24
+2022,2022Q1,01,H208H,Minor Injury Unit or Other,197,196,0,0
+2022,2022Q1,01,H212H,Emergency Department,652,595,2,0
+2022,2022Q1,01,H214H,Minor Injury Unit or Other,244,237,0,0
+2022,2022Q1,01,H215H,Minor Injury Unit or Other,53,53,0,0
+2022,2022Q1,01,H219H,Minor Injury Unit or Other,22,22,0,0
+2022,2022Q1,01,H224H,Minor Injury Unit or Other,226,221,0,0
+2022,2022Q1,01,H227B,Minor Injury Unit or Other,50,50,0,0
+2022,2022Q1,01,H227H,Minor Injury Unit or Other,79,77,0,0
+2022,2022Q1,01,L106H,Emergency Department,5092,3638,376,72
+2022,2022Q1,01,L302H,Emergency Department,4741,3396,168,29
+2022,2022Q1,01,L308H,Emergency Department,5448,3338,681,137
+2022,2022Q1,01,S116H,Minor Injury Unit or Other,2923,1896,260,106
+2022,2022Q1,01,S308H,Emergency Department,4310,3146,319,117
+2022,2022Q1,01,S314H,Emergency Department,9028,5292,1203,559
+2022,2022Q1,01,S319H,Emergency Department,3825,3628,3,0
+2022,2022Q1,01,R103H,Emergency Department,478,444,4,1
+2022,2022Q1,01,Z102H,Emergency Department,541,531,0,0
+2022,2022Q1,01,T101H,Emergency Department,4240,3982,4,0
+2022,2022Q1,01,T202H,Emergency Department,1496,1413,4,1
+2022,2022Q1,01,T304H,Minor Injury Unit or Other,536,535,0,0
+2022,2022Q1,01,T319H,Minor Injury Unit or Other,239,239,0,0
+2022,2022Q1,01,W106H,Minor Injury Unit or Other,38,38,0,0
+2022,2022Q1,01,W107H,Emergency Department,322,316,0,0
+2022,2022Q1,01,W108H,Minor Injury Unit or Other,77,77,0,0
