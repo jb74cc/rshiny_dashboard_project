@@ -12,6 +12,7 @@ library(here)
 library(leaflet)
 library(sf)
 library(infer)
+library(plotly)
 
 
 
@@ -160,7 +161,7 @@ write_csv(beds_by_hb_trim, "../clean_data/bed_occupancy_by_health_board_clean.cs
 
 
 ```{r}
-beds_by_hb_trim %>%
+beds_by_hb_trim_plotly <- beds_by_hb_trim %>% 
   ggplot() +
   aes(x = quarter, y = hb_mean_occupancy, colour = hb_name, group = hb) +
   geom_line() +
@@ -172,6 +173,8 @@ beds_by_hb_trim %>%
   theme(axis.text.x = element_text(angle = 270, vjust = 0.25),
         title = element_text(face = "bold"),
         legend.title = element_blank())
+
+ggplotly(beds_by_hb_trim_plotly)
 
 ```
 
