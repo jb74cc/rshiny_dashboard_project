@@ -37,8 +37,8 @@ covid_admissions_HB_agesex <- janitor::clean_names(covid_admissions_HB_agesex)
 covid_admissions_HB_simd <- janitor::clean_names(covid_admissions_HB_simd)
 ```
 
-**Change week_ending column to a date and creating new day, month, year AND ** 
-**a month and year col**
+**Change week_ending column to a date and creating new month, year AND ** 
+**a month and year col** 
 ```{r}
 # Health Board x Age sex
 covid_admissions_HB_agesex <- covid_admissions_HB_agesex %>%
@@ -63,7 +63,6 @@ covid_admissions_HB_simd <- covid_admissions_HB_simd %>%
 
 covid_admissions_HB_simd <- covid_admissions_HB_simd %>%
   mutate(
-    wk_ending_day = day(week_ending),
     wk_ending_month = month(week_ending, label = TRUE, abbr = FALSE),
     wk_ending_year = year(week_ending)
   ) %>% 
@@ -74,7 +73,42 @@ covid_admissions_HB_simd <- covid_admissions_HB_simd %>%
 covid_admissions_HB_simd
 
 ```
+<br>
 
+Adding a quarter and year column 
+```{r}
+covid_admissions_HB_agesex <- covid_admissions_HB_agesex %>% 
+  mutate(year_quarter = case_when(
+    wk_ending_yr_month == "January 2020" ~ "2020Q1",
+    wk_ending_yr_month == "February 2020" ~ "2020Q1",
+    wk_ending_yr_month == "March 2020" ~ "2020Q1",
+    wk_ending_yr_month == "April 2020" ~ "2020Q2",
+    wk_ending_yr_month == "May 2020" ~ "2020Q2",
+    wk_ending_yr_month == "June 2020" ~ "2020Q2",
+    wk_ending_yr_month == "July 2020" ~ "2020Q3",
+    wk_ending_yr_month == "August 2020" ~ "2020Q3",
+    wk_ending_yr_month == "September 2020" ~ "2020Q3",
+    wk_ending_yr_month == "October 2020" ~ "2020Q4",
+    wk_ending_yr_month == "November 2020" ~ "2020Q4",
+    wk_ending_yr_month == "December 2020" ~ "2020Q4",
+    wk_ending_yr_month == "January 2021" ~ "2021Q1",
+    wk_ending_yr_month == "February 2021" ~ "2021Q1",
+    wk_ending_yr_month == "March 2021" ~ "2021Q1",
+    wk_ending_yr_month == "April 2021" ~ "2021Q2",
+    wk_ending_yr_month == "May 2021" ~ "2021Q2",
+    wk_ending_yr_month == "June 2021" ~ "2021Q2",
+    wk_ending_yr_month == "July 2021" ~ "2021Q3",
+    wk_ending_yr_month == "August 2021" ~ "2021Q3",
+    wk_ending_yr_month == "September 2021" ~ "2021Q3",
+    wk_ending_yr_month == "October 2021" ~ "2021Q4",
+    wk_ending_yr_month == "November 2021" ~ "2021Q4",
+    wk_ending_yr_month == "December 2021" ~ "2021Q4",
+    wk_ending_yr_month == "January 2022" ~ "2022Q1",
+    wk_ending_yr_month == "February 2022" ~ "2022Q1",
+  ))
+```
+
+<br>
 
 <hr>
 
@@ -254,6 +288,23 @@ winter_dates <- c("January 2020", "February 2020", "March 2020", "October 2020",
                   "February 2021", "March 2021", "October 2021", 
                   "November 2021", "December 2021", "January 2022", 
                   "February 2022")
+
+quarter_dates <- c("2016Q3", "2016Q4", "2017Q1", "2017Q2", "2017Q3", "2017Q4", 
+                   "2018Q1", "2018Q2", "2018Q3", "2018Q4", "2019Q1", "2019Q2", 
+                   "2019Q3", "2019Q4", "2020Q1", "2020Q2", "2020Q3", "2020Q4",
+                   "2021Q1", "2021Q2", "2021Q3")
+
+q1 <- c("January 2020", "February 2020", "March 2020", "January 2021", 
+        "February 2021", "March 2021", "January 2022", "February 2022")
+
+q2 <- c("April 2020", "May 2020", "June 2020", "April 2021", "May 2021", 
+        "June 2021") 
+
+q3 <- c("July 2020", "August 2020", "September 2020", "July 2021", 
+        "August 2021", "September 2021")
+
+q4 <- c("October 2020", "November 2020", "December 2020", "October 2021", 
+        "November 2021", "December 2021")
 ```
 
 <br>
@@ -273,14 +324,106 @@ covid_admissions_HB_age_totals %>%
   scale_x_discrete(limits = dates) +
   geom_point()+
   geom_line()+
-  labs(x = "Month",
+  labs(x = "Month and Year",
        y = "Total admissions",
-       title = "HB Total Admissions per month by age group",
+       title = "(HB) Total Admissions per month across Scotland by age group",
        subtitle = "January, 2020 - February 2022",
        colour = "Age Group") +
   theme_bw()+
   theme(axis.text.x = element_text(angle = 45, hjust = 0.9))
 ```
+
+
+
+column for totals per quarter
+```{r}
+
+q1_20 <- covid_admissions_HB_age_totals %>% 
+  filter(year_quarter == "2020Q1") %>% 
+  group_by(age_group) %>% 
+  mutate(totals_per_age_per_quarter = sum(number_admissions))
+q1_20
+
+q2_20 <- covid_admissions_HB_age_totals %>% 
+  filter(year_quarter == "2020Q2") %>% 
+  group_by(age_group) %>% 
+  mutate(totals_per_age_per_quarter = sum(number_admissions))
+q2_20
+
+q3_20 <- covid_admissions_HB_age_totals %>% 
+  filter(year_quarter == "2020Q3") %>% 
+  group_by(age_group) %>% 
+  mutate(totals_per_age_per_quarter = sum(number_admissions))
+q3_20
+
+q4_20 <- covid_admissions_HB_age_totals %>% 
+  filter(year_quarter == "2020Q4") %>% 
+  group_by(age_group) %>% 
+  mutate(totals_per_age_per_quarter = sum(number_admissions))
+q4_20
+
+q1_21 <- covid_admissions_HB_age_totals %>% 
+  filter(year_quarter == "2021Q1") %>% 
+  group_by(age_group) %>% 
+  mutate(totals_per_age_per_quarter = sum(number_admissions))
+q1_21
+
+q2_21 <- covid_admissions_HB_age_totals %>% 
+  filter(year_quarter == "2021Q2") %>% 
+  group_by(age_group) %>% 
+  mutate(totals_per_age_per_quarter = sum(number_admissions))
+q2_21
+
+q3_21 <- covid_admissions_HB_age_totals %>% 
+  filter(year_quarter == "2021Q3") %>% 
+  group_by(age_group) %>% 
+  mutate(totals_per_age_per_quarter = sum(number_admissions))
+q3_21
+
+q4_21 <- covid_admissions_HB_age_totals %>% 
+  filter(year_quarter == "2021Q4") %>% 
+  group_by(age_group) %>% 
+  mutate(totals_per_age_per_quarter = sum(number_admissions))
+q4_21
+
+q1_22 <- covid_admissions_HB_age_totals %>% 
+  filter(year_quarter == "2022Q1") %>% 
+  group_by(age_group) %>% 
+  mutate(totals_per_age_per_quarter = sum(number_admissions))
+q1_22
+
+
+
+covid_admissions_quarter_age_totals <- bind_rows(q1_20, q2_20, q3_20, q4_20, q1_21, 
+                                             q2_21, q3_21, q4_21, q1_22)
+covid_admissions_quarter_age_totals
+```
+
+By Quarter: 
+```{r}
+covid_admissions_quarter_age_totals %>% 
+  mutate(age_group = fct_relevel(age_group, 
+                                 "Under 5", "5 - 14", "15 - 44", 
+                                 "45 - 64", "65 - 74", "75 - 84", 
+                                 "85 and over")) %>%
+  ggplot()+
+  aes(x = year_quarter, 
+      y = totals_per_age_per_quarter, 
+      group = age_group, 
+      colour = age_group)+
+  geom_point()+
+  geom_line()+
+  labs(x = "Yearly Quarters",
+       y = "Total admissions",
+       title = "(HB) Total Admissions per quarter across Scotland by age group",
+       subtitle = "January, 2020 - February 2022",
+       colour = "Age Group") +
+  theme_bw()+
+  theme(axis.text.x = element_text(angle = 45, hjust = 0.9))
+```
+
+
+
 
 let's try again to see if there's difference in age groups and seasons:
 * Winter = Q4 and Q1 
@@ -399,9 +542,10 @@ covid_admissions_HB_age_totals %>%
       colour = age_group)+
   geom_point() +
   labs(x = "Weekly number of admissions",
-       y = "Average weekly admissions to hospital in 2018-2019",
-       title = "HB Weekly admissions per age group against the average weekly 
-       admissions in previous years",
+       y = "Average weekly admissions in 2018-2019",
+       title = "(HB) Weekly admissions across Scotland in COVID times against 
+       the equivalent average weekly admissions in previous years 
+       (per age group)",
        subtitle = "COVID: January, 2020 - February, 2022 / 
        Previous years: 2018 - 2019",
        colour = "Age Group") +
@@ -454,9 +598,10 @@ covid_admissions_HB_age_totals %>%
       colour = age_group)+
   geom_point() +
   labs(x = "Monthly number of admissions",
-       y = "Average monthly admissions to hospital in 2018-2019",
-       title = "HB Monthly admissions per age group against the average weekly 
-       admissions in previous years",
+       y = "Average monthly admissions in 2018-2019",
+       title = "(HB) Monthly admissions across Scotland in COVID times against 
+       the equivalent average monthly admissions in previous years 
+       (per age group)",
        subtitle = "COVID: January, 2020 - February, 2022 / 
        Previous years: 2018 - 2019",
        colour = "Age Group") +
@@ -547,15 +692,19 @@ Total admissions across HBs by gender for week ending (this doesn't work):
 
 ```{r}
 covid_admissions_HB_sex_totals %>% 
-  group_by(sex) %>% 
   ggplot()+
-  aes(x = total_admissions_per_month, 
-      y = total_past_average_ads_per_month,
+  aes(x = wk_ending_yr_month, 
+      y = total_admissions_per_month,
+      group = sex, 
       colour = sex)+
   scale_x_discrete(limits = dates) +
   geom_point()+
   geom_line()+
-  labs(title = "I AM AWARE THIS IS AWFUL")+
+  labs(x = "Month and Year",
+       y = "Total Admissions per Month",
+       title = "Total Admissions across Health Boards in COVID Times per Month,
+       by Sex", 
+       fill = "Sex")+
   theme_bw()+
   theme(axis.text.x = element_text(angle = 45, hjust = 0.9))
 ```
@@ -570,33 +719,103 @@ covid_admissions_HB_sex_totals %>%
   scale_x_discrete(limits = dates) +
   geom_col(position = "dodge")+
   labs(x = "Month and Year",
-       y = "Total Admissions across Health Boards per Month",
-       title = "Total Admissions  in COVID Times per Month by Sex", 
+       y = "Total Admissions per Month",
+       title = "Total Admissions across Health Boards in COVID Times per Month,
+       by Sex", 
        fill = "Sex")+  
   theme_bw()+
   theme(axis.text.x = element_text(angle = 45, hjust = 0.9))
 ```
 
-weekly  
+## sex by quarter
+
 ```{r}
-covid_admissions_HB_sex_totals %>% 
+
+q1_20 <- covid_admissions_HB_sex_totals %>% 
+  filter(year_quarter == "2020Q1") %>% 
   group_by(sex) %>% 
+  mutate(totals_per_sex_per_quarter = sum(number_admissions))
+q1_20
+
+q2_20 <- covid_admissions_HB_sex_totals %>% 
+  filter(year_quarter == "2020Q2") %>% 
+  group_by(sex) %>% 
+  mutate(totals_per_sex_per_quarter = sum(number_admissions))
+q2_20
+
+q3_20 <- covid_admissions_HB_sex_totals %>% 
+  filter(year_quarter == "2020Q3") %>% 
+  group_by(sex) %>% 
+  mutate(totals_per_sex_per_quarter = sum(number_admissions))
+q3_20
+
+q4_20 <- covid_admissions_HB_sex_totals %>% 
+  filter(year_quarter == "2020Q4") %>% 
+  group_by(sex) %>% 
+  mutate(totals_per_sex_per_quarter = sum(number_admissions))
+q4_20
+
+q1_21 <- covid_admissions_HB_sex_totals %>% 
+  filter(year_quarter == "2021Q1") %>% 
+  group_by(sex) %>% 
+  mutate(totals_per_sex_per_quarter = sum(number_admissions))
+q1_21
+
+q2_21 <- covid_admissions_HB_sex_totals %>% 
+  filter(year_quarter == "2021Q2") %>% 
+  group_by(sex) %>% 
+  mutate(totals_per_sex_per_quarter = sum(number_admissions))
+q2_21
+
+q3_21 <- covid_admissions_HB_sex_totals %>% 
+  filter(year_quarter == "2021Q3") %>% 
+  group_by(sex) %>% 
+  mutate(totals_per_sex_per_quarter = sum(number_admissions))
+q3_21
+
+q4_21 <- covid_admissions_HB_sex_totals %>% 
+  filter(year_quarter == "2021Q4") %>% 
+  group_by(sex) %>% 
+  mutate(totals_per_sex_per_quarter = sum(number_admissions))
+q4_21
+
+q1_22 <- covid_admissions_HB_sex_totals %>% 
+  filter(year_quarter == "2022Q1") %>% 
+  group_by(sex) %>% 
+  mutate(totals_per_sex_per_quarter = sum(number_admissions))
+q1_22
+
+
+
+covid_admissions_quarter_sex_totals <- bind_rows(q1_20, q2_20, q3_20, q4_20, q1_21, 
+                                             q2_21, q3_21, q4_21, q1_22)
+covid_admissions_quarter_sex_totals
+```
+
+
+By quarter
+```{r}
+covid_admissions_quarter_sex_totals %>% 
   ggplot()+
-  aes(x = wk_ending_yr_month, 
-      y = total_admissions_per_month,
-      colour = sex,
-      group = sex)+
-  scale_x_discrete(limits = dates) +
+  aes(x = year_quarter, 
+      y = totals_per_sex_per_quarter,
+      group = sex, 
+      colour = sex)+
   geom_point()+
-  geom_line()+ # where is the line?
-  labs(x = "Month and Year",
-       y = "Total Admissions",
-       title = "Monthly admissions in COVID times by sex",
-       subtitle = "January, 2020 - February, 2022",
-       colour = "Sex") +
+  geom_line()+
+  labs(x = "Quarter and Year",
+       y = "Total Admissions per Quarter",
+       title = "(HB) Total Admissions across Health Boards in COVID Times per 
+       Quarter, by Sex", 
+       fill = "Sex")+
   theme_bw()+
   theme(axis.text.x = element_text(angle = 45, hjust = 0.9))
-```  
+```
+
+
+
+
+
 
 
 <hr> 
@@ -607,6 +826,8 @@ covid_admissions_HB_sex_totals %>%
 
 ```{r}
 covid_admissions_HB_simd %>% 
+  mutate(simd_quintile = fct_relevel(as.character(simd_quintile, 
+                                  "1", "2", "3", "4", "5"))) %>%
   group_by(wk_ending_yr_month, simd_quintile) %>% 
   ggplot()+
   aes(x = number_admissions, 
@@ -614,10 +835,10 @@ covid_admissions_HB_simd %>%
       colour = simd_quintile)+
   scale_x_discrete(limits = dates) +
   geom_point()+
-  labs(x = "Monthly Number of Admissions in COVID Times",
-       y = "Average Number of Admissions in 2018/2019",
-       title = "Monthly number of admissions in COVID Times against the average
-       of the same month in 2018/2019 for SIMD Levels",
+  labs(x = "Weekly Number of Admissions in COVID Times",
+       y = "Average Weekly Number of Admissions in 2018/2019",
+       title = "(HB) Weekly number of admissions in COVID Times against the 
+       average of the same week in 2018/2019 by SIMD Levels",
       colour = "SIMD Level:
        1 = Most Deprived
        5 = Least Deprived")+
@@ -693,7 +914,7 @@ covid_admissions_HB_simd_totals
 **PLOT total admissions per simd per month**
 ```{r}
 covid_admissions_HB_simd_totals %>% 
-   mutate(simd_quintile = fct_relevel(as.character(simd_quintile, 
+  mutate(simd_quintile = fct_relevel(as.character(simd_quintile, 
                                   "1", "2", "3", "4", "5"))) %>%
   group_by(wk_ending_yr_month, simd_quintile) %>% 
   ggplot()+
@@ -706,7 +927,7 @@ covid_admissions_HB_simd_totals %>%
   geom_line()+
   labs(x = "Month and Year",
        y = "Total admissions",
-       title = "Total admissions in COVID times per month by SIMD Level",
+       title = "(HB) Total admissions in COVID times per month by SIMD Level",
        subtitle = "January, 2020 - February 2022",
        colour = "SIMD Level:
        1 = Most Deprived
@@ -727,9 +948,9 @@ covid_admissions_HB_simd_totals %>%
       colour = simd_quintile)+
   geom_point()+
   labs(x = "Monthly number of admissions in COVID times",
-       y = "Average monthly admissions to hospital in 2018-2019",
-       title = "Monthly admissions in COVID times against the equivalent monthly 
-       average admissions in previous years by SIMD Level",
+       y = "Average monthly admissions in 2018-2019",
+       title = "(HB) Monthly admissions in COVID times against the equivalent monthly 
+       average admissions in previous years, by SIMD Level",
        subtitle = "COVID: January, 2020 - February, 2022 / 
        Previous years: 2018 - 2019",
        colour = "SIMD Level:
@@ -739,4 +960,125 @@ covid_admissions_HB_simd_totals %>%
   theme(axis.text.x = element_text(angle = 45, hjust = 0.9))
 ```  
 
+
+by quarter
+Adding a quarter and year column 
+```{r}
+covid_admissions_HB_simd_totals <- covid_admissions_HB_simd_totals %>% 
+  mutate(year_quarter = case_when(
+    wk_ending_yr_month == "January 2020" ~ "2020Q1",
+    wk_ending_yr_month == "February 2020" ~ "2020Q1",
+    wk_ending_yr_month == "March 2020" ~ "2020Q1",
+    wk_ending_yr_month == "April 2020" ~ "2020Q2",
+    wk_ending_yr_month == "May 2020" ~ "2020Q2",
+    wk_ending_yr_month == "June 2020" ~ "2020Q2",
+    wk_ending_yr_month == "July 2020" ~ "2020Q3",
+    wk_ending_yr_month == "August 2020" ~ "2020Q3",
+    wk_ending_yr_month == "September 2020" ~ "2020Q3",
+    wk_ending_yr_month == "October 2020" ~ "2020Q4",
+    wk_ending_yr_month == "November 2020" ~ "2020Q4",
+    wk_ending_yr_month == "December 2020" ~ "2020Q4",
+    wk_ending_yr_month == "January 2021" ~ "2021Q1",
+    wk_ending_yr_month == "February 2021" ~ "2021Q1",
+    wk_ending_yr_month == "March 2021" ~ "2021Q1",
+    wk_ending_yr_month == "April 2021" ~ "2021Q2",
+    wk_ending_yr_month == "May 2021" ~ "2021Q2",
+    wk_ending_yr_month == "June 2021" ~ "2021Q2",
+    wk_ending_yr_month == "July 2021" ~ "2021Q3",
+    wk_ending_yr_month == "August 2021" ~ "2021Q3",
+    wk_ending_yr_month == "September 2021" ~ "2021Q3",
+    wk_ending_yr_month == "October 2021" ~ "2021Q4",
+    wk_ending_yr_month == "November 2021" ~ "2021Q4",
+    wk_ending_yr_month == "December 2021" ~ "2021Q4",
+    wk_ending_yr_month == "January 2022" ~ "2022Q1",
+    wk_ending_yr_month == "February 2022" ~ "2022Q1",
+  ))
+```
+
+```{r}
+
+q1_20 <- covid_admissions_HB_simd_totals %>% 
+  filter(year_quarter == "2020Q1") %>% 
+  group_by(simd_quintile) %>% 
+  mutate(totals_per_simd_per_quarter = sum(number_admissions))
+q1_20
+
+q2_20 <- covid_admissions_HB_simd_totals %>% 
+  filter(year_quarter == "2020Q2") %>% 
+  group_by(simd_quintile) %>% 
+  mutate(totals_per_simd_per_quarter = sum(number_admissions))
+q2_20
+
+q3_20 <- covid_admissions_HB_simd_totals %>% 
+  filter(year_quarter == "2020Q3") %>% 
+  group_by(simd_quintile) %>% 
+  mutate(totals_per_simd_per_quarter = sum(number_admissions))
+q3_20
+
+q4_20 <- covid_admissions_HB_simd_totals %>% 
+  filter(year_quarter == "2020Q4") %>% 
+  group_by(simd_quintile) %>% 
+  mutate(totals_per_simd_per_quarter = sum(number_admissions))
+q4_20
+
+q1_21 <- covid_admissions_HB_simd_totals %>% 
+  filter(year_quarter == "2021Q1") %>% 
+  group_by(simd_quintile) %>% 
+  mutate(totals_per_simd_per_quarter = sum(number_admissions))
+q1_21
+
+q2_21 <- covid_admissions_HB_simd_totals %>% 
+  filter(year_quarter == "2021Q2") %>% 
+  group_by(simd_quintile) %>% 
+  mutate(totals_per_simd_per_quarter = sum(number_admissions))
+q2_21
+
+q3_21 <- covid_admissions_HB_simd_totals %>% 
+  filter(year_quarter == "2021Q3") %>% 
+  group_by(simd_quintile) %>% 
+  mutate(totals_per_simd_per_quarter = sum(number_admissions))
+q3_21
+
+q4_21 <- covid_admissions_HB_simd_totals %>% 
+  filter(year_quarter == "2021Q4") %>% 
+  group_by(simd_quintile) %>% 
+  mutate(totals_per_simd_per_quarter = sum(number_admissions))
+q4_21
+
+q1_22 <- covid_admissions_HB_simd_totals %>% 
+  filter(year_quarter == "2022Q1") %>% 
+  group_by(simd_quintile) %>% 
+  mutate(totals_per_simd_per_quarter = sum(number_admissions))
+q1_22
+
+
+
+covid_admissions_quarter_simd_totals <- bind_rows(q1_20, q2_20, q3_20, q4_20, q1_21, 
+                                             q2_21, q3_21, q4_21, q1_22)
+covid_admissions_quarter_simd_totals
+```
+
+
+By quarter
+```{r}
+covid_admissions_quarter_simd_totals %>% 
+  mutate(simd_quintile = fct_relevel(as.character(simd_quintile, 
+                                  "1", "2", "3", "4", "5"))) %>%
+  ggplot()+
+  aes(x = year_quarter, 
+      y = totals_per_simd_per_quarter,
+      group = simd_quintile, 
+      colour = simd_quintile)+
+  geom_point()+
+  geom_line()+
+  labs(x = "Quarter and Year",
+       y = "Total Admissions per Quarter",
+       title = "(HB) Total Admissions across Health Boards in COVID Times per 
+       Quarter, by SIMD", 
+       colour = "SIMD Level:
+       1 = Most Deprived
+       5 = Least Deprived")+
+  theme_bw()+
+  theme(axis.text.x = element_text(angle = 45, hjust = 0.9))
+```
 
