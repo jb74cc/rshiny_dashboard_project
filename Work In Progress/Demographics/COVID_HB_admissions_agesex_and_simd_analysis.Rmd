@@ -257,7 +257,7 @@ winter_dates <- c("January 2020", "February 2020", "March 2020", "October 2020",
 ```
 
 <br>
-**MESSY PLOT OF Total COVID admissions per month by age group**
+**PLOT OF Total COVID admissions per month by age group**
 
 ```{r}
 covid_admissions_HB_age_totals %>% 
@@ -545,7 +545,7 @@ Total admissions across HBs by gender for week ending (this doesn't work):
 
 ```{r}
 covid_admissions_HB_sex_totals %>% 
-  group_by(wk_ending_yr_month, sex) %>% 
+  group_by(sex) %>% 
   ggplot()+
   aes(x = total_admissions_per_month, 
       y = total_past_average_ads_per_month,
@@ -575,7 +575,7 @@ covid_admissions_HB_sex %>%
   theme(axis.text.x = element_text(angle = 45, hjust = 0.9))
 ```
 
-AVERAGE admissions 2018 and 2019 against COVID admissions 
+weekly  
 ```{r}
 covid_admissions_HB_sex %>% 
   group_by(sex) %>% 
@@ -586,10 +586,9 @@ covid_admissions_HB_sex %>%
   scale_x_discrete(limits = dates) +
   geom_point()+
   geom_line()+ # where is the line?
-  labs(x = "Weekly number of COVID admissions",
-       y = "Average weekly admissions to hospital in 2018-2019",
-       title = "Weekly COVID admissions per sex against the average weekly 
-       admissions in previous years",
+  labs(x = "Month",
+       y = "Total COVID Admissions",
+       title = "Monthly COVID admissions by sex",
        subtitle = "COVID: January, 2020 to February, 2022 / Previous years: 2018 - 2019",
        colour = "Sex") +
   theme_bw()+
@@ -597,27 +596,137 @@ covid_admissions_HB_sex %>%
 ```  
 
 
-
 <hr> 
 
 ## HEALTH BOARD - SIMD 
-### HB - SIMD - Average Covid Admissions vs Average 2018 and 2019 admissions
 
-<hr>
-<hr>
+### HB - SIMD - Total Admissions 
 
-## HSCP - sex and age
-### HSCP - Age - Average Covid Admissions vs Average 2018 and 2019 admissions
+```{r}
+covid_admissions_HB_simd %>% 
+  group_by(wk_ending_yr_month, simd_quintile) %>% 
+  ggplot()+
+  aes(x = number_admissions, 
+      y = average20182019,
+      colour = simd_quintile)+
+  scale_x_discrete(limits = dates) +
+  geom_point()+
+  geom_line()+
+  labs(title = "I AM AWARE THIS IS AWFUL")+
+  theme_bw()+
+  theme(axis.text.x = element_text(angle = 45, hjust = 0.9))
+  
+  
+```
 
-* Take out age group "all"
+So, creating monthly total columns for each level of simd:
+```{r}
+simd1 <- covid_admissions_HB_simd %>% 
+  filter(simd_quintile == "1") %>%
+  group_by(wk_ending_yr_month) %>% 
+  mutate(total_admissions_per_month_simd = sum(number_admissions))
 
-<hr>
+simd1 <- simd1 %>% 
+  group_by(wk_ending_yr_month) %>% 
+  mutate(total_past_average_ads_per_month = sum(average20182019))
+simd1
 
-### HSCP - Sex - Average Covid Admissions vs Average 2018 and 2019 admissions
+#2
+simd2 <- covid_admissions_HB_simd %>% 
+  filter(simd_quintile == "2") %>%
+  group_by(wk_ending_yr_month) %>% 
+  mutate(total_admissions_per_month_simd = sum(number_admissions))
 
-<hr>
+simd2 <- simd2 %>% 
+  group_by(wk_ending_yr_month) %>% 
+  mutate(total_past_average_ads_per_month = sum(average20182019))
+simd2
 
-## HSCP - SIMD 
-### HSCP - SIMD - Average Covid Admissions vs Average 2018 and 2019 admissions
+#3
+simd3 <- covid_admissions_HB_simd %>% 
+  filter(simd_quintile == "3") %>%
+  group_by(wk_ending_yr_month) %>% 
+  mutate(total_admissions_per_month_simd = sum(number_admissions))
+
+simd3 <- simd3 %>% 
+  group_by(wk_ending_yr_month) %>% 
+  mutate(total_past_average_ads_per_month = sum(average20182019))
+simd3
+
+#4
+simd4 <- covid_admissions_HB_simd %>% 
+  filter(simd_quintile == "4") %>%
+  group_by(wk_ending_yr_month) %>% 
+  mutate(total_admissions_per_month_simd = sum(number_admissions))
+
+simd4 <- simd4 %>% 
+  group_by(wk_ending_yr_month) %>% 
+  mutate(total_past_average_ads_per_month = sum(average20182019))
+simd4
+
+#5
+simd5 <- covid_admissions_HB_simd %>% 
+  filter(simd_quintile == "5") %>%
+  group_by(wk_ending_yr_month) %>% 
+  mutate(total_admissions_per_month_simd = sum(number_admissions))
+
+simd5 <- simd5 %>% 
+  group_by(wk_ending_yr_month) %>% 
+  mutate(total_past_average_ads_per_month = sum(average20182019))
+simd5
+  
+```
+
+bind these together:
+```{r}
+covid_admissions_HB_simd_totals <- bind_rows(simd1, simd2, simd3, simd4, simd5)
+covid_admissions_HB_simd_totals
+```
+
+**PLOT total admissions per simd per month**
+```{r}
+covid_admissions_HB_simd_totals %>% 
+   mutate(simd_quintile = fct_relevel(as.character(simd_quintile, 
+                                  "1", "2", "3", "4", "5"))) %>%
+  group_by(wk_ending_yr_month, simd_quintile) %>% 
+  ggplot()+
+  aes(x = wk_ending_yr_month, 
+      y = total_admissions_per_month_simd, 
+      group = simd_quintile, 
+      colour = simd_quintile)+
+  scale_x_discrete(limits = dates) +
+  geom_point()+
+  geom_line()+
+  labs(x = "Month",
+       y = "Total COVID admissions",
+       title = "Total COVID admissions per month by SIMD Level",
+       subtitle = "January, 2020 - February 2022",
+       colour = "SIMD Level:
+       1 = Most Deprived
+       5 = Least Deprived") +
+  theme_bw()+
+  theme(axis.text.x = element_text(angle = 45, hjust = 0.9))
+```
+
+SIMD - AVERAGE admissions 2018 and 2019 against COVID admissions 
+```{r}
+covid_admissions_HB_simd_totals %>% 
+   mutate(simd_quintile = fct_relevel(as.character(simd_quintile, 
+                                  "1", "2", "3", "4", "5"))) %>%
+  group_by(simd_quintile) %>% 
+  ggplot()+
+  aes(x = total_admissions_per_month_simd, 
+      y = total_past_average_ads_per_month,
+      colour = simd_quintile)+
+  geom_point()+
+  labs(x = "Monthly number of COVID admissions",
+       y = "Average monthly admissions to hospital in 2018-2019",
+       title = "Monthly COVID admissions against the average weekly 
+       admissions in previous yearsby SIMD Level",
+       subtitle = "COVID: January, 2020 to February, 2022 / Previous years: 2018 - 2019",
+       colour = "SIMD Level") +
+  theme_bw()+
+  theme(axis.text.x = element_text(angle = 45, hjust = 0.9))
+```  
 
 
