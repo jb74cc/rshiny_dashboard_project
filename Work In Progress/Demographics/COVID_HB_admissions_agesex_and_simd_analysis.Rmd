@@ -275,7 +275,7 @@ covid_admissions_HB_age_totals %>%
   geom_line()+
   labs(x = "Month",
        y = "Total COVID admissions",
-       title = "Total COVID admissions per month by age group",
+       title = "HB Total COVID admissions per month by age group",
        subtitle = "January, 2020 - February 2022",
        colour = "Age Group") +
   theme_bw()+
@@ -296,7 +296,7 @@ highlight_summer_HB_agesex <- covid_admissions_HB_age_totals %>%
 ```
 
 
-Re-trying above graph - still messy but can be looked into.
+Re-trying above graph -  messy but can be looked into.
 * Total COVID admissions per month by age group
 ```{r}
 covid_admissions_HB_age_totals %>% 
@@ -616,7 +616,6 @@ covid_admissions_HB_simd %>%
   theme_bw()+
   theme(axis.text.x = element_text(angle = 45, hjust = 0.9))
   
-  
 ```
 
 So, creating monthly total columns for each level of simd:
@@ -724,7 +723,9 @@ covid_admissions_HB_simd_totals %>%
        title = "Monthly COVID admissions against the average weekly 
        admissions in previous yearsby SIMD Level",
        subtitle = "COVID: January, 2020 to February, 2022 / Previous years: 2018 - 2019",
-       colour = "SIMD Level") +
+       colour = "SIMD Level:
+       1 = Most Deprived
+       5 = Least Deprived") +
   theme_bw()+
   theme(axis.text.x = element_text(angle = 45, hjust = 0.9))
 ```  
