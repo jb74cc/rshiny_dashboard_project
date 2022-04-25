@@ -1,0 +1,193 @@
+---
+title: "Public Health Scotland Group Project"
+output: html_notebook
+---
+
+```{r}
+library(tidyverse)
+library(janitor)
+library(here)
+library(leaflet)
+library(sf)
+
+
+
+here::here()
+```
+
+# Read in hospital location data;
+
+```{r}
+hospitals <- read_csv(here("raw_data/nhs_hospital_locations.csv")) %>% clean_names()
+```
+## Plotting (work in progress!)
+```{r}
+# hospitals %>% 
+#    st_transform('+proj=longlat +datum=WGS84') %>%  # reference coord structure from espg.io
+# 
+#   
+#    hospitals %>% 
+#   st_crs(x_coordinate)
+
+
+
+
+
+hospitals %>% 
+  leaflet() %>% 
+  addTiles() %>% 
+  addCircleMarkers(lng = -5.1155000,     # attempt to convert from degrees to lat/long
+                   lat = 55.5430000,     # conversion was poor - had to adjust manually
+                   radius = 5)
+```
+
+
+
+## Occupied beds by area;
+```{r}
+beds_by_health_board <- 
+  read_csv(here("raw_data/beds_by_nhs_board_of_treatment_and_specialty.csv")) %>% 
+  clean_names()
+  
+```
+
+Remove unwanted info from hospital locations in preparation for joining;
+
+```{r}
+hospitals_trim <- hospitals %>% 
+  select(location, location_name)
+
+```
+
+Join decoded hospital locations to beds by health board data;
+
+```{r}
+joined_beds_hb <- left_join(beds_by_health_board, hospitals_trim, by = "location")
+
+# then remove duplicate rows
+joined_beds_hb_trim <-  joined_beds_hb %>% 
+  filter(location != hb )
+```
+
+
+
+```{r}
+# Remove "qualifier" columns full of NAs
+joined_beds_hb <- joined_beds_hb %>% 
+  select(!ends_with("qf"))
+  
+# check NA count across all columns
+joined_beds_hb %>% 
+  summarise(across(.cols =everything(), ~ sum(is.na(.)))) 
+```
+Still lots of NAs in "Specialty" (almost 30% of all rows), but will leave them for now.
+
+## Plot total Percentage Hospital Bed Occupancy (Acute)
+```{r}
+# create a column with the average of the total % occupancy
+total_avg_acute_occupancy <- joined_beds_hb %>% 
+  select(quarter, location_name, specialty_name, percentage_occupancy) %>% 
+  filter(specialty_name == "All Acute") %>% 
+  group_by(quarter) %>% 
+  summarise(mean_total_acute_occupancy = mean(percentage_occupancy, na.rm = TRUE)) 
+# is 'mean' the correct measure here?
+
+```
+
+
+
+```{r}
+total_avg_acute_occupancy %>% 
+  ggplot() +
+  aes(x = quarter, y = mean_total_acute_occupancy) +
+  geom_line(colour = "#433685", group = 1) +
+  geom_point(colour = "#433685", size = 1) +
+  theme_bw() +
+  labs(title = "Percentage Hospital Bed Occupancy (Acute) Scotland, Q3|2016 - Q3|2021",
+       x = "\nQuarter",
+       y = "% Bed Occupancy") +
+  theme(axis.text.x = element_text(angle = 270, vjust = 0.25),
+        title = element_text(face = "bold"))
+```
+
+## Plot% occupancy by health board;
+
+```{r}
+beds_by_hb_trim <- joined_beds_hb %>% 
+  select(quarter, hb, location_name, specialty_name, percentage_occupancy) %>% 
+  group_by(quarter, hb) %>% 
+  summarise(hb_mean_occupancy = mean(percentage_occupancy, na.rm = TRUE))
+
+#Check NAs
+
+# beds_by_hb_trim %>% 
+#   summarise(across(.cols =everything(), ~ sum(is.na(.)))) 
+
+
+```
+
+Health board codes are not easy to understand...
+
+## Join health board code definitions;
+
+```{r}
+hb_codes <- read_csv(here("raw_data/phs_health_board_codes.csv")) %>% clean_names()
+```
+
+
+```{r}
+beds_by_hb_trim<- left_join(beds_by_hb_trim, hb_codes)
+
+# and tidy up...
+
+beds_by_hb_trim <- beds_by_hb_trim %>% 
+  select(quarter, hb, hb_mean_occupancy, hb_name) %>% 
+  #remove country codes from regional data;
+  filter(hb != "S92000003" & hb != "SB0801") %>% 
+  ungroup()
+  
+
+```
+
+
+## Write cleaned 'Bed Occupancy by Health Board' data;
+```{r}
+write_csv(beds_by_hb_trim, "../clean_data/bed_occupancy_by_health_board_clean.csv")
+```
+
+```{r}
+beds_by_hb_trim <- read_csv("../clean_data/bed_occupancy_by_health_board_clean.csv")
+```
+
+
+```{r}
+beds_by_hb_trim %>%
+  ggplot() +
+  aes(x = quarter, y = hb_mean_occupancy, colour = hb_name, group = hb) +
+  geom_line() +
+  geom_point(size = 0.75) +
+  theme_bw() +
+  labs(title = "% Bed Occupancy by Health Board, Scotland, Q3|2016 - Q3|2021",
+       x = "\nQuarter",
+       y = "% Bed Occupancy") +
+  theme(axis.text.x = element_text(angle = 270, vjust = 0.25),
+        title = element_text(face = "bold"),
+        legend.title = element_blank())
+
+```
+
+Is there an overall seasonal pattern to bed occupancy in all the data Q32016 - Q32021?
+
+```{r}
+beds_by_hb_trim %>% 
+  separate(quarter, into = c("year", "quarter"), sep = "Q") %>% 
+  ggplot() +
+  aes(x = quarter, y = hb_mean_occupancy) +
+  geom_boxplot(fill = "#433685", alpha = 0.3) +
+  theme_bw() +
+  labs(title = "% Overall Bed Occupancy by Quarter, Scotland, Q3|2016 - Q3|2021",
+       x = "\nQuarter",
+       y = "% Bed Occupancy") +
+  theme(title = element_text(face = "bold"))
+  
+```
