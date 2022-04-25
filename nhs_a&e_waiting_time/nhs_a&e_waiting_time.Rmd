@@ -22,6 +22,7 @@ ae_waiting_time_prior <- read_csv(here::here("data/monthly_ae_waitingtimes_A&E a
 
 ```
 
+__Data Cleaning__
 
 ```{r}
 
@@ -142,10 +143,9 @@ unique(ae_waiting_time_clean_long_p$year_quarter)
 
 ```
 
+__Plots__
 
 ```{r}
-
-#3 lines in one plot
 
  plot_data_4hrs <- ae_waiting_time_clean_long_p %>% 
   group_by(year_quarter) %>% 
@@ -167,22 +167,27 @@ plot_data_12hrs <- ae_waiting_time_clean_long_p %>%
 
 plot_data_waiting_time <- rbind(plot_data_4hrs, plot_data_8hrs, plot_data_12hrs)
 
+
+#Number of People in Waiting Time Range
 plot_data_waiting_time %>% 
   group_by(year_quarter) %>% 
   ggplot()+
   aes(x = year_quarter, y = total_attendances, group = time_waiting, colour = time_waiting)+
   geom_point()+
-  geom_line()
+  geom_line()+
+  xlab("Year(Quarter)")+ylab("Number of Attendances")+
+  theme(axis.text.x = element_text(angle = 90, size = 5, vjust = 0.5, hjust=1))+
+  labs(color="Time Waiting", size = 5)+
+  ggtitle("Number of People in Waiting Time Range")
 
-
-
+  
 ```
 
 
 
 ```{r}
 
-# all attendances
+#Number of A&E Attendances from 2016 to 2022
 ae_waiting_time_clean_long_p %>% 
   group_by(year_quarter) %>% 
   # filter(hrs_waiting == "hrs_waiting_4") %>% 
@@ -190,25 +195,12 @@ ae_waiting_time_clean_long_p %>%
   ggplot()+
   aes(x = year_quarter, y = total_attendances)+
   geom_point()+
-  geom_line(group = 1)
-#
+  geom_line(group = 1)+
+  xlab("Year(Quarter)")+ylab("Number of Attendances")+
+  theme(axis.text.x = element_text(angle = 90, size = 5, vjust = 0.5, hjust=1))+
+  labs(color="Time Waiting", size = 5)+
+  ggtitle("Number of A&E Attendances from 2016 to 2022")
 
-ae_waiting_time_clean_long_p %>% 
-  group_by(year_quarter) %>% 
-  filter(hrs_waiting) %>% 
-  summarise(total_attendances_4rs = sum(number_attendances),
-            total_attendances_8hr = sum())
-  ggplot(aes(x = year_quarter, y = number_attendances, group_by = hrs_waiting))+
-  geom_line()+
-  geom_point()
-  
-ae_waiting_time_clean_long_p %>% 
-  ggplot(aes(x = year_quarter, y = number_attendances, group = hrs_waiting))+
-  geom_line()+
-  geom_point()
-  
-  
-# ggplot(ae_waiting_time_clean_long_p, aes(year_quarter, colour = number_attendances,, stat = "count")) +geom_freqpoly(binwidth = 500)
 
 ```
 
