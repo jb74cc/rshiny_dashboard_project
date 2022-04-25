@@ -270,9 +270,9 @@ covid_admissions_HSCP_age_totals %>%
   scale_x_discrete(limits = dates) +
   geom_point()+
   geom_line()+
-  labs(x = "Month",
-       y = "Total COVID admissions",
-       title = "HSCP Total COVID admissions per month by age group",
+  labs(x = "Month and Year",
+       y = "Total admissions",
+       title = "HSCP Total admissions in COVID times per month by age group",
        subtitle = "January, 2020 - February 2022",
        colour = "Age Group") +
   theme_bw()+
@@ -310,8 +310,8 @@ covid_admissions_HSCP_age_totals %>%
   geom_col()+
   facet_wrap(~age_group)+
   labs(x = "Month",
-       y = "Total COVID admissions",
-       title = "HSCP Total COVID admissions per month by age group",
+       y = "Total admissions",
+       title = "HSCP Total admissions in COVID times per month by age group",
        subtitle = "January, 2020 - February 2022",
        fill = "Age Group") +
   theme_bw()+
@@ -339,8 +339,8 @@ highlight_summer_HSCP_age %>%
   geom_col()+
   facet_wrap(~age_group)+
   labs(x = "Month",
-       y = "Total COVID admissions",
-       title = "Total COVID admissions per month by age group",
+       y = "Total admissions",
+       title = "Total admissions in COVID times per SUMMER month, by age group",
        subtitle = "Summer Months: 
        April, 2020 - September 2020 
        and April, 2021 - September 2021",
@@ -368,9 +368,9 @@ highlight_winter_HSCP_age %>%
   scale_x_discrete(limits = winter_dates) +
   geom_col()+
   facet_wrap(~age_group)+
-  labs(x = "Month",
-       y = "Total COVID admissions",
-       title = "HSCP Total COVID admissions per month by age group",
+  labs(x = "Month and Year",
+       y = "Total admissions",
+       title = "HSCP Total admissions in COVID times per WINTER month by age group",
        subtitle = "Winter Months: 
        January, 2020 - March 2020; 
        October 2020 - March 2021; 
@@ -400,10 +400,10 @@ covid_admissions_HSCP_age_totals %>%
       y = average20182019, 
       colour = age_group)+
   geom_point() +
-  labs(x = "Weekly number of COVID admissions",
+  labs(x = "Weekly number of admissions in COVID times",
        y = "Average weekly admissions to hospital in 2018-2019",
-       title = "Weekly COVID admissions per age group against the average weekly 
-       admissions in previous years",
+       title = "Weekly admissions in COVID TIMES per age group against the 
+       equivalent average weekly admissions in previous years",
        subtitle = "COVID: January, 2020 - February, 2022 / 
        Previous years: 2018 - 2019",
        colour = "Age Group") +
@@ -428,10 +428,10 @@ covid_admissions_HSCP_age_totals %>%
       colour = age_group)+
   geom_point() +
   facet_wrap(~age_group) +
-  labs(x = "Weekly number of COVID admissions",
+  labs(x = "Weekly number of admissions in COVID times",
        y = "Average weekly admissions to hospital in 2018-2019",
-       title = "Weekly COVID admissions per age group against the average weekly 
-       admissions in previous years",
+       title = "Weekly admissions in COVID TIMES per age group against the 
+       equivalent average weekly admissions in previous years",
        subtitle = "COVID: January, 2020 - February, 2022 / 
        Previous years: 2018 - 2019",
        colour = "Age Group") +
@@ -453,10 +453,10 @@ covid_admissions_HSCP_age_totals %>%
       y = total_past_average_ads_per_month, 
       colour = age_group)+
   geom_point() +
-  labs(x = "Monthly number of COVID admissions",
+  labs(x = "Monthly number of admissions in COVID times",
        y = "Average monthly admissions to hospital in 2018-2019",
-       title = "Monthly COVID admissions per age group against the average weekly 
-       admissions in previous years",
+       title = "Monthly admissions in COVID TIMES per age group against the 
+       equivalent average monthly admissions in previous years",
        subtitle = "COVID: January, 2020 - February, 2022 / 
        Previous years: 2018 - 2019",
        colour = "Age Group") +
@@ -479,10 +479,10 @@ covid_admissions_HSCP_age_totals %>%
       colour = age_group)+
   geom_point() +
     facet_wrap(~age_group) +
-  labs(x = "Monthly number of COVID admissions",
+  labs(x = "Monthly number of admissions in COVID times",
        y = "Average monthly admissions to hospital in 2018-2019",
-       title = "Monthly COVID admissions per age group against the average weekly 
-       admissions in previous years",
+       title = "Monthly admissions in COVID TIMES per age group against the 
+       equivalent average monthly admissions in previous years",
        subtitle = "COVID: January, 2020 - February, 2022 / 
        Previous years: 2018 - 2019",
        colour = "Age Group") +
@@ -570,8 +570,8 @@ covid_admissions_HSCP_sex_totals %>%
   scale_x_discrete(limits = dates) +
   geom_col(position = "dodge")+
   labs(x = "Month and Year",
-       y = "Total COVID Admissions across Health Boards per Month",
-       title = "HSCP Total COVID Admissions per Month by Sex", 
+       y = "Total Admissions per Month",
+       title = "HSCP Total Admissions in COVID times per Month by Sex", 
        fill = "Sex")+  
   theme_bw()+
   theme(axis.text.x = element_text(angle = 45, hjust = 0.9))
@@ -589,10 +589,11 @@ covid_admissions_HSCP_sex_totals %>%
   scale_x_discrete(limits = dates) +
   geom_point()+
   geom_line()+ # where is the line?
-  labs(x = "Month",
-       y = "Total COVID Admissions",
-       title = "HSCP Monthly COVID admissions by sex",
-       subtitle = "COVID: January, 2020 to February, 2022 / Previous years: 2018 - 2019",
+  labs(x = "Month and Year",
+       y = "Total Admissions",
+       title = "HSCP Monthly admissions in COVID times by sex",
+       subtitle = "COVID: January, 2020 - February, 2022 / 
+       Previous years: 2018 - 2019",
        colour = "Sex") +
   theme_bw()+
   theme(axis.text.x = element_text(angle = 45, hjust = 0.9))
@@ -700,9 +701,9 @@ covid_admissions_HSCP_simd_totals %>%
   scale_x_discrete(limits = dates) +
   geom_point()+
   geom_line()+
-  labs(x = "Month",
-       y = "Total COVID admissions",
-       title = "HSCP Total COVID admissions per month by SIMD Level",
+  labs(x = "Month and year",
+       y = "Total admissions",
+       title = "HSCP Total admissions in COVID times per month by SIMD Level",
        subtitle = "January, 2020 - February 2022",
        colour = "SIMD Level:
        1 = Most Deprived
@@ -722,11 +723,12 @@ covid_admissions_HSCP_simd_totals %>%
       y = total_past_average_ads_per_month,
       colour = simd_quintile)+
   geom_point()+
-  labs(x = "Monthly number of COVID admissions",
+  labs(x = "Monthly number of admissions",
        y = "Average monthly admissions to hospital in 2018-2019",
-       title = "HSCP Monthly COVID admissions against the average weekly 
-       admissions in previous years by SIMD Level",
-       subtitle = "COVID: January, 2020 to February, 2022 / Previous years: 2018 - 2019",
+       title = "Monthly admissions in COVID Times per SIMD level against the 
+       equivalent average monthly admissions in previous years",
+       subtitle = "COVID: January, 2020 - February, 2022 / 
+       Previous years: 2018 - 2019",
        colour = "SIMD Level:
        1 = Most Deprived
        5 = Least Deprived") +
