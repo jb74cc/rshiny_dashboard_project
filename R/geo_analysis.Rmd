@@ -415,7 +415,7 @@ Generate and visualise the null distribution with observed_stat overlaid;
 null_distribution <- seasonal_total_avg_acute_occupancy %>% 
   specify(mean_total_acute_occupancy ~ season) %>% 
   hypothesize(null = "independence") %>% 
-  generate(reps = 10000, type = "permute") %>% 
+  generate(reps = 50000, type = "permute") %>% 
   calculate(stat = "diff in means", order = c("winter", "summer"))
 ```
 
@@ -425,8 +425,6 @@ null_distribution %>%
   shade_p_value(obs_stat = observed_stat, direction = "right")
 ```
 
-
-
 Calculate the p-value;
 ```{r}
 p_value <- null_distribution %>%
@@ -434,3 +432,6 @@ p_value <- null_distribution %>%
 
 p_value
 ```
+
+
+
