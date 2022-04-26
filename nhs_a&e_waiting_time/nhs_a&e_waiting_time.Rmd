@@ -205,6 +205,16 @@ ae_waiting_time_clean_long_p %>%
 ```
 
 
+__geospatial__
+
+```{r}
+
+ae_waiting_time_clean_long_p %>% 
+  distinct(treatment_location)
+
+```
+
+
 
 
 
