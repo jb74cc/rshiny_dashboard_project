@@ -770,5 +770,21 @@ greater than that of SIMD 5 (Least deprivation) so again suggests that those
 in more deprived areas are more likely to be admitted to hospital in COVID 
 months.
 
+<br>
+<hr>
+<br>
 
+Total monthly admissions for SIMD - measures of spread 
+
+```{r}
+covid_admissions_HB_simd %>%
+  group_by(simd_quintile) %>%
+  summarise(
+    Mean = mean(total_admissions_per_month_simd),
+    Q1 = quantile(total_admissions_per_month_simd, 0.25),
+    Q2 = quantile(total_admissions_per_month_simd, 0.5),
+    Q3 = quantile(total_admissions_per_month_simd, 0.75), 
+    IQR = Q3 - Q1
+  )
+```
 
