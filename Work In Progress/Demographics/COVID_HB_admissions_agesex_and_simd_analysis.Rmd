@@ -776,8 +776,7 @@ months.
 <hr>
 <br>
 
-Total monthly admissions for SIMD - measures of spread 
-
+Total monthly admissions in COVID times for SIMD - measures of spread
 ```{r}
 covid_admissions_HB_simd %>%
   group_by(simd_quintile) %>%
@@ -789,4 +788,7 @@ covid_admissions_HB_simd %>%
     IQR = Q3 - Q1
   )
 ```
+
+
+
 
