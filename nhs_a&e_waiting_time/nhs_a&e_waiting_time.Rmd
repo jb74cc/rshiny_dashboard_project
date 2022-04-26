@@ -4,7 +4,10 @@ output: html_notebook
 ---
 
 ```{r}
-
+library(prob)
+library(gtools)
+library(e1071)
+library(infer)
 library(tidyverse)
 library(janitor)
 library(lubridate)
@@ -144,6 +147,7 @@ unique(ae_waiting_time_clean_long_p$year_quarter)
 ```
 
 __Plots__
+__ready to go__
 
 ```{r}
 
@@ -184,7 +188,7 @@ plot_data_waiting_time %>%
 ```
 
 
-
+__ready to go__
 ```{r}
 
 #Number of A&E Attendances from 2016 to 2022
@@ -216,6 +220,10 @@ ae_waiting_time_clean_long_p %>%
 
 
 __Statistics__
+
+
+
+
 In this case we are going to check the difference between mean attendances before Covid (~2019Q4) and after (2020Q1~)
 
 H0: after_Covid_attendances_mean = before_Covid_attendances_mean
@@ -233,7 +241,7 @@ before_covid_attendances_avg <- ae_waiting_time_clean%>%
   mutate(status = "before")
   
 after_covid_attendances_avg <- ae_waiting_time_clean%>% 
-  group_by(year_quarter ) %>% 
+  #group_by(year_quarter ) %>% 
   filter(year != "2016") %>%
   filter(year != "2017") %>% 
   filter(year != "2018") %>% 
@@ -248,16 +256,56 @@ waiting_time_mean <- rbind(before_covid_attendances_avg, after_covid_attendances
 
 waiting_time_mean %>% 
   ggplot(aes(x = status, y = avg_attendances))+
-  geom_boxplot()
+  geom_boxplot()+
+  xlab("After vs Before Covid")+ylab("Avg Attendances (quater)")
+
+
+```
+
+__Try to do some stats__
+
+```{r}
+
+waiting_time_distribution <- waiting_time_mean %>% 
+  specify(avg_attendances ~ status) %>% 
+  hypothesize(null = "independence") %>% 
+  generate( reps = 1000, type = "permute") %>% 
+  calculate(stat = "diff in means", order = c("after", "before"))
+
+observed_waiting_time <- waiting_time_mean %>% 
+  specify(avg_attendances ~ status) %>% 
+  calculate( stat = "diff in means", order = c("after", "before"))
+
+waiting_time_distribution %>% 
+  visualise()+
+shade_p_value(obs_stat = observed_waiting_time, direction = "right")
 
 
 ```
 
 
+```{r}
+
+waiting_time_distribution %>% 
+get_p_value(obs_stat = observed_waiting_time, direction = "right")
+
+```
 
 
+The H0 is rejected. There is no evidence proof that the mean attendances after Covid is the same as the mean attendances before Covid.
+
+Since this is a right-sided test, we can confirm that the mean attendances after Covid is greater than the mean attendance before Covid.
 
 
+__explore the region__
+
+
+```{r}
+
+ae_waiting_time_clean_long_p %>% 
+  distinct(treatment_location_name)
+
+```
 
 
 
