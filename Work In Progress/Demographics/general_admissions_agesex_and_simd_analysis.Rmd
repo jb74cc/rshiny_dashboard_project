@@ -167,117 +167,30 @@ Inpatients and Day cases, Not Specified
 # need a total column: 
 # sometimes stay = 0, and length of stay = 5
 
-#Male
-total_stays_sex_males <- hosp_acute_activity_agesex %>% 
-  filter(sex == "Male") %>% 
-  group_by(quarter) %>% 
+hosp_acute_activity_agesex <- hosp_acute_activity_agesex %>% 
+  group_by(sex, quarter) %>% 
   mutate(total_stays_per_quarter_sex = sum(stays))
-total_stays_sex_males
-
-#Female
-total_stays_sex_females <- hosp_acute_activity_agesex %>% 
-  filter(sex == "Female") %>% 
-  group_by(quarter) %>% 
-  mutate(total_stays_per_quarter_sex = sum(stays))
-total_stays_sex_females
+hosp_acute_activity_agesex
 ```
 
-Bind males and females: 
+
+ALSO WANT TOTALS FOR AGE BY QUARTER 
 ```{r}
-hosp_acute_activity_sex_total_stays <- bind_rows(total_stays_sex_females, total_stays_sex_males)
-hosp_acute_activity_sex_total_stays
+
+hosp_acute_activity_agesex <- hosp_acute_activity_agesex %>% 
+  group_by(age, quarter) %>% 
+  mutate(total_stays_per_quarter_age = sum(stays))
+hosp_acute_activity_agesex
 ```
 
-ALSO WANT TO BIND FOR AGE GROUPS
-```{r}
-hosp_acute_activity_sex_total_stays %>% 
-  group_by(age) %>% 
-  summarise(total = n())
 
-# 0-9 years
-age_0_9 <- hosp_acute_activity_sex_total_stays %>% 
-  filter(age == "0-9 years") %>% 
-  group_by(quarter) %>% 
-  mutate(total_stays_per_quarter_age = sum(stays))
-age_0_9
 
-# 10-19 years
-age_10_19 <- hosp_acute_activity_sex_total_stays %>% 
-  filter(age == "10-19 years") %>% 
-  group_by(quarter) %>% 
-  mutate(total_stays_per_quarter_age = sum(stays))
-age_10_19
-
-# 20-29 years
-age_20_29 <- hosp_acute_activity_sex_total_stays %>% 
-  filter(age == "20-29 years") %>% 
-  group_by(quarter) %>% 
-  mutate(total_stays_per_quarter_age = sum(stays))
-age_20_29
-
-# 30-39 years
-age_30_39 <- hosp_acute_activity_sex_total_stays %>% 
-  filter(age == "30-39 years") %>% 
-  group_by(quarter) %>% 
-  mutate(total_stays_per_quarter_age = sum(stays))
-age_30_39
-
-# 40-49 years
-age_40_49 <- hosp_acute_activity_sex_total_stays %>% 
-  filter(age == "40-49 years") %>% 
-  group_by(quarter) %>% 
-  mutate(total_stays_per_quarter_age = sum(stays))
-age_40_49
-
-# 20-29 years
-age_50_59 <- hosp_acute_activity_sex_total_stays %>% 
-  filter(age == "50-59 years") %>% 
-  group_by(quarter) %>% 
-  mutate(total_stays_per_quarter_age = sum(stays))
-age_50_59
-
-# 60-69 years
-age_60_69 <- hosp_acute_activity_sex_total_stays %>% 
-  filter(age == "60-69 years") %>% 
-  group_by(quarter) %>% 
-  mutate(total_stays_per_quarter_age = sum(stays))
-age_60_69
-
-# 70-79 years
-age_70_79 <- hosp_acute_activity_sex_total_stays %>% 
-  filter(age == "70-79 years") %>% 
-  group_by(quarter) %>% 
-  mutate(total_stays_per_quarter_age = sum(stays))
-age_70_79
-
-# 80-89 years
-age_80_89 <- hosp_acute_activity_sex_total_stays %>% 
-  filter(age == "80-89 years") %>% 
-  group_by(quarter) %>% 
-  mutate(total_stays_per_quarter_age = sum(stays))
-age_80_89
-
-# 90 years and over
-age_90_plus <- hosp_acute_activity_sex_total_stays %>% 
-  filter(age == "90 years and over") %>% 
-  group_by(quarter) %>% 
-  mutate(total_stays_per_quarter_age = sum(stays))
-age_90_plus
-```
-Bind these together
-```{r}
-hosp_acute_activity_total_stays <- bind_rows(age_0_9, age_10_19, age_20_29, 
-                                             age_30_39, age_40_49, age_50_59,
-                                             age_60_69, age_70_79, age_80_89,
-                                             age_90_plus)
-hosp_acute_activity_total_stays
-```
 
 
 ## Sex and stays
 
 ```{r}
-hosp_acute_activity_total_stays %>% 
+hosp_acute_activity_agesex %>% 
   ggplot()+
   aes(x = quarter, 
       y = total_stays_per_quarter_sex, 
@@ -299,7 +212,7 @@ hosp_acute_activity_total_stays %>%
 ## AGE GROUPS AND TOTAL STAYS 
 
 ```{r}
-hosp_acute_activity_total_stays %>% 
+hosp_acute_activity_agesex %>% 
   ggplot()+
   aes(x = quarter, 
       y = total_stays_per_quarter_age, 
@@ -347,52 +260,17 @@ hosp_acute_activity_simd_no_na
 ```
 
 ```{r}
-# simd 1
-simd1 <- hosp_acute_activity_simd_no_na %>% 
-  filter(simd == "1") %>% 
-  group_by(quarter) %>% 
-  mutate(total_stays_per_quarter_simd = sum(stays))
-simd1
 
-# simd 2
-simd2 <- hosp_acute_activity_simd_no_na %>% 
-  filter(simd == "2") %>% 
-  group_by(quarter) %>% 
+hosp_acute_activity_simd_no_na_simd <- hosp_acute_activity_simd_no_na %>% 
+  group_by(simd, quarter) %>% 
   mutate(total_stays_per_quarter_simd = sum(stays))
-simd2
+hosp_acute_activity_simd_no_na_simd
 
-# simd 3
-simd3 <- hosp_acute_activity_simd_no_na %>% 
-  filter(simd == "3") %>% 
-  group_by(quarter) %>% 
-  mutate(total_stays_per_quarter_simd = sum(stays))
-simd3
-
-# simd 4
-simd4 <- hosp_acute_activity_simd_no_na %>% 
-  filter(simd == "4") %>% 
-  group_by(quarter) %>% 
-  mutate(total_stays_per_quarter_simd = sum(stays))
-simd4
-
-# simd 5
-simd5 <- hosp_acute_activity_simd_no_na %>% 
-  filter(simd == "5") %>% 
-  group_by(quarter) %>% 
-  mutate(total_stays_per_quarter_simd = sum(stays))
-simd5
 ```
 
-bind smid
 
 ```{r}
-hosp_acute_activity_total_stays_simd <- bind_rows(simd1, simd2, simd3, simd4, 
-                                                  simd5)
-hosp_acute_activity_total_stays_simd
-```
-
-```{r}
-hosp_acute_activity_total_stays_simd %>%
+hosp_acute_activity_simd_no_na_simd %>%
      mutate(simd = fct_relevel(as.character(simd, 
                                   "1", "2", "3", "4", "5"))) %>%
   ggplot()+
@@ -418,48 +296,17 @@ hosp_acute_activity_total_stays_simd %>%
 ## EPISODES 
 
 ```{r}
-# simd 1
-simd1e <- hosp_acute_activity_total_stays_simd %>% 
-  filter(simd == "1") %>% 
-  group_by(quarter) %>% 
-  mutate(total_episodes_per_quarter_simd = sum(episodes))
-simd1e
 
-# simd 2
-simd2e <- hosp_acute_activity_total_stays_simd %>% 
-  filter(simd == "2") %>% 
-  group_by(quarter) %>% 
+hosp_acute_activity_simd_no_na_simd <- hosp_acute_activity_simd_no_na %>% 
+  group_by(simd, quarter) %>% 
   mutate(total_episodes_per_quarter_simd = sum(episodes))
-simd2e
+hosp_acute_activity_simd_no_na_simd
 
-# simd 3
-simd3e <- hosp_acute_activity_total_stays_simd %>% 
-  filter(simd == "3") %>% 
-  group_by(quarter) %>% 
-  mutate(total_episodes_per_quarter_simd = sum(episodes))
-simd3e
-
-# simd 4
-simd4e <- hosp_acute_activity_total_stays_simd %>% 
-  filter(simd == "4") %>% 
-  group_by(quarter) %>% 
-  mutate(total_episodes_per_quarter_simd = sum(episodes))
-simd4e
-
-# simd 5
-simd5e <- hosp_acute_activity_total_stays_simd %>% 
-  filter(simd == "5") %>% 
-  group_by(quarter) %>% 
-  mutate(total_episodes_per_quarter_simd = sum(episodes))
-simd5e
-
-hosp_acute_activity_total_stays_andEps_simd <- bind_rows(simd1e, simd2e, simd3e, 
-                                                         simd4e, simd5e)
 ```
 
 
 ```{r}
-hosp_acute_activity_total_stays_andEps_simd %>%
+hosp_acute_activity_simd_no_na_simd %>%
      mutate(simd = fct_relevel(as.character(simd, 
                                   "1", "2", "3", "4", "5"))) %>%
   ggplot()+
