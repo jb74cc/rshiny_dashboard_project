@@ -20,7 +20,8 @@ bed_plot_function <- function(beds_by_hb_trim) {
              labs(title = "% Bed Occupancy by Health Board, Scotland, Q3|2016 - Q3|2021",
                   x = "\nQuarter",
                   y = "% Bed Occupancy") +
-             scale_color_discrete(name = NULL) +
+             #scale_color_discrete(name = NULL) +
+             scale_color_manual(values = nhs_colours_2) +
              theme(legend.title = element_blank(), 
                    axis.text.x = element_text(angle = 270, vjust = 0.25),
                    title = element_text(face = "bold")),
@@ -38,7 +39,7 @@ new_map_function <- function(locations = HBName) {
     addProviderTiles(providers$CartoDB.Positron) %>% 
     addTiles(providers$CartoDB.Positron) %>%
     addPolygons(
-      fillColor = ~colorQuantile("Set3", sco_hb_simplified$Shape_Area)(Shape_Area),
+      fillColor = ~colorQuantile(nhs_colours, sco_hb_simplified$Shape_Area)(Shape_Area),
       fillOpacity = 0.6,
       weight = 1
     )

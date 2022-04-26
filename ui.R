@@ -26,61 +26,98 @@ ui <- fluidPage(
       
       tabsetPanel(type = "tabs",
                   
-                  tabPanel("Bed Occupancy", 
-                           fluidRow(
-                             column(1),
-                             column(4,
+      tabPanel("Bed Occupancy", 
+              fluidRow(
+              column(1),
+              column(4,
                                     
-                                    # drop down select dates
-                                    selectInput("select_start", label = h4("Select start date"), 
-                                                choices = sort(unique(beds_by_hb_trim$quarter)), 
-                                                selected = min(beds_by_hb_trim$quarter)),
+              # drop down select dates
+              selectInput("select_start", label = h4("Select start date"), 
+                           choices = sort(unique(beds_by_hb_trim$quarter)), 
+                           selected = min(beds_by_hb_trim$quarter)),
                                     
-                                    selectInput("select_end", label = h4("Select end date"), 
-                                                choices = sort(unique(beds_by_hb_trim$quarter)), 
-                                                selected = max(beds_by_hb_trim$quarter)), 
+              selectInput("select_end", label = h4("Select end date"), 
+                           choices = sort(unique(beds_by_hb_trim$quarter)), 
+                           selected = max(beds_by_hb_trim$quarter)), 
                                     
-                                    checkboxGroupInput("hb_input", label = h4("Select Health Board"), 
-                                                       choices = sort(unique(beds_by_hb_trim$hb_name)),
-                                                       selected = sort(unique(beds_by_hb_trim$hb_name)))),
+              checkboxGroupInput("hb_input", label = h4("Select Health Board"), 
+                                 choices = sort(unique(beds_by_hb_trim$hb_name)),
+                                 selected = c("NHS Highland", "NHS Lanarkshire", "NHS Lothian"))),
+                                #selected = sort(unique(beds_by_hb_trim$hb_name)))),
                              
-                             column(7, 
-                                    br(), 
-                                    br(),
-                                    plotlyOutput("plot")))),
+              column(7, 
+                        br(), 
+                        br(),
+                        plotlyOutput("plot")))),
                   
                   
+        # Demographics Tab -----------------
+        tabPanel("Demographics", 
+                 fluidRow(
+                 column(1),
+                 column(4,
+                                    
+                 # drop down select dates
+                 selectInput("select_start", label = h4("Select start date"), 
+                            choices = sort(unique(beds_by_hb_trim$quarter)), 
+                            selected = min(beds_by_hb_trim$quarter)),
+                                    
+                 selectInput("select_end", label = h4("Select end date"), 
+                            choices = sort(unique(beds_by_hb_trim$quarter)), 
+                            selected = max(beds_by_hb_trim$quarter)),
+                 
+                 ))),
+
                   
-                  tabPanel("Demographics", verbatimTextOutput("")),
+        # Deprivation Tab -----------------
+        tabPanel("Demographics", 
+                 fluidRow(
+                 column(1),
+                 column(4,
+                                   
+                 # drop down select dates
+                  selectInput("select_start", label = h4("Select start date"), 
+                              choices = sort(unique(beds_by_hb_trim$quarter)), 
+                              selected = min(beds_by_hb_trim$quarter)),
+                                   
+                  selectInput("select_end", label = h4("Select end date"), 
+                             choices = sort(unique(beds_by_hb_trim$quarter)), 
+                             selected = max(beds_by_hb_trim$quarter)),
+                                   
+                  ))),
+      
+        # A&E Tab -----------------            
+         tabPanel("A&E",
+                  fluidRow(
+                  column(1),
+                  column(4,
+                           
+                  # drop down select dates
+                  selectInput("select_start", label = h4("Select start date"), 
+                              choices = sort(unique(beds_by_hb_trim$quarter)), 
+                              selected = min(beds_by_hb_trim$quarter)),
+                           
+                  selectInput("select_end", label = h4("Select end date"), 
+                              choices = sort(unique(beds_by_hb_trim$quarter)), 
+                              selected = max(beds_by_hb_trim$quarter)),
+                           
+                    ))),
                   
-                  tabPanel("Deprivation", verbatimTextOutput("")),
-                  
-                  tabPanel("A&E", verbatimTextOutput("")),
-                  
+                  # Map Tab ----------------- 
                   tabPanel("Map", 
                            column(1),
                            column(8,
                                   leafletOutput("new_map_function"),
-                                  p("p creates a paragraph of text."),
-                                  p("A new p() command starts a new paragraph. 
-                               Supply a style attribute to change the format of the entire paragraph.", 
-                               style = "font-family: 'times'; font-si16pt"),
-                               strong("strong() makes bold text."),
-                               em("em() creates italicized (i.e, emphasized) text."),
-                               br(),
-                               code("code displays your text similar to computer code"),
-                               div("div creates segments of text with a similar style. 
-                                   This division of text is all blue because I passed the argument 'style = color:blue' to div", 
-                                   style = "color:blue"),
-                               br(),
-                               p("span does the same thing as div, but it works with",
-                                 span("groups of words", style = "color:blue"),
-                                 "that appear inside a paragraph."))),
+                                  br(),
+                                  p("NHS Scotland Healthboard Map", style = "color:white"))),
                   
-                  tabPanel("Resources", verbatimTextOutput("summary"))
+                  # Map Tab ----------------- 
+                  tabPanel("Resources", p("Data sourced from PHS Open Data Platform.
+                                          Contains public sector information licensed under 
+                                          the Open Government Licence v3.0.", style = "color:white"))
                   
-      )
       )
     )
-    
   )
+  
+)
