@@ -172,10 +172,10 @@ plot_data_waiting_time <- rbind(plot_data_4hrs, plot_data_8hrs, plot_data_12hrs)
 plot_data_waiting_time %>% 
   group_by(year_quarter) %>% 
   ggplot()+
-  aes(x = year_quarter, y = total_attendances, group = time_waiting, colour = time_waiting)+
+  aes(x = year_quarter, y = log10(total_attendances), group = time_waiting, colour = time_waiting)+
   geom_point()+
   geom_line()+
-  xlab("Year(Quarter)")+ylab("Number of Attendances")+
+  xlab("Year(Quarter)")+ylab("Number of Attendances (log 10)")+
   theme(axis.text.x = element_text(angle = 90, size = 5, vjust = 0.5, hjust=1))+
   labs(color="Time Waiting", size = 5)+
   ggtitle("Number of People in Waiting Time Range")
@@ -193,10 +193,10 @@ ae_waiting_time_clean_long_p %>%
   # filter(hrs_waiting == "hrs_waiting_4") %>% 
   summarise(total_attendances = sum(number_attendances)) %>% 
   ggplot()+
-  aes(x = year_quarter, y = total_attendances)+
+  aes(x = year_quarter, y = log10(total_attendances))+
   geom_point()+
   geom_line(group = 1)+
-  xlab("Year(Quarter)")+ylab("Number of Attendances")+
+  xlab("Year(Quarter)")+ylab("Number of Attendances(log 10)")+
   theme(axis.text.x = element_text(angle = 90, size = 5, vjust = 0.5, hjust=1))+
   labs(color="Time Waiting", size = 5)+
   ggtitle("Number of A&E Attendances from 2016 to 2022")
