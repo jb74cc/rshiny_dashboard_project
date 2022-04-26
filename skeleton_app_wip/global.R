@@ -5,6 +5,7 @@ library(janitor)
 library(shinydashboard)
 library(leaflet)
 library(sf)
+library(plotly)
 
 source("R/helpers.R")
 

@@ -16,7 +16,7 @@ server <- function(input, output, session) {
   
   
   # Generate a plot of the bed occupancy data ----
-  output$plot <- renderPlot({
+  output$plot <- renderPlotly({
     bed_plot_function(filtered_hb())
     
     
