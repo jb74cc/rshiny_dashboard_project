@@ -8,8 +8,8 @@ server <- function(input, output, session) {
   filtered_hb <- reactive({
     beds_by_hb_trim %>% 
       filter(hb_name %in% input$hb_input) %>% 
-      filter(quarter == input$select_start) %>% 
-      filter(quarter == input$select_end)
+      filter(quarter >= input$select_start) %>% 
+      filter(quarter <= input$select_end)
     
   })
   
@@ -24,12 +24,12 @@ server <- function(input, output, session) {
   
   # Generate a summary of the data ----
   output$summary <- renderPrint({
-    paste("Summary goes here")
+    paste("Resource list goes here")
   })
   
   # Generate a map of health board locations ----
-  output$map_function <- renderLeaflet({
-    map_function()
+  output$new_map_function <- renderLeaflet({
+    new_map_function()
   })
   
 }

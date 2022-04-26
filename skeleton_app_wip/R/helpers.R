@@ -24,7 +24,17 @@ bed_plot_function <- function(beds_by_hb_trim) {
   
 }
 
-quarter_dates <- c("2016Q3", "2016Q4", "2017Q1", "2017Q2", "2017Q3", "2017Q4", 
-                   "2018Q1", "2018Q2", "2018Q3", "2018Q4", "2019Q1", "2019Q2", 
-                   "2019Q3", "2019Q4", "2020Q1", "2020Q2", "2020Q3", "2020Q4",
-                   "2021Q1", "2021Q2", "2021Q3")
+# function to produce the new location map
+new_map_function <- function(locations = HBName) {
+  
+  sco_hb_simplified %>% 
+    st_transform(4326) %>% 
+    leaflet() %>% 
+    addProviderTiles(providers$CartoDB.Positron) %>% 
+    addTiles(providers$CartoDB.Positron) %>%
+    addPolygons(
+      fillColor = ~colorQuantile("YlOrRd", sco_hb_simplified$Shape_Area)(Shape_Area),
+      fillOpacity = 0.6,
+      weight = 1
+    )
+}
