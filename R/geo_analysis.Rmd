@@ -172,10 +172,11 @@ ggplotly(beds_by_hb_trim %>%
     labs(title = "% Bed Occupancy by Health Board, Scotland, Q3|2016 - Q3|2021",
          x = "\nQuarter",
          y = "% Bed Occupancy") +
-    theme(axis.text.x = element_text(angle = 270, vjust = 0.25),
-          title = element_text(face = "bold"),
-          legend.title = element_blank()),
-    tooltip = "text") %>% 
+    scale_color_discrete(name = NULL) +
+    theme(legend.title = element_blank(), 
+          axis.text.x = element_text(angle = 270, vjust = 0.25),
+          title = element_text(face = "bold")),
+    tooltip = "text") %>%  
     style(hoverlabel = list, marker.color = "white")
 
 
