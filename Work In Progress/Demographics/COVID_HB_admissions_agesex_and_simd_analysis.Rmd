@@ -287,7 +287,8 @@ covid_admissions_HB_AGE %>%
   geom_line()+
   labs(x = "Month and Year",
        y = "Total admissions",
-       title = "(HB) Total Admissions per month across Scotland by age group",
+       title = "(HB) Total Admissions during COVID, per month and across 
+       Scotland by age group",
        subtitle = "January, 2020 - February 2022",
        colour = "Age Group") +
   theme_bw()+
@@ -311,7 +312,8 @@ covid_admissions_HB_AGE %>%
   geom_line()+
   labs(x = "Yearly Quarters",
        y = "Total admissions",
-       title = "(HB) Total Admissions per quarter across Scotland by age group",
+       title = "(HB) Total Admissions during COVID, per quarter and across 
+       Scotland by age group",
        subtitle = "January, 2020 - February 2022",
        colour = "Age Group") +
   theme_bw()+
