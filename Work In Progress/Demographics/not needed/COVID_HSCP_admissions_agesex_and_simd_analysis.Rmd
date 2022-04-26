@@ -1,0 +1,739 @@
+---
+title: "Demographics analysis 3 - HSCP and COVID"
+subtitle: "COVID Admissions - January 2020 to Febraury 2022"
+output:
+  html_document:
+    df_print: paged
+---
+HSCP - 9-digit code for Health and Social Care Partnerships (2016) of residence
+
+HB - 9-digit code for health board of treatment based on boundaries as at 1st 
+April 2019
+
+```{r}
+library(tidyverse)
+library(here)
+library(readxl)
+library(janitor)
+library(ggplot2)
+library(lubridate)
+library(stringr)
+```
+<br> 
+
+Read In Data
+
+```{r}
+covid_admissions_HSCP_agesex <- read_csv(here("../../raw_data/covid_data/hospital_admissions_hscp_agesex_20220302.csv"))
+
+covid_admissions_HSCP_simd <- read_csv(here("../../raw_data/covid_data/hospital_admissions_hscp_simd_20220302.csv"))
+
+```
+
+**Clean Names**
+
+```{r}
+covid_admissions_HSCP_agesex <- janitor::clean_names(covid_admissions_HSCP_agesex)
+covid_admissions_HSCP_simd <- janitor::clean_names(covid_admissions_HSCP_simd)
+```
+
+**Change week_ending column to a date and creating new day, month, year AND ** 
+**a month and year col**
+```{r}
+#HSCP x age sex
+covid_admissions_HSCP_agesex <- covid_admissions_HSCP_agesex %>%
+  mutate(week_ending = ymd(week_ending))
+
+covid_admissions_HSCP_agesex <- covid_admissions_HSCP_agesex %>%
+  mutate(
+    wk_ending_day = day(week_ending),
+    wk_ending_month = month(week_ending, label = TRUE, abbr = FALSE),
+    wk_ending_year = year(week_ending)
+  ) %>% 
+  unite(wk_ending_yr_month, 
+        wk_ending_month, wk_ending_year, 
+        remove = FALSE, 
+        sep = " ")
+covid_admissions_HSCP_agesex
+
+#HSCP x simd
+covid_admissions_HSCP_simd <- covid_admissions_HSCP_simd %>%
+  mutate(week_ending = ymd(week_ending))
+
+covid_admissions_HSCP_simd <- covid_admissions_HSCP_simd %>%
+  mutate(
+    wk_ending_day = day(week_ending),
+    wk_ending_month = month(week_ending, label = TRUE, abbr = FALSE),
+    wk_ending_year = year(week_ending)
+  ) %>% 
+  unite(wk_ending_yr_month, 
+        wk_ending_month, wk_ending_year, 
+        remove = FALSE, 
+        sep = " ")
+covid_admissions_HSCP_simd
+```
+
+
+<hr>
+
+<br>
+
+#### What are we working with?
+**Looking to see if i can join data? Probably??? All the HSPC corresponding **
+**health board values are S08000015 - s08000032 **
+**https://www.opendata.nhs.scot/dataset/geography-codes-and-labels/resource/944765d7-d0d9-46a0-b377-abb3de51d08e**
+
+**The HB data set is all S08000015 - s08000032** 
+
+```{r}
+covid_admissions_HSCP_agesex %>% 
+  distinct(hscp)
+```
+
+We only need ACUTE patients: 
+
+admission_type has: All, Emergency and Planned
+* all and emergency always have similar figures compared with planned.
+
+```{r}
+covid_admissions_HSCP_agesex%>% 
+  group_by(admission_type) %>% 
+  summarise(total = n())
+covid_admissions_HSCP_agesex %>% 
+  group_by(age_group) %>% 
+  summarise(total = n())
+
+covid_admissions_HSCP_simd%>% 
+  group_by(admission_type) %>% 
+  summarise(total = n())
+covid_admissions_HSCP_simd %>% 
+  group_by(simd_quintile) %>% 
+  summarise(total = n())
+```
+
+
+* let's remove "all" as we only want acute 
+```{r}
+covid_admissions_HSCP_agesex <- covid_admissions_HSCP_agesex %>% 
+  filter(admission_type == "Emergency")
+
+covid_admissions_HSCP_simd <- covid_admissions_HSCP_simd %>% 
+  filter(admission_type == "Emergency")
+```
+
+* We can remove simd NAs
+* ANd we don't need ALL ages either... edit: yes we do:
+ * The "sex" column "Male, Female, All" - m & f only come under "All ages"!
+```{r}
+covid_admissions_HSCP_simd <- covid_admissions_HSCP_simd %>% 
+  drop_na(simd_quintile)
+
+covid_admissions_HSCP_AGE <- covid_admissions_HSCP_agesex %>% 
+  filter(age_group != "All ages")
+```
+
+<hr>
+
+<br>
+
+## HSCP - sex and age
+
+### HB - Age - Total Covid admissions
+<br>
+
+Firstly need a total column for each age group per month:
+```{r}
+
+#Under 5
+monthly_covid_ads_HSCP_under5 <- covid_admissions_HSCP_AGE %>% 
+  filter(age_group == "Under 5") %>% 
+  group_by(wk_ending_yr_month) %>% 
+  mutate(total_admissions_per_month = sum(number_admissions))
+
+monthly_past_average_HSCP_under5 <- monthly_covid_ads_HSCP_under5 %>% 
+  group_by(wk_ending_yr_month) %>% 
+  mutate(total_past_average_ads_per_month = sum(average20182019))
+monthly_past_average_HSCP_under5
+
+#5 - 14
+monthly_covid_ads_HSCP_5to14 <- covid_admissions_HSCP_AGE %>% 
+  filter(age_group == "5 - 14") %>% 
+  group_by(wk_ending_yr_month) %>% 
+  mutate(total_admissions_per_month = sum(number_admissions))
+
+monthly_past_average_HSCP_5to14 <- monthly_covid_ads_HSCP_5to14 %>% 
+  group_by(wk_ending_yr_month) %>% 
+  mutate(total_past_average_ads_per_month = sum(average20182019))
+monthly_past_average_HSCP_5to14
+  
+#15 - 44
+monthly_covid_ads_HSCP_15to44 <- covid_admissions_HSCP_AGE %>% 
+  filter(age_group == "15 - 44") %>% 
+  group_by(wk_ending_yr_month) %>% 
+  mutate(total_admissions_per_month = sum(number_admissions))
+
+monthly_past_average_HSCP_15to44 <- monthly_covid_ads_HSCP_15to44 %>% 
+  group_by(wk_ending_yr_month) %>% 
+  mutate(total_past_average_ads_per_month = sum(average20182019))
+monthly_past_average_HSCP_15to44
+
+# 45 - 64
+a <- covid_admissions_HSCP_AGE %>% 
+  filter(age_group == "45 - 64") %>% 
+  group_by(wk_ending_yr_month) %>% 
+  mutate(total_admissions_per_month = sum(number_admissions))
+
+a2 <- a %>% 
+  group_by(wk_ending_yr_month) %>% 
+  mutate(total_past_average_ads_per_month = sum(average20182019))
+a2
+
+#65-74  
+b <- covid_admissions_HSCP_AGE %>% 
+  filter(age_group == "65 - 74") %>% 
+  group_by(wk_ending_yr_month) %>% 
+  mutate(total_admissions_per_month = sum(number_admissions))
+
+b2 <- b %>% 
+  group_by(wk_ending_yr_month) %>% 
+  mutate(total_past_average_ads_per_month = sum(average20182019))
+b2
+
+#75-84
+c <- covid_admissions_HSCP_AGE %>% 
+  filter(age_group == "75 - 84") %>% 
+  group_by(wk_ending_yr_month) %>% 
+  mutate(total_admissions_per_month = sum(number_admissions))
+
+c2 <- c %>% 
+  group_by(wk_ending_yr_month) %>% 
+  mutate(total_past_average_ads_per_month = sum(average20182019))
+c2
+
+#85 and over
+d <- covid_admissions_HSCP_AGE %>% 
+  filter(age_group == "85 and over") %>% 
+  group_by(wk_ending_yr_month) %>% 
+  mutate(total_admissions_per_month = sum(number_admissions))
+
+d2 <- d %>% 
+  group_by(wk_ending_yr_month) %>% 
+  mutate(total_past_average_ads_per_month = sum(average20182019))
+d2
+```
+
+bind together so we have totals for each month:
+```{r}
+covid_admissions_HSCP_age_totals <- bind_rows(monthly_past_average_HSCP_under5, 
+                                            monthly_past_average_HSCP_5to14,
+                                            monthly_past_average_HSCP_15to44,
+                                            a2, b2, c2, d2)
+covid_admissions_HSCP_age_totals
+```
+
+April 2020 will be shown first and ages are a mess. So:
+
+```{r}
+dates <- c("January 2020", "February 2020", "March 2020", "April 2020", 
+           "May 2020", "June 2020", "July 2020", "August 2020", 
+           "September 2020", "October 2020", "November 2020", "December 2020", 
+           "January 2021", "February 2021", "March 2021", "April 2021", 
+           "May 2021", "June 2021", "July 2021", "August 2021", 
+           "September 2021", "October 2021", "November 2021", "December 2021", 
+           "January 2022", "February 2022")
+
+summer_dates <- c("April 2020", "May 2020", "June 2020", "July 2020", 
+                  "August 2020", "September 2020", "April 2021", "May 2021", 
+                  "June 2021", "July 2021", "August 2021", "September 2021")
+
+winter_dates <- c("January 2020", "February 2020", "March 2020", "October 2020",
+                  "November 2020", "December 2020", "January 2021", 
+                  "February 2021", "March 2021", "October 2021", 
+                  "November 2021", "December 2021", "January 2022", 
+                  "February 2022")
+```
+
+<br>
+**PLOT OF Total COVID admissions per month by age group**
+
+```{r}
+covid_admissions_HSCP_age_totals %>% 
+  mutate(age_group = fct_relevel(age_group, 
+                                 "Under 5", "5 - 14", "15 - 44", 
+                                 "45 - 64", "65 - 74", "75 - 84", 
+                                 "85 and over")) %>%
+  ggplot()+
+  aes(x = wk_ending_yr_month, 
+      y = total_admissions_per_month, 
+      group = age_group, 
+      colour = age_group)+
+  scale_x_discrete(limits = dates) +
+  geom_point()+
+  geom_line()+
+  labs(x = "Month and Year",
+       y = "Total admissions",
+       title = "HSCP Total admissions in COVID times per month by age group",
+       subtitle = "January, 2020 - February 2022",
+       colour = "Age Group") +
+  theme_bw()+
+  theme(axis.text.x = element_text(angle = 45, hjust = 0.9))
+```
+
+
+let's try again to see if there's difference in age groups and seasons:
+* Winter = Q4 and Q1 
+* Summer = Q2 and Q3
+```{r}
+highlight_winter_HSCP_age <- covid_admissions_HSCP_age_totals %>% 
+  filter(str_detect(wk_ending_yr_month, 
+                    "October|November|December|January|February|March"))
+
+highlight_summer_HSCP_age <- covid_admissions_HSCP_age_totals %>% 
+  filter(str_detect(wk_ending_yr_month, 
+                    "April|May|June|July|August|September"))
+```
+
+Re-trying above graph -  messy but can be looked into.
+* Total COVID admissions per month by age group
+```{r}
+covid_admissions_HSCP_age_totals %>% 
+  mutate(age_group = fct_relevel(age_group, 
+                                 "Under 5", "5 - 14", "15 - 44", 
+                                 "45 - 64", "65 - 74", "75 - 84", 
+                                 "85 and over")) %>%
+  ggplot()+
+  aes(x = wk_ending_yr_month, 
+      y = total_admissions_per_month, 
+      group = age_group, 
+      fill = age_group)+
+  scale_x_discrete(limits = dates) +
+  geom_col()+
+  facet_wrap(~age_group)+
+  labs(x = "Month",
+       y = "Total admissions",
+       title = "HSCP Total admissions in COVID times per month by age group",
+       subtitle = "January, 2020 - February 2022",
+       fill = "Age Group") +
+  theme_bw()+
+  theme(axis.text.x = element_text(angle = 45, hjust = 0.9))
+```
+
+
+**THE ABOVE BUT WINTER vs SUMMER**
+
+* Total COVID admissions per month by age group
+* SUMMER
+```{r}
+
+highlight_summer_HSCP_age %>% 
+  mutate(age_group = fct_relevel(age_group, 
+                                 "Under 5", "5 - 14", "15 - 44", 
+                                 "45 - 64", "65 - 74", "75 - 84", 
+                                 "85 and over")) %>%
+  ggplot()+
+  aes(x = wk_ending_yr_month, 
+      y = total_admissions_per_month, 
+      group = age_group, 
+      fill = age_group)+
+  scale_x_discrete(limits = summer_dates) +
+  geom_col()+
+  facet_wrap(~age_group)+
+  labs(x = "Month",
+       y = "Total admissions",
+       title = "Total admissions in COVID times per SUMMER month, by age group",
+       subtitle = "Summer Months: 
+       April, 2020 - September 2020 
+       and April, 2021 - September 2021",
+       fill = "Age Group") +
+  theme_bw()+
+  theme(axis.text.x = element_text(angle = 45, hjust = 0.9))
+```
+
+
+* Total COVID admissions per month by age group
+* WINTER
+
+```{r}
+
+highlight_winter_HSCP_age %>% 
+  mutate(age_group = fct_relevel(age_group, 
+                                 "Under 5", "5 - 14", "15 - 44", 
+                                 "45 - 64", "65 - 74", "75 - 84", 
+                                 "85 and over")) %>%
+  ggplot()+
+  aes(x = wk_ending_yr_month, 
+      y = total_admissions_per_month, 
+      group = age_group, 
+      fill = age_group)+
+  scale_x_discrete(limits = winter_dates) +
+  geom_col()+
+  facet_wrap(~age_group)+
+  labs(x = "Month and Year",
+       y = "Total admissions",
+       title = "HSCP Total admissions in COVID times per WINTER month by age group",
+       subtitle = "Winter Months: 
+       January, 2020 - March 2020; 
+       October 2020 - March 2021; 
+       October 2021 - February 2022",
+       fill = "Age Group") +
+  theme_bw()+
+  theme(axis.text.x = element_text(angle = 45, hjust = 0.9))
+```
+
+
+<hr>
+<br>
+
+### HSCP -Age- Weekly COVID admissions against the average admissions in 2018 & 19
+
+* wow this is messy 
+
+```{r}
+covid_admissions_HSCP_age_totals %>% 
+  mutate(age_group = fct_relevel(age_group, 
+                                 "Under 5", "5 - 14", "15 - 44", 
+                                 "45 - 64", "65 - 74", "75 - 84", 
+                                 "85 and over")) %>%
+  group_by(age_group) %>% 
+  ggplot()+
+  aes(x = number_admissions, 
+      y = average20182019, 
+      colour = age_group)+
+  geom_point() +
+  labs(x = "Weekly number of admissions in COVID times",
+       y = "Average weekly admissions to hospital in 2018-2019",
+       title = "Weekly admissions in COVID TIMES per age group against the 
+       equivalent average weekly admissions in previous years",
+       subtitle = "COVID: January, 2020 - February, 2022 / 
+       Previous years: 2018 - 2019",
+       colour = "Age Group") +
+  theme_bw()+
+  theme(axis.text.x = element_text(angle = 45, hjust = 0.9))
+```
+
+**The above again just looking to see if there are differences in age groups**
+* Weekly COVID admissions per age group against the average weekly admissions in 
+previous years (2018&19)
+
+```{r}
+covid_admissions_HSCP_age_totals %>% 
+  mutate(age_group = fct_relevel(age_group, 
+                                 "Under 5", "5 - 14", "15 - 44", 
+                                 "45 - 64", "65 - 74", "75 - 84", 
+                                 "85 and over")) %>% 
+  group_by(age_group) %>% 
+  ggplot()+
+  aes(x = number_admissions, 
+      y = average20182019, 
+      colour = age_group)+
+  geom_point() +
+  facet_wrap(~age_group) +
+  labs(x = "Weekly number of admissions in COVID times",
+       y = "Average weekly admissions to hospital in 2018-2019",
+       title = "Weekly admissions in COVID TIMES per age group against the 
+       equivalent average weekly admissions in previous years",
+       subtitle = "COVID: January, 2020 - February, 2022 / 
+       Previous years: 2018 - 2019",
+       colour = "Age Group") +
+  theme_bw()+
+  theme(axis.text.x = element_text(angle = 45, hjust = 0.9))
+
+```
+
+**The above but by month instead of EVERY input**
+```{r}
+covid_admissions_HSCP_age_totals %>% 
+  mutate(age_group = fct_relevel(age_group, 
+                                 "Under 5", "5 - 14", "15 - 44", 
+                                 "45 - 64", "65 - 74", "75 - 84", 
+                                 "85 and over")) %>%
+  group_by(age_group) %>% 
+  ggplot()+
+  aes(x = total_admissions_per_month, 
+      y = total_past_average_ads_per_month, 
+      colour = age_group)+
+  geom_point() +
+  labs(x = "Monthly number of admissions in COVID times",
+       y = "Average monthly admissions to hospital in 2018-2019",
+       title = "Monthly admissions in COVID TIMES per age group against the 
+       equivalent average monthly admissions in previous years",
+       subtitle = "COVID: January, 2020 - February, 2022 / 
+       Previous years: 2018 - 2019",
+       colour = "Age Group") +
+  theme_bw()+
+  theme(axis.text.x = element_text(angle = 45, hjust = 0.9))
+```
+
+Facet by age group
+
+```{r}
+covid_admissions_HSCP_age_totals %>% 
+  mutate(age_group = fct_relevel(age_group, 
+                                 "Under 5", "5 - 14", "15 - 44", 
+                                 "45 - 64", "65 - 74", "75 - 84", 
+                                 "85 and over")) %>%
+  group_by(age_group) %>% 
+  ggplot()+
+  aes(x = total_admissions_per_month, 
+      y = total_past_average_ads_per_month, 
+      colour = age_group)+
+  geom_point() +
+    facet_wrap(~age_group) +
+  labs(x = "Monthly number of admissions in COVID times",
+       y = "Average monthly admissions to hospital in 2018-2019",
+       title = "Monthly admissions in COVID TIMES per age group against the 
+       equivalent average monthly admissions in previous years",
+       subtitle = "COVID: January, 2020 - February, 2022 / 
+       Previous years: 2018 - 2019",
+       colour = "Age Group") +
+  theme_bw()+
+  theme(axis.text.x = element_text(angle = 45, hjust = 0.9))
+```
+
+
+<hr>
+
+### HSCP - Sex - Average Covid Admissions vs Average 2018 and 2019 admissions
+ 
+ * remember that the agesex df has male, female, and all - male and female come
+ under "All ages" but not specific age groups
+ 
+ * Creating columns for monthly totals - admissions, and average past ads
+ * FOR FEMALES (males below):
+
+```{r}
+
+monthly_covid_ads_HSCP_agesex_female <- covid_admissions_HSCP_agesex %>% 
+  filter(sex == "Female") %>% 
+  group_by(wk_ending_yr_month) %>% 
+  mutate(total_admissions_per_month = sum(number_admissions))
+
+monthly_past_average_HSCP_agesex_female <- monthly_covid_ads_HSCP_agesex_female %>% 
+  group_by(wk_ending_yr_month) %>% 
+  mutate(total_past_average_ads_per_month = sum(average20182019))
+monthly_past_average_HSCP_agesex_female
+  
+```
+
+
+ * Creating columns for monthly totals - admissions, and average past ads
+ * FOR MALES (females above):
+```{r}
+# covid_admissions_HB_agesex %>% 
+#   distinct(sex)
+# view(covid_admissions_HB_agesex)
+
+monthly_covid_ads_HSCP_agesex_male <- covid_admissions_HSCP_agesex %>% 
+  filter(sex == "Male") %>% 
+  group_by(wk_ending_yr_month) %>% 
+  mutate(total_admissions_per_month = sum(number_admissions))
+
+monthly_past_average_HSCP_agesex_male <- monthly_covid_ads_HSCP_agesex_male %>% 
+  group_by(wk_ending_yr_month) %>% 
+  mutate(total_past_average_ads_per_month = sum(average20182019))
+monthly_past_average_HSCP_agesex_male
+  
+```
+
+
+bringing male and females with totals per month together:
+```{r}
+covid_admissions_HSCP_sex_totals <- bind_rows(monthly_past_average_HSCP_agesex_female, 
+                                     monthly_past_average_HSCP_agesex_male)
+covid_admissions_HSCP_sex_totals
+```
+
+
+Total admissions across HSCPs by gender for week ending (this doesn't work):
+```{r}
+covid_admissions_HSCP_sex_totals%>% 
+  group_by(sex) %>% 
+  ggplot()+
+  aes(x = total_admissions_per_month, 
+      y = total_past_average_ads_per_month,
+      colour = sex)+
+  scale_x_discrete(limits = dates) +
+  geom_point()+
+  geom_line()+
+  labs(title = "I AM AWARE THIS IS AWFUL")+
+  theme_bw()+
+  theme(axis.text.x = element_text(angle = 45, hjust = 0.9))
+```
+
+Trying again - Total admissions across HSCPs by gender for week ending 
+```{r}
+covid_admissions_HSCP_sex_totals %>% 
+  ggplot()+
+  aes(x = wk_ending_yr_month, 
+      y = total_admissions_per_month,
+      fill = sex)+
+  scale_x_discrete(limits = dates) +
+  geom_col(position = "dodge")+
+  labs(x = "Month and Year",
+       y = "Total Admissions per Month",
+       title = "HSCP Total Admissions in COVID times per Month by Sex", 
+       fill = "Sex")+  
+  theme_bw()+
+  theme(axis.text.x = element_text(angle = 45, hjust = 0.9))
+```
+
+
+weekly  
+```{r}
+covid_admissions_HSCP_sex_totals %>% 
+  group_by(sex) %>% 
+  ggplot()+
+  aes(x = wk_ending_yr_month, 
+      y = total_admissions_per_month,
+      colour = sex)+
+  scale_x_discrete(limits = dates) +
+  geom_point()+
+  geom_line()+ # where is the line?
+  labs(x = "Month and Year",
+       y = "Total Admissions",
+       title = "HSCP Monthly admissions in COVID times by sex",
+       subtitle = "COVID: January, 2020 - February, 2022 / 
+       Previous years: 2018 - 2019",
+       colour = "Sex") +
+  theme_bw()+
+  theme(axis.text.x = element_text(angle = 45, hjust = 0.9))
+```
+
+
+<hr> 
+
+## HEALTH BOARD - SIMD 
+
+### HSCP - SIMD - Total Admissions 
+
+```{r}
+covid_admissions_HSCP_simd %>% 
+  group_by(wk_ending_yr_month, simd_quintile) %>% 
+  ggplot()+
+  aes(x = number_admissions, 
+      y = average20182019,
+      colour = simd_quintile)+
+  scale_x_discrete(limits = dates) +
+  geom_point()+
+  geom_line()+
+  labs(title = "I AM AWARE THIS IS AWFUL")+
+  theme_bw()+
+  theme(axis.text.x = element_text(angle = 45, hjust = 0.9))
+  
+```
+
+So, creating monthly total columns for each level of simd:
+```{r}
+simd1 <- covid_admissions_HSCP_simd %>% 
+  filter(simd_quintile == "1") %>%
+  group_by(wk_ending_yr_month) %>% 
+  mutate(total_admissions_per_month_simd = sum(number_admissions))
+
+simd1 <- simd1 %>% 
+  group_by(wk_ending_yr_month) %>% 
+  mutate(total_past_average_ads_per_month = sum(average20182019))
+simd1
+
+#2
+simd2 <- covid_admissions_HSCP_simd %>% 
+  filter(simd_quintile == "2") %>%
+  group_by(wk_ending_yr_month) %>% 
+  mutate(total_admissions_per_month_simd = sum(number_admissions))
+
+simd2 <- simd2 %>% 
+  group_by(wk_ending_yr_month) %>% 
+  mutate(total_past_average_ads_per_month = sum(average20182019))
+simd2
+
+#3
+simd3 <- covid_admissions_HSCP_simd %>% 
+  filter(simd_quintile == "3") %>%
+  group_by(wk_ending_yr_month) %>% 
+  mutate(total_admissions_per_month_simd = sum(number_admissions))
+
+simd3 <- simd3 %>% 
+  group_by(wk_ending_yr_month) %>% 
+  mutate(total_past_average_ads_per_month = sum(average20182019))
+simd3
+
+#4
+simd4 <- covid_admissions_HSCP_simd %>% 
+  filter(simd_quintile == "4") %>%
+  group_by(wk_ending_yr_month) %>% 
+  mutate(total_admissions_per_month_simd = sum(number_admissions))
+
+simd4 <- simd4 %>% 
+  group_by(wk_ending_yr_month) %>% 
+  mutate(total_past_average_ads_per_month = sum(average20182019))
+simd4
+
+#5
+simd5 <- covid_admissions_HSCP_simd %>% 
+  filter(simd_quintile == "5") %>%
+  group_by(wk_ending_yr_month) %>% 
+  mutate(total_admissions_per_month_simd = sum(number_admissions))
+
+simd5 <- simd5 %>% 
+  group_by(wk_ending_yr_month) %>% 
+  mutate(total_past_average_ads_per_month = sum(average20182019))
+simd5
+  
+```
+
+bind these together:
+```{r}
+covid_admissions_HSCP_simd_totals <- bind_rows(simd1, simd2, simd3, simd4, simd5)
+covid_admissions_HSCP_simd_totals
+```
+
+
+**PLOT total admissions per simd per month**
+```{r}
+covid_admissions_HSCP_simd_totals %>% 
+   mutate(simd_quintile = fct_relevel(as.character(simd_quintile, 
+                                  "1", "2", "3", "4", "5"))) %>%
+  group_by(wk_ending_yr_month, simd_quintile) %>% 
+  ggplot()+
+  aes(x = wk_ending_yr_month, 
+      y = total_admissions_per_month_simd, 
+      group = simd_quintile, 
+      colour = simd_quintile)+
+  scale_x_discrete(limits = dates) +
+  geom_point()+
+  geom_line()+
+  labs(x = "Month and year",
+       y = "Total admissions",
+       title = "HSCP Total admissions in COVID times per month by SIMD Level",
+       subtitle = "January, 2020 - February 2022",
+       colour = "SIMD Level:
+       1 = Most Deprived
+       5 = Least Deprived") +
+  theme_bw()+
+  theme(axis.text.x = element_text(angle = 45, hjust = 0.9))
+```
+
+SIMD - AVERAGE admissions 2018 and 2019 against COVID admissions 
+```{r}
+covid_admissions_HSCP_simd_totals %>% 
+   mutate(simd_quintile = fct_relevel(as.character(simd_quintile, 
+                                  "1", "2", "3", "4", "5"))) %>%
+  group_by(simd_quintile) %>% 
+  ggplot()+
+  aes(x = total_admissions_per_month_simd, 
+      y = total_past_average_ads_per_month,
+      colour = simd_quintile)+
+  geom_point()+
+  labs(x = "Monthly number of admissions",
+       y = "Average monthly admissions to hospital in 2018-2019",
+       title = "Monthly admissions in COVID Times per SIMD level against the 
+       equivalent average monthly admissions in previous years",
+       subtitle = "COVID: January, 2020 - February, 2022 / 
+       Previous years: 2018 - 2019",
+       colour = "SIMD Level:
+       1 = Most Deprived
+       5 = Least Deprived") +
+  theme_bw()+
+  theme(axis.text.x = element_text(angle = 45, hjust = 0.9))
+```  
+
+
