@@ -215,6 +215,45 @@ ae_waiting_time_clean_long_p %>%
 ```
 
 
+__Statistics__
+In this case we are going to check the difference between mean attendances before Covid (~2019Q4) and after (2020Q1~)
+
+H0: after_Covid_attendances_mean = before_Covid_attendances_mean
+Ha: after_Covid_attendances_mean != before_Covid_attendances_mean
+
+```{r}
+#before Covid attendances mean
+
+before_covid_attendances_avg <- ae_waiting_time_clean%>% 
+  group_by(year_quarter) %>% 
+  filter(year != "2022") %>% 
+  filter(year != "2021") %>% 
+  filter(year_quarter != "2019Q4") %>% 
+  summarise(avg_attendances = mean(number_of_attendances_aggregate)) %>% 
+  mutate(status = "before")
+  
+after_covid_attendances_avg <- ae_waiting_time_clean%>% 
+  group_by(year_quarter ) %>% 
+  filter(year != "2016") %>%
+  filter(year != "2017") %>% 
+  filter(year != "2018") %>% 
+  filter(year_quarter != "2019Q1") %>% 
+  filter(year_quarter != "2019Q2") %>% 
+  filter(year_quarter != "2019Q3") %>% 
+  summarise(avg_attendances= mean(number_of_attendances_aggregate)) %>% 
+  mutate(status = "after")
+
+waiting_time_mean <- rbind(before_covid_attendances_avg, after_covid_attendances_avg)
+
+
+waiting_time_mean %>% 
+  ggplot(aes(x = status, y = avg_attendances))+
+  geom_boxplot()
+
+
+```
+
+
 
 
 
