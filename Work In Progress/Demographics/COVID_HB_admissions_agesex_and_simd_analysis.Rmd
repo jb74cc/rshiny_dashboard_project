@@ -409,8 +409,6 @@ covid_admissions_HB_SEX <- covid_admissions_HB_SEX %>%
   group_by(sex, year_quarter) %>% 
   mutate(admissions_2018_19_per_quarter_sex = sum(average20182019))
 
- 
-  
 ```
 
 
@@ -508,73 +506,30 @@ covid_admissions_HB_simd %>%
   
 ```
 
-So, creating monthly total columns for each level of simd:
+So, creating monthly and quarterly total columns for each level of simd:
 ```{r}
-simd1 <- covid_admissions_HB_simd %>% 
-  filter(simd_quintile == "1") %>%
-  group_by(wk_ending_yr_month) %>% 
+covid_admissions_HB_simd <- covid_admissions_HB_simd %>% 
+  group_by(simd_quintile, wk_ending_yr_month) %>% 
   mutate(total_admissions_per_month_simd = sum(number_admissions))
 
-simd1 <- simd1 %>% 
-  group_by(wk_ending_yr_month) %>% 
-  mutate(total_past_average_ads_per_month = sum(average20182019))
-simd1
+covid_admissions_HB_simd <- covid_admissions_HB_simd %>% 
+  group_by(simd_quintile, wk_ending_yr_month) %>% 
+  mutate(admissions_2018_19_per_month_simd = sum(average20182019))
 
-#2
-simd2 <- covid_admissions_HB_simd %>% 
-  filter(simd_quintile == "2") %>%
-  group_by(wk_ending_yr_month) %>% 
-  mutate(total_admissions_per_month_simd = sum(number_admissions))
+covid_admissions_HB_simd <- covid_admissions_HB_simd %>% 
+  group_by(simd_quintile, year_quarter) %>% 
+  mutate(total_admissions_per_quarter_simd = sum(number_admissions))
 
-simd2 <- simd2 %>% 
-  group_by(wk_ending_yr_month) %>% 
-  mutate(total_past_average_ads_per_month = sum(average20182019))
-simd2
+covid_admissions_HB_simd <- covid_admissions_HB_simd %>% 
+  group_by(simd_quintile, year_quarter) %>% 
+  mutate(admissions_2018_19_per_quarter_simd = sum(average20182019))
 
-#3
-simd3 <- covid_admissions_HB_simd %>% 
-  filter(simd_quintile == "3") %>%
-  group_by(wk_ending_yr_month) %>% 
-  mutate(total_admissions_per_month_simd = sum(number_admissions))
-
-simd3 <- simd3 %>% 
-  group_by(wk_ending_yr_month) %>% 
-  mutate(total_past_average_ads_per_month = sum(average20182019))
-simd3
-
-#4
-simd4 <- covid_admissions_HB_simd %>% 
-  filter(simd_quintile == "4") %>%
-  group_by(wk_ending_yr_month) %>% 
-  mutate(total_admissions_per_month_simd = sum(number_admissions))
-
-simd4 <- simd4 %>% 
-  group_by(wk_ending_yr_month) %>% 
-  mutate(total_past_average_ads_per_month = sum(average20182019))
-simd4
-
-#5
-simd5 <- covid_admissions_HB_simd %>% 
-  filter(simd_quintile == "5") %>%
-  group_by(wk_ending_yr_month) %>% 
-  mutate(total_admissions_per_month_simd = sum(number_admissions))
-
-simd5 <- simd5 %>% 
-  group_by(wk_ending_yr_month) %>% 
-  mutate(total_past_average_ads_per_month = sum(average20182019))
-simd5
-  
-```
-
-bind these together:
-```{r}
-covid_admissions_HB_simd_totals <- bind_rows(simd1, simd2, simd3, simd4, simd5)
-covid_admissions_HB_simd_totals
+covid_admissions_HB_simd
 ```
 
 **PLOT total admissions per simd per month**
 ```{r}
-covid_admissions_HB_simd_totals %>% 
+covid_admissions_HB_simd %>% 
   mutate(simd_quintile = fct_relevel(as.character(simd_quintile, 
                                   "1", "2", "3", "4", "5"))) %>%
   group_by(wk_ending_yr_month, simd_quintile) %>% 
@@ -597,15 +552,15 @@ covid_admissions_HB_simd_totals %>%
   theme(axis.text.x = element_text(angle = 45, hjust = 0.9))
 ```
 
-SIMD - AVERAGE admissions 2018 and 2019 against COVID admissions 
+SIMD - monthly AVERAGE admissions 2018 and 2019 against COVID admissions 
 ```{r}
-covid_admissions_HB_simd_totals %>% 
+covid_admissions_HB_simd %>% 
    mutate(simd_quintile = fct_relevel(as.character(simd_quintile, 
                                   "1", "2", "3", "4", "5"))) %>%
   group_by(simd_quintile) %>% 
   ggplot()+
   aes(x = total_admissions_per_month_simd, 
-      y = total_past_average_ads_per_month,
+      y = admissions_2018_19_per_month_simd,
       colour = simd_quintile)+
   geom_point()+
   labs(x = "Monthly number of admissions in COVID times",
@@ -620,84 +575,14 @@ covid_admissions_HB_simd_totals %>%
   theme_bw()+
   theme(axis.text.x = element_text(angle = 45, hjust = 0.9))
 ```  
-
-
-by quarter
-Adding a quarter and year column 
-
-
+BY QUARTER 
 ```{r}
-
-q1_20 <- covid_admissions_HB_simd_totals %>% 
-  filter(year_quarter == "2020Q1") %>% 
-  group_by(simd_quintile) %>% 
-  mutate(totals_per_simd_per_quarter = sum(number_admissions))
-q1_20
-
-q2_20 <- covid_admissions_HB_simd_totals %>% 
-  filter(year_quarter == "2020Q2") %>% 
-  group_by(simd_quintile) %>% 
-  mutate(totals_per_simd_per_quarter = sum(number_admissions))
-q2_20
-
-q3_20 <- covid_admissions_HB_simd_totals %>% 
-  filter(year_quarter == "2020Q3") %>% 
-  group_by(simd_quintile) %>% 
-  mutate(totals_per_simd_per_quarter = sum(number_admissions))
-q3_20
-
-q4_20 <- covid_admissions_HB_simd_totals %>% 
-  filter(year_quarter == "2020Q4") %>% 
-  group_by(simd_quintile) %>% 
-  mutate(totals_per_simd_per_quarter = sum(number_admissions))
-q4_20
-
-q1_21 <- covid_admissions_HB_simd_totals %>% 
-  filter(year_quarter == "2021Q1") %>% 
-  group_by(simd_quintile) %>% 
-  mutate(totals_per_simd_per_quarter = sum(number_admissions))
-q1_21
-
-q2_21 <- covid_admissions_HB_simd_totals %>% 
-  filter(year_quarter == "2021Q2") %>% 
-  group_by(simd_quintile) %>% 
-  mutate(totals_per_simd_per_quarter = sum(number_admissions))
-q2_21
-
-q3_21 <- covid_admissions_HB_simd_totals %>% 
-  filter(year_quarter == "2021Q3") %>% 
-  group_by(simd_quintile) %>% 
-  mutate(totals_per_simd_per_quarter = sum(number_admissions))
-q3_21
-
-q4_21 <- covid_admissions_HB_simd_totals %>% 
-  filter(year_quarter == "2021Q4") %>% 
-  group_by(simd_quintile) %>% 
-  mutate(totals_per_simd_per_quarter = sum(number_admissions))
-q4_21
-
-q1_22 <- covid_admissions_HB_simd_totals %>% 
-  filter(year_quarter == "2022Q1") %>% 
-  group_by(simd_quintile) %>% 
-  mutate(totals_per_simd_per_quarter = sum(number_admissions))
-q1_22
-
-
-
-covid_admissions_quarter_simd_totals <- bind_rows(q1_20, q2_20, q3_20, q4_20, q1_21, 
-                                             q2_21, q3_21, q4_21, q1_22)
-covid_admissions_quarter_simd_totals
-```
-
-
-By quarter
-```{r}
-covid_admissions_quarter_simd_totals %>% 
+covid_admissions_HB_simd %>% 
   mutate(simd_quintile = fct_relevel(as.character(simd_quintile, 
                                   "1", "2", "3", "4", "5"))) %>%
   ggplot()+
   aes(x = year_quarter, 
-      y = totals_per_simd_per_quarter,
+      y = total_admissions_per_quarter_simd,
       group = simd_quintile, 
       colour = simd_quintile)+
   geom_point()+
@@ -713,3 +598,26 @@ covid_admissions_quarter_simd_totals %>%
   theme(axis.text.x = element_text(angle = 45, hjust = 0.9))
 ```
 
+SIMD - quarterly AVERAGE admissions 2018 and 2019 against COVID admissions 
+```{r}
+covid_admissions_HB_simd %>% 
+   mutate(simd_quintile = fct_relevel(as.character(simd_quintile, 
+                                  "1", "2", "3", "4", "5"))) %>%
+  group_by(simd_quintile) %>% 
+  ggplot()+
+  aes(x = total_admissions_per_quarter_simd, 
+      y = admissions_2018_19_per_quarter_simd,
+      colour = simd_quintile)+
+  geom_point()+
+  labs(x = "Quarterly number of admissions in COVID times",
+       y = "Average quarterly admissions in 2018-2019",
+       title = "(HB) Quarterly admissions in COVID times against the equivalent quarterly 
+       average admissions in previous years, by SIMD Level",
+       subtitle = "COVID: January, 2020 - February, 2022 / 
+       Previous years: 2018 - 2019",
+       colour = "SIMD Level:
+       1 = Most Deprived
+       5 = Least Deprived") +
+  theme_bw()+
+  theme(axis.text.x = element_text(angle = 45, hjust = 0.9))
+```  
