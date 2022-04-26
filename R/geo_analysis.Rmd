@@ -173,10 +173,11 @@ ggplotly(beds_by_hb_trim %>%
          x = "\nQuarter",
          y = "% Bed Occupancy") +
     scale_color_discrete(name = NULL) +
-    theme(legend.title = element_blank(), 
+    theme(legend.position = "bottom", 
+          legend.direction = "horizontal", 
           axis.text.x = element_text(angle = 270, vjust = 0.25),
           title = element_text(face = "bold")),
-    tooltip = "text") %>%  
+          tooltip = "text") %>% 
     style(hoverlabel = list, marker.color = "white")
 
 
