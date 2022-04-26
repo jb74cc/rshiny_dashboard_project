@@ -44,7 +44,7 @@ ui <- fluidPage(
                                                        choices = sort(unique(beds_by_hb_trim$hb_name)),
                                                        selected = sort(unique(beds_by_hb_trim$hb_name)))),
                              
-                             column(6, 
+                             column(7, 
                                     br(), 
                                     br(),
                                     plotlyOutput("plot")))),
