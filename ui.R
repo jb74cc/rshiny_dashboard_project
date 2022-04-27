@@ -181,9 +181,36 @@ ui <- fluidPage(
   
   # Resources Tab ----------------- 
   tabPanel("Resources", 
-           p("Data sourced from PHS Open Data Platform.
+           h3("Data sourced from PHS Open Data Platform.
                       Contains public sector information licensed under 
-                      the Open Government Licence v3.0.", style = "color:white"))
+                      the Open Government Licence v3.0.", style = "color:white"),
+           HTML("<br>", "<br>"),
+           tags$h4("Data Sets Used", style = "color:white"),
+           HTML("<br>"),
+           tags$a("Hospital Activity Page", style = "color:white", 
+                  href = "https://www.opendata.nhs.scot/dataset/inpatient-and-daycase-activity/resource/c3b4be64-5fb4-4a2f-af41-b0012f0a276a"),
+           HTML("<br>"),
+           tags$a("Hospital Activity by Speciality", style = "color:white", 
+                  href = "https://www.opendata.nhs.scot/dataset/inpatient-and-daycase-activity/resource/c3b4be64-5fb4-4a2f-af41-b0012f0a276a"),
+           HTML("<br>"),
+           tags$a("Hospital Activity and Patient Demographics", style = "color:white", 
+                  href = "https://www.opendata.nhs.scot/dataset/inpatient-and-daycase-activity/resource/00c00ecc-b533-426e-a433-42d79bdea5d4"),
+           HTML("<br>"),
+           tags$a("Hospital Activity and Deprivation", style = "color:white", 
+                  href = "https://www.opendata.nhs.scot/dataset/inpatient-and-daycase-activity/resource/4fc640aa-bdd4-4fbe-805b-1da1c8ed6383"),
+           HTML("<br>"),
+           tags$a("Hospitalisations due to Covid-19", style = "color:white", 
+                  href = "https://www.opendata.nhs.scot/dataset/covid-19-wider-impacts-hospital-admissions"),
+           HTML("<br>"),
+           tags$a("A&E Attendances and Performance Data", style = "color:white", 
+                  href = "https://www.opendata.nhs.scot/dataset/monthly-emergency-department-activity-and-waiting-times"),
+           HTML("<br>"),
+           tags$a("Quarterly Hospital Beds Information - Datasets - Scottish Health and Social Care Open Data - nhs.scot", style = "color:white", 
+                  href = "https://www.opendata.nhs.scot/dataset/hospital-beds-information"),
+           HTML("<br>"),
+           tags$a("Delayed Discharge Data", style = "color:white", 
+                  href = "https://www.opendata.nhs.scot/dataset/hospital-beds-information")
+           )
   
 )
 )
