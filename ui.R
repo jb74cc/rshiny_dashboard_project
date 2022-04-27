@@ -169,7 +169,9 @@ ui <- fluidPage(
                          h4("The SIMD (Scottish Index of Multiple Deprivation) is a quintile scale:", 
                             style = "color:white"),
                          h4("1 = \'Most Deprived\', 5 = \'Least Deprived\'", style = "color:white"),
-                         p("It uses a wide range of information for small areas (data zones) to identify concentrations of multiple deprivation across Scotland. Further information can be found here: https://www.gov.scot/collections/scottish-index-of-multiple-deprivation-2020/", style = "color:white"),
+                         p("It uses a wide range of information for small areas (data zones) to 
+                           identify concentrations of multiple deprivation across Scotland. Further 
+                           information can be found here:", style = "color:white"), tags$a("www.gov.scot", href = "https://www.gov.scot/collections/scottish-index-of-multiple-deprivation-2020/", style = "color:white"),
                          h4("Two independent samples (one tailed) hypothesis tests were carried out between the mean stays of:", style = "color:white"),
                          h5("* SIMD 1 (most deprived areas) and SIMD 3 (mid deprivation areas)", style = "color:white"),
                          h5("* SIMD 3 (mid deprivation areas) and SIMD 5 (least deprived areas)", style = "color:white"),
