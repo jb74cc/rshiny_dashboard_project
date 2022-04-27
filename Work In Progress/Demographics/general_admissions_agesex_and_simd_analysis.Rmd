@@ -6,12 +6,16 @@ output:
     df_print: paged
 ---
 
-* **These are general hospital admissions - 7 admission_types (1 is acute)**
-* **This data is by QUARTER - 2016Q3 to 2021Q3 - (COVID admissions is by "week** 
-**ending" from May 2020 to March 2022** 
-* **SEX here is "Male", "Female", COVID data also has Male, Female, and All**
+* **These are general hospital admissions**
+* **This data is by QUARTER - 2016Q3 to 2021Q3** 
+* **SEX here is "Male", "Female"**
 * **AGE groups are in 10 year increments with (from "0-10 to "90 and over")**
-  **COVID data is a lot dirtier**
+* **SIMD (Scottish Index of Multiple Deprivation)**
+  * This is a quintile scale (1 = "Most Deprived", 5 = "Least Deprived"). The 
+  most appropriate SIMD released for each year is used. REMEMBER: removed 962 
+  NAs. There are codes in the simdqf column as to why they are NA - sometimes 
+  it's just a general geographical groupings.
+
 * Total per age group 
   * 0-9 years	1261	
   * 10-19 years	1893	
@@ -24,88 +28,46 @@ output:
   * 80-89 years	2140	
   * 90 years and over	2007
 
+* Total per sex
+  * Female	9832			
+  * Male	9799	
+  
+* Totals per SIMD
+  * 1	1042	- "Most Deprived"
+  * 2	1066		
+  * 3	1080
+  * 4	1074	
+  * 5	1018
 
-## Libraries Used 
-
+#### Libraries Used 
 ```{r}
 library(tidyverse)
 library(here)
-library(readxl)
 library(janitor)
 library(ggplot2)
-library(lubridate)
-library(stringr)
 ```
 <br> 
 
-## Read In Data
+## Read In Cleaned Data
 
 ```{r}
-hosp_activity_agesex <- read_csv(here("../../raw_data/inpatient_and_daycase_by_nhs_board_of_treatment_age_and_sex.csv"))
+acute_activity_agesex <- read_csv(here("../../clean_data/acute_activity_by_board_of_treatment_age_sex_clean.csv"))
 
-hosp_activity_simd <- 
-  read_csv(here("../../raw_data/inpatient_and_daycase_by_nhs_board_of_treatment_and_simd.csv"))
+acute_activity_simd <- 
+  read_csv(here("../../clean_data/acute_activity_by_board_of_treatment_simd_clean.csv"))
 ```
-<br>
-
-## Clean Data
-
-```{r}
-hosp_activity_agesex <- janitor::clean_names(hosp_activity_agesex)
-# glimpse(hosp_activity_agesex)
-
-hosp_activity_simd <- janitor::clean_names(hosp_activity_simd)
-# glimpse(hosp_acivity_simd)
-```
- 
-<br>
-
-We only need ACUTE patients, what do we have:
-
-admission_type:
-* Elective Inpatients		(not acute)
-* *Emergency Inpatients*				
-* Transfers			(not acute)			
-* All Day cases				(not acute)		
-* All Inpatients		  		(not necasseraly acute)		
-* All Inpatients and Day cases			(not acute)			
-* Not Specified   		(not acute???)
-```{r}
-hosp_activity_agesex %>% 
-  group_by(admission_type) %>% 
-  summarise(total = n())
-
-hosp_activity_simd %>% 
-  group_by(admission_type) %>% 
-  summarise(total = n())
-```
-<br>
-
-removing those that aren't acute (see above)
-
-```{r}
-hosp_acute_activity_agesex <- hosp_activity_agesex %>% 
-  filter(admission_type == "Emergency Inpatients")
-
-hosp_acute_activity_simd <- hosp_activity_simd %>% 
-  filter(admission_type == "Emergency Inpatients")
-
-```
-
 
 ### Seeing what we're working with:
 
 *Age*
-
 ```{r}
-hosp_acute_activity_agesex %>% 
+acute_activity_agesex %>% 
   group_by(age) %>% 
-  summarise(total_patients_in_age_group = n())
-
+  count()
 # 10 year increments i.e. 0-9, 10-19... 80-89, 90 years and over
 # No NA values
 
-hosp_acute_activity_agesex %>% 
+acute_activity_agesex %>% 
   mutate(age = is.na(age)) %>% 
   filter(age == TRUE)
 ```
@@ -113,34 +75,31 @@ hosp_acute_activity_agesex %>%
 *Sex*
 
 ```{r}
-hosp_acute_activity_agesex %>% 
+acute_activity_agesex %>% 
   group_by(sex) %>% 
-  summarise(total_patients_in_sex_group = n())
+  count()
 
 # Female: 9,832   Male: 9,799 
 # No NA values
 
-hosp_acute_activity_agesex %>% 
+acute_activity_agesex %>% 
   mutate(sex = is.na(age)) %>% 
   filter(sex == TRUE)
 ```
 
 **SIMD** 
 ```{r}
-hosp_acute_activity_simd %>% 
+acute_activity_simd %>% 
   group_by(simd) %>% 
-  summarise(total = n())
-#There are 962 NAs and ~ 1000 of levels 1:5... remember to tidy this in analysis
+  count()
+#There were 962 NAs. cleaned in R script. 
 ```
 
-<br>
 
-```{r}
-quarter_dates <- c("2016Q3", "2016Q4", "2017Q1", "2017Q2", "2017Q3", "2017Q4", 
-                   "2018Q1", "2018Q2", "2018Q3", "2018Q4", "2019Q1", "2019Q2", 
-                   "2019Q3", "2019Q4", "2020Q1", "2020Q2", "2020Q3", "2020Q4",
-                   "2021Q1", "2021Q2", "2021Q3")
-```
+Remember there were 7 admission types... I chose to keep Emergency Inpatients. 
+
+Others = Elective Inpatients, Transfers, All Day cases, All Inpatients, All 
+Inpatients and Day cases, Not Specified
 
 <hr>
 
@@ -148,49 +107,12 @@ quarter_dates <- c("2016Q3", "2016Q4", "2017Q1", "2017Q2", "2017Q3", "2017Q4",
 
 ## Graphs
 
-Remember there were 7 admission types... I chose to keep one. 
-
-Might want to make use of this if we're not sure about admission types:
- `acute_target <- c("Emergency Inpatients", "Not Specified")`
-
-Others = Elective Inpatients, Transfers, All Day cases, All Inpatients, All 
-Inpatients and Day cases, Not Specified
-
 <br>
 
-### Graphs of general admissions and sex
-
-#### Sex against time and admissions
+### Sex and stays
 
 ```{r}
-# do I want to use total length of stay or total average_length_of_stay
-# need a total column: 
-# sometimes stay = 0, and length of stay = 5
-
-hosp_acute_activity_agesex <- hosp_acute_activity_agesex %>% 
-  group_by(sex, quarter) %>% 
-  mutate(total_stays_per_quarter_sex = sum(stays))
-hosp_acute_activity_agesex
-```
-
-
-ALSO WANT TOTALS FOR AGE BY QUARTER 
-```{r}
-
-hosp_acute_activity_agesex <- hosp_acute_activity_agesex %>% 
-  group_by(age, quarter) %>% 
-  mutate(total_stays_per_quarter_age = sum(stays))
-hosp_acute_activity_agesex
-```
-
-
-
-
-
-## Sex and stays
-
-```{r}
-hosp_acute_activity_agesex %>% 
+acute_activity_agesex %>% 
   ggplot()+
   aes(x = quarter, 
       y = total_stays_per_quarter_sex, 
@@ -212,7 +134,7 @@ hosp_acute_activity_agesex %>%
 ## AGE GROUPS AND TOTAL STAYS 
 
 ```{r}
-hosp_acute_activity_agesex %>% 
+acute_activity_agesex %>% 
   ggplot()+
   aes(x = quarter, 
       y = total_stays_per_quarter_age, 
@@ -231,46 +153,11 @@ hosp_acute_activity_agesex %>%
 
 ## SIMD - deprivation level data 
 
-
-SIMD (**Scottish Index of Multiple Deprivation**)
-
-* This is a quintile scale (1 = "Most Deprived", 5 = "Least Deprived").
-* The most appropriate SIMD released for each year is used. 
-* REMEMBER: In the simd level column, there are 962 NAs and ~1000 of levels 
-  1:5. Remember to tidy this in analysis. There are codes in the simdqf column 
-  as to why they are NA - sometimes it's just a general geographical groupings. 
-
-```{r}
-hosp_acute_activity_simd %>% 
-  group_by(simd) %>% 
-  summarise(total = n())
-#There are 962 NAs and ~ 1000 of levels 1:5... remember to tidy this in analysis
-```
-
-
-
 <br>
 
-
-Drop NAs
+### Total stays per SIMD
 ```{r}
-hosp_acute_activity_simd_no_na <- hosp_acute_activity_simd %>% 
-  drop_na(simd)
-hosp_acute_activity_simd_no_na
-```
-
-```{r}
-
-hosp_acute_activity_simd_no_na_simd <- hosp_acute_activity_simd_no_na %>% 
-  group_by(simd, quarter) %>% 
-  mutate(total_stays_per_quarter_simd = sum(stays))
-hosp_acute_activity_simd_no_na_simd
-
-```
-
-
-```{r}
-hosp_acute_activity_simd_no_na_simd %>%
+acute_activity_simd %>%
      mutate(simd = fct_relevel(as.character(simd, 
                                   "1", "2", "3", "4", "5"))) %>%
   ggplot()+
@@ -293,20 +180,11 @@ hosp_acute_activity_simd_no_na_simd %>%
 
 
 
-## EPISODES 
-
-```{r}
-
-hosp_acute_activity_simd_no_na_simd <- hosp_acute_activity_simd_no_na %>% 
-  group_by(simd, quarter) %>% 
-  mutate(total_episodes_per_quarter_simd = sum(episodes))
-hosp_acute_activity_simd_no_na_simd
-
-```
+## Comparing total EPISODES with stays(above) for SIMD
 
 
 ```{r}
-hosp_acute_activity_simd_no_na_simd %>%
+acute_activity_simd %>%
      mutate(simd = fct_relevel(as.character(simd, 
                                   "1", "2", "3", "4", "5"))) %>%
   ggplot()+
@@ -327,22 +205,3 @@ hosp_acute_activity_simd_no_na_simd %>%
 
 ```
 <hr>
-<hr>
-<hr>
-<hr>
-<hr>
-<hr>
-<hr>
-<hr>
-<hr>
-<hr>
-<hr>
-<hr>
-<hr>
-<hr>
-<hr>
-<hr>
-<hr>
-<hr>
-
-
