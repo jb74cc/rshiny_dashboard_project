@@ -220,6 +220,8 @@ __Statistics__
 
 In this case we are going to check the difference between mean attendances before Covid (~2019Q4) and after (2020Q1~)
 
+Hypothesis : two mean independent sample test with permutation.
+
 H0: after_Covid_attendances_mean = before_Covid_attendances_mean
 Ha: after_Covid_attendances_mean != before_Covid_attendances_mean
 
@@ -256,6 +258,9 @@ waiting_time_mean %>%
 
 ```
 
+The diagram indicates that distribution of the average attendances before Covid (2019Q3) is at around 1500; while Covid and after is at around 1700 to 1800
+
+
 __Try to do some stats__
 
 ```{r}
@@ -286,9 +291,7 @@ get_p_value(obs_stat = observed_waiting_time, direction = "right")
 ```
 
 
-The H0 is rejected. There is no evidence proof that the mean attendances after Covid is the same as the mean attendances before Covid.
-
-Since this is a right-sided test, we can confirm that the mean attendances after Covid is greater than the mean attendance before Covid.
+The H0 is rejected. There is no evidence proof that the mean attendances after Covid is the same as the mean attendances before Covid. Since this is a right-sided test, we can confirm that the mean attendances after Covid is greater than the mean attendance before Covid.
 
 
 __explore the region__
@@ -296,14 +299,20 @@ __explore the region__
 
 ```{r}
 
-ae_waiting_time_clean_long_p
+region_waiting_time <- ae_waiting_time_clean_long_p %>% 
+  group_by(year_quarter, region) %>% 
+  summarise(attendances = sum(number_of_attendances_aggregate))
 
-ae_waiting_time_clean_long_p %>% 
+region_waiting_time %>% 
   group_by(year_quarter) %>% 
   ggplot()+
-  aes(x = year_quarter, y = sum(number_of_attendances_aggregate), group = region, color = region)+
+  aes(x = year_quarter, y = log10(attendances), group = region, color = region)+
   geom_line()+
-  geom_point()
+  geom_point()+
+  xlab("Year(Quarter)")+ylab("Number of Attendances (log 10)")+
+  theme(axis.text.x = element_text(angle = 90, size = 5, vjust = 0.5, hjust=1))+
+  labs(color="Time Waiting", size = 3)+
+  ggtitle("Average Waiting Time of Every Region")
 
 
 
