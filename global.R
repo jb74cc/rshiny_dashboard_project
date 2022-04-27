@@ -36,7 +36,7 @@ sco_hb <- st_read('raw_data/SG_NHS_HealthBoards_2019/SG_NHS_HealthBoards_2019.sh
 sco_hb_simplified <-  st_simplify(sco_hb, preserveTopology = TRUE,
                                   dTolerance = 1000)
 
-# colour palette
+# colour palette by Health Board
 nhs_colours <-  c("Ayrshire and Arran" = "#45214A", 
                   "Borders" = "#323050", 
                   "Dumfries and Galloway" = "#21445B", 
@@ -57,3 +57,8 @@ nhs_colours <-  c("Ayrshire and Arran" = "#45214A",
 nhs_colours_2 <-  c("#406771", "#73BFA3", "#F2B263", "#F2594B", "#F23030",
                   "#34401A", "#F2A03D", "#F27F1B", "#590202", "#0B2559",
                   "#2A5159", "#1EA4D9", "#9B4393", "#433685")
+
+# function for defining colour palette for Health Board Map
+pal <- colorFactor(
+  palette = nhs_colours,
+  domain = sco_hb_simplified$HBName)

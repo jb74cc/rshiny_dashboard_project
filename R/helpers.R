@@ -104,9 +104,9 @@ new_map_function <- function(locations = HBName) {
     leaflet() %>% 
     addProviderTiles(providers$CartoDB.Positron) %>% 
     addTiles(providers$CartoDB.Positron) %>%
+    setView(lng = -4.5, lat = 57, zoom = 6) %>% 
     addPolygons(
-      color = ~nhs_colours(HBName),
-      #fillColor = ~colorQuantile(nhs_colours, sco_hb_simplified$Shape_Area)(Shape_Area),
+      color = ~pal(HBName),
       fillOpacity = 0.6,
       weight = 1, 
       popup = ~HBName
