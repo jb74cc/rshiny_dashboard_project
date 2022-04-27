@@ -119,6 +119,8 @@ ae_waiting_time_clean_long_p <-ae_waiting_time_clean_long %>%
 
 head(ae_waiting_time_clean_long_p)
 
+
+
 ```
 
 
@@ -173,9 +175,10 @@ plot_data_12hrs <- ae_waiting_time_clean_long_p %>%
 
 waiting_time_all_range <- rbind(plot_data_4hrs, plot_data_8hrs, plot_data_12hrs)
 
+write_csv(waiting_time_all_range, file = here::here("data/waiting_time_all_range.csv"))
 
 #Number of People in Waiting Time Range
-all_range_plot <- waiting_time_all_range %>% 
+  waiting_time_all_range %>% 
   group_by(year_quarter) %>% 
   ggplot()+
   aes(x = year_quarter, y = log10(total_attendances), group = time_waiting, colour = time_waiting)+
@@ -198,7 +201,6 @@ The total number of attendances from 2016 to 2022
 #Number of A&E Attendances from 2016 to 2022
 ae_waiting_time_clean_long_p %>% 
   group_by(year_quarter) %>% 
-  # filter(hrs_waiting == "hrs_waiting_4") %>% 
   summarise(total_attendances = sum(number_attendances)) %>% 
   ggplot()+
   aes(x = year_quarter, y = log10(total_attendances))+
@@ -301,33 +303,30 @@ __explore the region__
 
 region_waiting_time <- ae_waiting_time_clean_long_p %>% 
   group_by(year_quarter, region) %>% 
-  summarise(attendances = sum(number_of_attendances_aggregate))
+  summarise(attendances = mean(number_of_attendances_aggregate))
 
 region_waiting_time %>% 
   group_by(year_quarter) %>% 
   ggplot()+
-  aes(x = year_quarter, y = log10(attendances), group = region, color = region)+
+  aes(x = year_quarter, y = attendances, group = region, color = region)+
   geom_line()+
   geom_point()+
-  xlab("Year(Quarter)")+ylab("Number of Attendances (log 10)")+
+  xlab("Year(Quarter)")+ylab("Number of Attendances")+
   theme(axis.text.x = element_text(angle = 90, size = 5, vjust = 0.5, hjust=1))+
   labs(color="Time Waiting", size = 3)+
-  ggtitle("Average Waiting Time of Every Region")
+  ggtitle("Average Number of Attendances (Region)")
+
+region_waiting_time
 
 
-
-ae_waiting_time_clean_long_p %>% 
-  ggplot()+
-  aes(x = year_quarter, y = region)+
-  geom_area()
-
+write_csv(region_waiting_time, file = here::here("data/region_waiting_time.csv"))
 
 ```
 
 __Ethical and legal considerations including data bias__
 
-The datasets in this report is open data that authorized under NHS Scotland's protection. We do not own the copyright of all datasets. The material contained in this report is distributed without profit for research and educational purposes. 
+The datasets in this report is the open data authorized by NHS Scotland and is under NHS  Scotland 's protection. We do not own the copyright of the data. The material contained in this report is distributed without profit for research and educational purposes. 
 
-The dataset recorded and collected the information of every episodes accessing the hospital services from the year of 2007 to 2022, which may not consent by patients. The data is anonymous, as well as contains without sensitive personal details such as address, occupancy and the reasons for accessing hospital services. However, there maybe a concern that the third party access the data for business usage. 
+The datasets recorded and collected the information of every episodes accessing the hospital services from the year of 2007 to 2022, which may not consent by patients. The data is anonymous. It contains without sensitive personal details such as address, occupancy and the reasons for accessing hospital services. However, there is a concern that the third party accessing the data for business usage. 
 
-The data may have bias since it is not standardized for each units of the hospital service. For instances some units are not able to provide a full record due to the limitation of resources, which may cause difference to the result.
+The data may have bias since it is not standardized some health board are not able to provide a full record of episodes due to the limitation of resources, which may cause difference to the result.
