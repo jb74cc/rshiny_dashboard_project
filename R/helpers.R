@@ -48,6 +48,7 @@ age_function_all_times <- function(acute_activity_agesex) {
          subtitle = "Q3, 2016 - Q3, 2021", 
          colour = "Age") +
       scale_color_manual(values = nhs_colours_2) +
+      scale_y_continuous(labels = scales::comma) +
     theme_bw()+
     theme(axis.text.x = element_text(angle = 270, vjust = 0.25))) %>% 
   style(hoverlabel = list, marker.color = "white")  
@@ -68,6 +69,7 @@ sex_function_all_times <- function(acute_activity_agesex) {
          subtitle = "Q3, 2016 - Q3, 2021", 
          colour = "Sex") +
       scale_color_manual(values = nhs_colours_2) +
+      scale_y_continuous(labels = scales::comma) +
       theme_bw()+
     theme(axis.text.x = element_text(angle = 270, vjust = 0.25))) %>% 
   style(hoverlabel = list, marker.color = "white")  
@@ -93,6 +95,7 @@ simd_function_all_times <- function(acute_activity_simd){
        1 = Most Deprived
        5 = Least Deprived") +
     scale_color_manual(values = nhs_colours_2) +
+    scale_y_continuous(labels = scales::comma)+
   theme_bw()+
   theme(axis.text.x = element_text(angle = 270, vjust = 0.25))) %>% 
   style(hoverlabel = list, marker.color = "white")  

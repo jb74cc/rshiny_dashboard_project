@@ -87,20 +87,29 @@ ui <- fluidPage(
                                      groups across Scotland?", 
                                      style = "color:white"),
                                     h4("Apart from the obvious dip in spring 2020,
-                                     when hospitals changed to being almost 
+                                     possibly due to the first COVID lockdown 
+                                     and when hospitals changed to being almost 
                                      solely used for COVID care, it is 
                                      interesting to note that the age group data
                                      does not overlap each other both before and
                                      after COVID.",
                                      style = "color:white"),
-
+                                    h4("With interest in the gap between 40-49
+                                       and 50-59 year olds, an independent 
+                                       samples hypothesis test (p < 2.22e-16) 
+                                       confirmed that there was enough 
+                                       statistical evidence to suggest that 
+                                       50-59 year olds are more likely to be 
+                                       admitted as an Emergency Inpatient 
+                                       throughout Scotland.",
+                                       style = "color:white"),
                                     h4("The \'70 - 79\' age group shows the most 
                                      admissions, with a decrease in admissions 
                                      appearing to correlate with a decrease in 
                                      age thereafter (with the exception of the 
-                                     \'90 years and over\' age- group) who 
+                                     \'90 years and over\' age- group who 
                                      appear near the bottom despite having a 
-                                     similar number of records.",
+                                     similar number of records).",
                                      style = "color:white")))),
                   
                   
@@ -130,16 +139,27 @@ ui <- fluidPage(
                                        emergency inpatient stays between males 
                                        and females across Scotland?", 
                                        style = "color:white"),
-                                    h4("Apart from the obvious dip in spring 2020, 
-                                     when hospitals changed to being almost 
-                                     solely used for COVID care, more Females 
+                                    h4("With p values close to zero, independent 
+                                       samples hypothesis tests revealed that 
+                                       there was sufficient statistical evidence 
+                                       to suggest that being Female means you 
+                                       are more likely to be admitted as an 
+                                       Emergency Inpatient both before and 
+                                       during COVID times.", 
+                                       style = "color:white"),
+                                    h4("Apart from the obvious dip in spring 
+                                       2020, possibly due to the first COVID 
+                                       lockdown and hospitals focusing almost 
+                                       solely on COVID care, more Females 
                                      than Males across Scotland were admitted to 
-                                     hospital each month.", 
+                                     hospital each month throught this time 
+                                     period.", 
                                      style = "color:white"),
                                     h4("There was a rather uniform difference of 
-                                     around 10,000 individual stays per quarter
-                                     between sexes.",
+                                     around 10-13,000 individual stays per 
+                                     quarter between sexes.",
                                      style = "color:white")))),
+                  
               # Deprivation Tab -----------------
                   tabPanel("Deprivation", 
                            fluidRow(
@@ -162,19 +182,39 @@ ui <- fluidPage(
                                     br(), 
                                     br(),
                                     plotlyOutput("plot3"),
-                                    h3("Is there a difference in number of emergency inpatient 
+                                    h3("Is there a difference in number of 
+                                       emergency inpatient 
                          stays between SIMD levels across Scotland?", 
                          style = "color:white"),
-                         h4("The SIMD (Scottish Index of Multiple Deprivation) is a quintile scale:", 
+                         h4("The SIMD (Scottish Index of Multiple Deprivation) 
+                            is a quintile scale:", 
                             style = "color:white"),
-                         h4("1 = \'Most Deprived\', 5 = \'Least Deprived\'", style = "color:white"),
-                         p("It uses a wide range of information for small areas (data zones) to 
-                           identify concentrations of multiple deprivation across Scotland. Further 
-                           information can be found here:", style = "color:white"), tags$a("www.gov.scot", href = "https://www.gov.scot/collections/scottish-index-of-multiple-deprivation-2020/", style = "color:white"),
-                         h4("Two independent samples (one tailed) hypothesis tests were carried out between the mean stays of:", style = "color:white"),
-                         h5("* SIMD 1 (most deprived areas) and SIMD 3 (mid deprivation areas)", style = "color:white"),
-                         h5("* SIMD 3 (mid deprivation areas) and SIMD 5 (least deprived areas)", style = "color:white"),
-                         h4("Results for both tests revealed that those in more deprived areas were statistically significantly more likely to visit Scottish hospitals than those in less deprived areas.", style = "color:white")))),
+                         h5("1 = \'Most Deprived\', 5 = \'Least Deprived\'", 
+                            style = "color:white"),
+                         p("It uses a wide range of information for small areas 
+                           (~7000 data zones) to identify concentrations of 
+                           multiple deprivation across Scotland. Further 
+                           information can be found here:", 
+                           style = "color:white"), 
+                         tags$a("www.gov.scot", href = "https://www.gov.scot/collections/scottish-index-of-multiple-deprivation-2020/", 
+                                style = "color:white"),
+                         h4("Several independent samples (one tailed) hypothesis 
+                            tests were carried out for both pre-COVID and during 
+                            COVID times considering the mean stays of:",
+                            style = "color:white"),
+                         h5("* SIMD 1 (most deprived areas) and SIMD 3 (mid 
+                            deprivation areas)", 
+                            style = "color:white"),
+                         h5("* SIMD 3 (mid deprivation areas) and SIMD 5 (least 
+                            deprived areas)", 
+                            style = "color:white"),
+                         h4("With all p values close to zero, results for all 
+                            tests revealed that those in more 
+                            deprived areas were statistically significantly more
+                            likely to visit Scottish hospitals as an Emergency 
+                            Inpatient than those in less deprived areas both 
+                            before and during COVID.", 
+                            style = "color:white")))),
                   
                   
                   
