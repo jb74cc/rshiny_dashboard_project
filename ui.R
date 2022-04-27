@@ -49,7 +49,13 @@ ui <- fluidPage(
                         br(), 
                         br(),
                         plotlyOutput("plot"),
-                     h3("Statistical analysis conclusion / interpretation in here",
+                     h3("Is there such a thing as a \"Winter Crisis\"?", 
+                        style = "color:white"),
+                     h4("Grouping the bed occupancy data into \"winter\" and 
+                        \"summer\" allows a two-sample hypothesis test to conclude 
+                        that the average acute bed occupancy in winter is 
+                        statistically significantly greater than in summer up 
+                        until the onset of Covid.",
                         style = "color:white")))),
                   
                   
