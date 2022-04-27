@@ -98,11 +98,11 @@ ae_waiting_time_clean <- ae_waiting_time_clean %>%
 
 ```{r}
 # avg_ae_waiting_time <- ae_waiting_time_clean %>% 
-    group_by(year_quarter) %>% 
-    summarise(mean(number_of_attendances_aggregate),
-              mean(number_meeting_target_aggregate),
-              mean(attendance_greater8hrs),
-              mean(attendance_greater12hrs))
+    # group_by(year_quarter) %>% 
+    # summarise(mean(number_of_attendances_aggregate),
+    #           mean(number_meeting_target_aggregate),
+    #           mean(attendance_greater8hrs),
+    #           mean(attendance_greater12hrs))
 ```
 
 
@@ -197,7 +197,7 @@ The total number of attendances of each quarter from 2016Q3 to 2022Q1 of differe
 4_hrs: 6837978, average 297303
 8_hrs: 126149, average 5484
 12_hrs: 30660, average 1333
-It shows that for the 8_hrs and 12_hrs waiting time, peaks existed sharply from Q4 to Q1 before Covid(2019Q3). However, a massive downturn was record in 2020Q2, which may resulted in the measurement of lock-down. After the Covid, there was another peak exitsed
+It shows that for the 8_hrs and 12_hrs waiting time, peaks existed sharply from Q4 to Q1 before Covid(2019Q3). However, a massive downturn was recorded in 2020Q2, which may resulted from the measurement of lock-down. While after the Covid, there was another peak existed at 2021Q4.
 ```{r}
 
 waiting_time_all_range %>% 
@@ -232,7 +232,7 @@ ae_waiting_time_clean_long_p %>%
 ```
 __Insight__
 
-The graph shows that the number of A&E attendances before Covid and during the breakout of Covid did not have big differences. However, there were two minor downturns at the period of 2020Q2(230K) and 2021Q1(224K), while at 2022Q1(224K) a siginificant drop was recorded
+The number of A&E attendances before Covid and during the breakout of Covid did not have big differences. However, there were two minor downturns at the period of 2020Q2(230K) and 2021Q1(224K), while at 2022Q1(224K) a significant drop was recorded.
 
 __Statistics__
 
@@ -258,7 +258,7 @@ before_covid_attendances_avg <- ae_waiting_time_clean%>%
   mutate(status = "before")
   
 after_covid_attendances_avg <- ae_waiting_time_clean%>% 
-  #group_by(year_quarter ) %>% 
+  group_by(year_quarter ) %>% 
   filter(year != "2016") %>%
   filter(year != "2017") %>% 
   filter(year != "2018") %>% 
@@ -335,12 +335,17 @@ region_waiting_time %>%
   labs(color="Time Waiting", size = 3)+
   ggtitle("Average Number of Attendances (Region)")
 
-region_waiting_time
-
+region_waiting_time %>% 
+  arrange(desc(attendances))
 
 write_csv(region_waiting_time, file = here::here("data/region_waiting_time.csv"))
 
 ```
+__Insights__
+The graph indicates the average number of A&E attendances of each health board from 2016Q3 to 2022Q1. The 3 regions have the most attendances are:
+NHS Lothian, NHS Greater Glasgow & Clyde and NHS Lanarkshire. While the least are 
+
+There were 2 downturns existed in 2020Q2 and 2021Q1.
 
 __Ethical and legal considerations including data bias__
 
