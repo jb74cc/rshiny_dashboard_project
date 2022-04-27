@@ -1,0 +1,72 @@
+---
+title: "R Notebook"
+output: html_notebook
+---
+
+acute care is 'any unplanned hospital attendance and admission', it includes 
+outpatients who (for example) come and have a chest xray before being given 
+antibiotics and leaving
+
+
+/* Color Theme Swatches in Hex */
+.phs-logo-1-hex { color: #C027B9; }
+.phs-logo-2-hex { color: #433685; }
+.phs-logo-3-hex { color: #1EA4D9; }
+.phs-logo-4-hex { color: #8FBF26; }
+.phs-logo-5-hex { color: #9B4393; }
+
+
+
+```{r}
+library(tidyverse)
+library(janitor)
+library(here)
+library(leaflet)
+library(sf)
+
+
+
+here::here()
+```
+
+## Read in the Activity data;
+
+```{r}
+age_sex <- read_csv(here("raw_data/activity_by_board_of_treatment_age_and_sex.csv")) %>% 
+  clean_names()
+
+deprivation <- read_csv(here("raw_data/activity_by_board_of_treatment_and_deprivation.csv")) %>% 
+  clean_names()
+
+speciality <- read_csv(here("raw_data/activity_by_board_of_treatment_and_speciality.csv")) %>% 
+  clean_names()
+```
+
+```{r}
+speciality <- speciality %>% 
+  select(quarter, hb, location, admission_type, specialty_name, episodes, 
+         length_of_episode, average_length_of_episode, spells, length_of_spell,
+         average_length_of_spell) %>% 
+  rename(stays = spells,
+         length_of_stay = length_of_spell,
+         average_length_of_stay = average_length_of_spell)
+```
+
+
+```{r}
+deprivation <- deprivation %>% 
+  select(quarter, hb, location, admission_type, simd, episodes, 
+         length_of_episode, average_length_of_episode, stays, length_of_stay,
+         average_length_of_stay)
+  
+```
+
+
+```{r}
+age_sex <- age_sex %>% 
+  select(quarter, hb, location, admission_type, sex, age, episodes, 
+         length_of_episode, average_length_of_episode, stays, length_of_stay,
+         average_length_of_stay)
+```
+
+

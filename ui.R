@@ -1,87 +1,220 @@
 library(shiny)
 library(shinydashboard)
+library(shinyWidgets)
+library(plotly)
 
 
-
-ui <- dashboardPage(
-  dashboardHeader(title = "PHS dashboard"),
-  ## Sidebar content
-  dashboardSidebar(
-    sidebarMenu(
-      menuItem("Dashboard", tabName = "dashboard", icon = icon("dashboard")),
-      menuItem("Tab 2", tabName = "tab2", icon = icon("th"))
-    )
-  ),
-  ## Body content
-  dashboardBody(
-    tags$head(tags$style(HTML('
+ui <- fluidPage(
   
-       .content-wrapper {
-        background-color: #8C8C8C;
-                             }
-    
-        /* logo */
-        .skin-blue .main-header .logo {
-                              background-color: #0D0D0D;
-                              }
-
-        /* logo when hovered */
-        .skin-blue .main-header .logo:hover {
-                              background-color: #0D0D0D;
-                              }
-
-        /* navbar (rest of the header) */
-        .skin-blue .main-header .navbar {
-                              background-color: #0D0D0D;
-                              }        
-                              
-        /* main sidebar */
-        .skin-blue .main-sidebar {
-                              background-color: #262626;
-                              }
-
-        /* active selected tab in the sidebarmenu */
-        .skin-blue .main-sidebar .sidebar .sidebar-menu .active a{
-                              background-color: #8C8C8C;
-                              }
-
-        /* other links in the sidebarmenu */
-        .skin-blue .main-sidebar .sidebar .sidebar-menu a{
-                              background-color: #262626;
-                              color: #FFFFFF;
-                              }
-
-        /* other links in the sidebarmenu when hovered */
-         .skin-blue .main-sidebar .sidebar .sidebar-menu a:hover{
-                              background-color: #0D0D0D;
-                              }
-        /* toggle button when hovered  */                    
-         .skin-blue .main-header .navbar .sidebar-toggle:hover{
-                              background-color: #8C8C8C;
-                              }
-                              ')
-    )
-    ),
-    
-    tabItems(
-      # First tab content
-      tabItem(tabName = "dashboard",
-              fluidRow(
-                box(plotOutput("plot1", height = 250), status = "primary"),
-                
-                box(
-                  title = "Controls", status = "primary",
-                  solidHeader = TRUE, #collapsible = TRUE,
-                  sliderInput("slider", "Number of observations:", 1, 100, 50), 
-                  height = 273
-                )
-              )
-      ),
+  tags$style(HTML("
+        .tabbable > .nav > li > a {
+           background-color: #433685;
+           color: #FFF;
+        }")),
+  # use a gradient in background
+  setBackgroundColor(
+    color = c("#265C4B", "#589A8D"),
+    gradient = "radial",
+    direction = c("bottom", "right")
+  ),
+  
+  titlePanel(img(src = "phs-logo.png", width = 250)),
+  
+  mainPanel(
+    fluidRow(
       
-      # Second tab content
-      tabItem(tabName = "tab2",
-              h2("Tab 2 content")
-      )
-    )
-  )
+      
+      tabsetPanel(type = "tabs",
+                  
+                  tabPanel("Bed Occupancy", 
+                           fluidRow(
+                             column(1),
+                             column(3,
+                                    
+                                    # drop down select dates
+                                    selectInput("select_start", label = h4("Select start date"), 
+                                                choices = sort(unique(beds_by_hb_trim$quarter)), 
+                                                selected = min(beds_by_hb_trim$quarter)),
+                                    
+                                    selectInput("select_end", label = h4("Select end date"), 
+                                                choices = sort(unique(beds_by_hb_trim$quarter)), 
+                                                selected = max(beds_by_hb_trim$quarter)), 
+                                    
+                                    checkboxGroupInput("hb_input", label = h4("Select Health Board"), 
+                                                       choices = sort(unique(beds_by_hb_trim$hb_name)),
+                                                       selected = c("NHS Highland", "NHS Lothian"))),
+                             #selected = sort(unique(beds_by_hb_trim$hb_name)))),
+                             
+                             column(8, 
+                                    br(), 
+                                    br(),
+                                    plotlyOutput("plot"),
+                                    h3("Is there such a thing as a \"Winter Crisis\"?", 
+                                       style = "color:white"),
+                                    h4("Grouping the bed occupancy data into \"winter\" and 
+                        \"summer\" allows a two-sample hypothesis test to conclude 
+                        that the average acute bed occupancy in winter is 
+                        statistically significantly greater than in summer up 
+                        until the onset of Covid.",
+                        style = "color:white")))),
+                  
+                  
+                  # Age Demographics Tab -----------------
+                  tabPanel("Demographics - Age", 
+                           fluidRow(
+                             column(1),
+                             column(3,
+                                    
+                                    # drop down select dates
+                                    selectInput("select_start_age", 
+                                                label = h4("Select start date"),
+                                                choices = sort(unique(acute_activity_agesex$quarter)),
+                                                selected = min(acute_activity_agesex$quarter)),
+                                    
+                                    selectInput("select_end_age", 
+                                                label = h4("Select end date"),
+                                                choices = sort(unique(acute_activity_agesex$quarter)),
+                                                selected = max(acute_activity_agesex$quarter)),
+                                    
+                             ),
+                             column(8, 
+                                    br(), 
+                                    br(),
+                                    plotlyOutput("plot1"),
+                                    h3("Text", 
+                                       style = "color:white"),
+                                    h4("Text",
+                                       style = "color:white")))),
+                  
+                  
+                  # Sex Demographics Tab -----------------
+                  tabPanel("Demographics - Sex", 
+                           fluidRow(
+                             column(1),
+                             column(3,
+                                    
+                                    # drop down select dates
+                                    selectInput("select_start_sex", 
+                                                label = h4("Select start date"),
+                                                choices = sort(unique(acute_activity_agesex$quarter)),
+                                                selected = min(acute_activity_agesex$quarter)),
+                                    
+                                    selectInput("select_end_sex", 
+                                                label = h4("Select end date"),
+                                                choices = sort(unique(acute_activity_agesex$quarter)),
+                                                selected = max(acute_activity_agesex$quarter)),
+                                    
+                             ),
+                             column(8, 
+                                    br(), 
+                                    br(),
+                                    plotlyOutput("plot2"),
+                                    h3("Text", 
+                                       style = "color:white"),
+                                    h4("Text",
+                                       style = "color:white")))),
+                  
+                  
+                  
+                  # Deprivation Tab -----------------
+                  tabPanel("Deprivation", 
+                           fluidRow(
+                             column(1),
+                             column(3,
+                                    
+                                    # drop down select dates
+                                    selectInput("select_start_simd", 
+                                                label = h4("Select start date"), 
+                                                choices = sort(unique(acute_activity_simd$quarter)), 
+                                                selected = min(acute_activity_simd$quarter)),
+                                    
+                                    selectInput("select_end_simd", 
+                                                label = h4("Select end date"), 
+                                                choices = sort(unique(acute_activity_simd$quarter)), 
+                                                selected = max(acute_activity_simd$quarter)),
+                                    
+                             ),
+                             column(8, 
+                                    br(), 
+                                    br(),
+                                    plotlyOutput("plot3"),
+                                    h3("Text", 
+                                       style = "color:white"),
+                                    h4("Text",
+                                       style = "color:white")))),
+                  
+                  
+                  
+                  
+                  
+                  # A&E Tab -----------------            
+                  tabPanel("A&E",
+                           fluidRow(
+                             column(1),
+                             column(3,
+                                    
+                                    # drop down select dates
+                                    selectInput("select_start_ae", label = h4("Select start date"),
+                                                choices = sort(unique(waiting_time_all_range$year_quarter)), 
+                                                selected = min(waiting_time_all_range$year_quarter)),
+                                    selectInput("select_end_ae", label = h4("Select end date"), 
+                                                choices = sort(unique(waiting_time_all_range$year_quarter)), 
+                                                selected = max(waiting_time_all_range$year_quarter)),
+                             ),
+                             column(8,
+                                    br(), 
+                                    br(),
+                                    plotlyOutput("waiting_plot"),
+                                    h3("Text", 
+                                       style = "color:white"),
+                                    h4("Text",
+                                       style = "color:white")))),
+                  
+  
+  # Map Tab ----------------- 
+  tabPanel("Map", 
+           column(1),
+           column(8,
+                  leafletOutput("new_map_function"),
+                  br(),
+                  h3("NHS Scotland Healthboard Map", style = "color:white"),
+                  h4("Please click on a Health Board region on the map above to find 
+                     out the total number of Covid 19 cases to date.", style = "color:white"))),
+  
+  # Resources Tab ----------------- 
+  tabPanel("Resources", 
+           h3("Data sourced from PHS Open Data Platform.", style = "color:white"),
+           h3("Contains public sector information licensed under the Open 
+              Government Licence v3.0.", style = "color:white"),
+           HTML("<br>", "<br>"),
+           tags$h4("Data Sets Used", style = "color:white"),
+           HTML("<br>"),
+           tags$a("Hospital Activity Page", style = "color:white", 
+                  href = "https://www.opendata.nhs.scot/dataset/inpatient-and-daycase-activity/resource/c3b4be64-5fb4-4a2f-af41-b0012f0a276a"),
+           HTML("<br>"),
+           tags$a("Hospital Activity by Speciality", style = "color:white", 
+                  href = "https://www.opendata.nhs.scot/dataset/inpatient-and-daycase-activity/resource/c3b4be64-5fb4-4a2f-af41-b0012f0a276a"),
+           HTML("<br>"),
+           tags$a("Hospital Activity and Patient Demographics", style = "color:white", 
+                  href = "https://www.opendata.nhs.scot/dataset/inpatient-and-daycase-activity/resource/00c00ecc-b533-426e-a433-42d79bdea5d4"),
+           HTML("<br>"),
+           tags$a("Hospital Activity and Deprivation", style = "color:white", 
+                  href = "https://www.opendata.nhs.scot/dataset/inpatient-and-daycase-activity/resource/4fc640aa-bdd4-4fbe-805b-1da1c8ed6383"),
+           HTML("<br>"),
+           tags$a("Hospitalisations due to Covid-19", style = "color:white", 
+                  href = "https://www.opendata.nhs.scot/dataset/covid-19-wider-impacts-hospital-admissions"),
+           HTML("<br>"),
+           tags$a("A&E Attendances and Performance Data", style = "color:white", 
+                  href = "https://www.opendata.nhs.scot/dataset/monthly-emergency-department-activity-and-waiting-times"),
+           HTML("<br>"),
+           tags$a("Quarterly Hospital Beds Information - Datasets - Scottish Health and Social Care Open Data - nhs.scot", style = "color:white", 
+                  href = "https://www.opendata.nhs.scot/dataset/hospital-beds-information"),
+           HTML("<br>"),
+           tags$a("Delayed Discharge Data", style = "color:white", 
+                  href = "https://www.opendata.nhs.scot/dataset/hospital-beds-information")
+           )
+  
+)
+)
+)
 )

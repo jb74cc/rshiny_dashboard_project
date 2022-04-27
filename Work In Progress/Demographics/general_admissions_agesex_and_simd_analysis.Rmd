@@ -6,94 +6,86 @@ output:
     df_print: paged
 ---
 
-* **These are general hospital admissions - 7 admission_types (1 is acute)**
-* **This data is by QUARTER - 2016Q3 to 2021Q3 - (COVID admissions is by "week** 
-**ending" from May 2020 to March 2022** 
-* **SEX here is "Male", "Female", COVID data also has Male, Female, and All**
+* **These are general hospital admissions**
+* **This data is by QUARTER - 2016Q3 to 2021Q3** 
+* **SEX here is "Male", "Female"**
 * **AGE groups are in 10 year increments with (from "0-10 to "90 and over")**
-  **COVID data is a lot dirtier**
+* **SIMD (Scottish Index of Multiple Deprivation)**
+  * This is a quintile scale (1 = "Most Deprived", 5 = "Least Deprived"). The 
+  most appropriate SIMD released for each year is used. REMEMBER: removed 962 
+  NAs. There are codes in the simdqf column as to why they are NA - sometimes 
+  it's just a general geographical groupings.
+  
+The SIMD uses a wide range of information for small areas (data zones) to 
+identify concentrations of multiple deprivation across Scotland. Further 
+information can be
+  https://www.gov.scot/collections/scottish-index-of-multiple-deprivation-2020/
 
+* Total per age group 
+  * 0-9 years	1261	
+  * 10-19 years	1893	
+  * 20-29 years	1965	
+  * 30-39 years	1990	
+  * 40-49 years	2041	
+  * 50-59 years	2091	
+  * 60-69 years	2114	
+  * 70-79 years	2129	
+  * 80-89 years	2140	
+  * 90 years and over	2007
 
-## Libraries Used 
+* Total per sex
+  * Female	9832			
+  * Male	9799	
+  
+* Totals per SIMD
+  * 1	1042	- "Most Deprived"
+  * 2	1066		
+  * 3	1080
+  * 4	1074	
+  * 5	1018
+  
 
+https://www.publichealthscotland.scot/publications/acute-hospital-activity-and-nhs-beds-information-quarterly/acute-hospital-activity-and-nhs-beds-information-quarterly-quarter-ending-30-september-2021/glossary
+^ this explains the below! 
+A *stay* is a continuous, unbroken period of time a patient spends as an inpatient 
+in an acute facility. A patient may change specialty, consultant, significant 
+facility, NHS board and/or hospital during a continuous inpatient stay. Because 
+of this, information used to assign a stay to a specific hospital or NHS board 
+has to be taken from a single episode within a stay. 
+
+*Admissions* are when you are first admitted to hospital - This relates to individual patients. However, the same patient can be counted more than once, if they change subgroup (e.g. specialty, type of admission, NHS Board etc.). In these cases, a patient will be counted once within each subtotal, but only once in the overall total.
+
+For example, if a patient was admitted three times in a single year, twice as an emergency admission and once as an elective admission, they would be counted once in each sub-total of emergency and elective admissions, and once in the overall total of admission types.
+
+#### Libraries Used 
 ```{r}
 library(tidyverse)
 library(here)
-library(readxl)
 library(janitor)
 library(ggplot2)
-library(lubridate)
 ```
 <br> 
 
-## Read In Data
+## Read In Cleaned Data
 
 ```{r}
-hosp_activity_agesex <- read_csv(here("../../raw_data/inpatient_and_daycase_by_nhs_board_of_treatment_age_and_sex.csv"))
+acute_activity_agesex <- read_csv(here("../../clean_data/acute_activity_by_board_of_treatment_age_sex_clean.csv"))
 
-hosp_activity_simd <- 
-  read_csv(here("../../raw_data/inpatient_and_daycase_by_nhs_board_of_treatment_and_simd.csv"))
+acute_activity_simd <- 
+  read_csv(here("../../clean_data/acute_activity_by_board_of_treatment_simd_clean.csv"))
 ```
-<br>
-
-## Clean Data
-
-```{r}
-hosp_activity_agesex <- janitor::clean_names(hosp_activity_agesex)
-# glimpse(hosp_activity_agesex)
-
-hosp_activity_simd <- janitor::clean_names(hosp_activity_simd)
-# glimpse(hosp_acivity_simd)
-```
- 
-<br>
-
-We only need ACUTE patients, what do we have:
-
-admission_type:
-* Elective Inpatients		(not acute)
-* *Emergency Inpatients*				
-* Transfers			(not acute)			
-* All Day cases				(not acute)		
-* All Inpatients		  		(not necasseraly acute)		
-* All Inpatients and Day cases			(not acute)			
-* Not Specified   		(not acute???)
-```{r}
-hosp_activity_agesex %>% 
-  group_by(admission_type) %>% 
-  summarise(total = n())
-
-hosp_activity_simd %>% 
-  group_by(admission_type) %>% 
-  summarise(total = n())
-```
-<br>
-
-removing those that aren't acute (see above)
-
-```{r}
-hosp_acute_activity_agesex <- hosp_activity_agesex %>% 
-  filter(admission_type == "Emergency Inpatients")
-
-hosp_acute_activity_simd <- hosp_activity_simd %>% 
-  filter(admission_type == "Emergency Inpatients")
-
-```
-
 
 ### Seeing what we're working with:
 
 *Age*
-
 ```{r}
-hosp_acute_activity_agesex %>% 
+acute_activity_agesex %>% 
   group_by(age) %>% 
-  summarise(total_patients_in_age_group = n())
-
+  count()
 # 10 year increments i.e. 0-9, 10-19... 80-89, 90 years and over
 # No NA values
 
-hosp_acute_activity_agesex %>% 
+acute_activity_agesex %>% 
   mutate(age = is.na(age)) %>% 
   filter(age == TRUE)
 ```
@@ -101,27 +93,31 @@ hosp_acute_activity_agesex %>%
 *Sex*
 
 ```{r}
-hosp_acute_activity_agesex %>% 
+acute_activity_agesex %>% 
   group_by(sex) %>% 
-  summarise(total_patients_in_sex_group = n())
+  count()
 
 # Female: 9,832   Male: 9,799 
 # No NA values
 
-hosp_acute_activity_agesex %>% 
+acute_activity_agesex %>% 
   mutate(sex = is.na(age)) %>% 
   filter(sex == TRUE)
 ```
 
 **SIMD** 
 ```{r}
-hosp_acute_activity_simd %>% 
+acute_activity_simd %>% 
   group_by(simd) %>% 
-  summarise(total = n())
-#There are 962 NAs and ~ 1000 of levels 1:5... remember to tidy this in analysis
+  count()
+#There were 962 NAs. cleaned in R script. 
 ```
 
-<br>
+
+Remember there were 7 admission types... I chose to keep Emergency Inpatients. 
+
+Others = Elective Inpatients, Transfers, All Day cases, All Inpatients, All 
+Inpatients and Day cases, Not Specified
 
 <hr>
 
@@ -129,36 +125,21 @@ hosp_acute_activity_simd %>%
 
 ## Graphs
 
-Remember there were 7 admission types... I chose to keep one. 
-
-Might want to make use of this if we're not sure about admission types:
- `acute_target <- c("Emergency Inpatients", "Not Specified")`
-
-Others = Elective Inpatients, Transfers, All Day cases, All Inpatients, All 
-Inpatients and Day cases, Not Specified
-
 <br>
 
-### Graphs of general admissions and sex
-
-#### Sex against time and admissions
+### Sex and stays
 
 ```{r}
-
-gen_admissions_sex_per_quarter <- hosp_acute_activity_agesex %>% 
-  group_by(quarter, sex) %>% 
-  summarise(total_admissions_per_quarter = n())
-  
-gen_admissions_sex_per_quarter %>% 
+acute_activity_agesex %>% 
   ggplot()+
   aes(x = quarter, 
-      y = total_admissions_per_quarter, 
-      group = sex, colour = sex)+
+      y = total_stays_per_quarter_sex, 
+      group = sex, colour = sex) +
   geom_line() + 
-  labs(x = "Quarter", 
-       y = "Total Admissions", 
-       title = "Total Emergency Inpatient Admissions",
-       subtitle = "Q3 2016 to Q3 2021", 
+  labs(x = "Yearly Quarter", 
+       y = "Total Stays", 
+       title = "Total Emergency Inpatient Stays Across Scotland by Sex",
+       subtitle = "Q3, 2016 - Q3, 2021", 
        colour = "Sex") +
   theme_bw()+
   theme(axis.text.x = element_text(angle=45, hjust=0.9))
@@ -168,508 +149,247 @@ gen_admissions_sex_per_quarter %>%
 
 <br>
 
-#### Average length of stay by sex - general admissions
+## AGE GROUPS AND TOTAL STAYS 
 
 ```{r}
-#this has negative numbers in it (?)
-hosp_acute_activity_agesex %>%
-  drop_na(average_length_of_stay) %>%
-  distinct(desc(average_length_of_stay))
-```
-
-
-```{r}
-# highlight_winter <- general_admissions_acute_age_sex %in% c("2016Q4", 
-# "2017Q1", "2017Q4", "2018Q1", "2018Q4", "2019Q1", "2019Q4", "2020Q1", 
-# "2020Q4", "2021Q1")
-# 
-# library(gghighlight)
-
-#Might be best to split into quarters? Have one of those sliding scales for time
-# Would also like to highlight the winter months 
-hosp_acute_activity_agesex %>% 
-  drop_na(average_length_of_stay) %>% 
+acute_activity_agesex %>% 
   ggplot()+
   aes(x = quarter, 
-      y = average_length_of_stay, 
-      fill = sex)+
-  geom_col(position = "dodge")+ 
-  labs(x = "Quarter of each year", 
-       y = "Average Length of stay (days)", 
-       title = "Average Length of Stay for Emergency Inpatient Admissions By 
-       Gender",
-       subtitle = "Q3 2016 to Q3 2021", 
-       fill = "Sex") +
-  theme_bw()+
-  theme(axis.text.x = element_text(angle=45, hjust=0.9))
-
-```
-
-**Winter Vs Summer**
-
-```{r}
-library(stringr)
-
-highlight_winter_acute_agesex <- hosp_acute_activity_agesex %>% 
-  filter(str_detect(quarter, "Q1|Q4"))
-
-highlight_summer_acute_agesex <- hosp_acute_activity_agesex %>% 
-  filter(str_detect(quarter, "Q2|Q3"))
-```
-
-
-```{r}
-highlight_winter_acute_agesex %>% 
-  drop_na(average_length_of_stay) %>%  
-  ggplot()+
-  aes(x = quarter, 
-      y = average_length_of_stay, 
-      fill = sex)+
-  geom_col(position = "dodge")+ 
-  labs(x = "Quarter of each year", 
-       y = "Average Length of stay (days)", 
-       title = "Average Length of Stay for Emergency Inpatient Admissions IN 
-       WINTER QUARTERS by Gender",
-       subtitle = "Q4, 2016 - Q1, 2021", 
-       fill = "Sex") +
-  scale_y_continuous(breaks = c(20, 40, 60, 80), 
-                      limits = c(0, 80))+
-  theme_bw()+
-  theme(axis.text.x = element_text(angle=45, hjust=0.9))
-
-
-```
-
-```{r}
-highlight_summer_acute_agesex %>% 
-  drop_na(average_length_of_stay) %>% 
-  ggplot()+
-  aes(x = quarter, 
-      y = average_length_of_stay, 
-      fill = sex)+
-  geom_col(position = "dodge")+ 
-  labs(x = "Quarter of each year", 
-       y = "Average Length of stay (days)", 
-       title = "Average Length of Stay for Emergency Inpatient Admissions IN 
-       SUMMER QUARTERS by Gender",
-       subtitle = "Q3, 2016 - Q3, 2021", 
-       fill = "Sex") +
-  scale_y_continuous(breaks = c(20, 40, 60, 80), 
-                      limits = c(0, 80))+
-  theme_bw()+
-  theme(axis.text.x = element_text(angle=45, hjust=0.9))
-
-
-```
-
-
-
-
-<br>
-
-### Graphs of general admissions and age group
-
-#### Age group against time and admissions
-
-
-Line graph of Total Emergency Inpatient Admissions:
-
-```{r}
-gen_admissions_age_per_quarter <- hosp_acute_activity_agesex %>% 
-  # remember this is only looking at Emergency Inpatients but there are 7 groups
-  group_by(quarter, age) %>% 
-  summarise(total_admissions_per_quarter = n())
-  
-# Note that it's 0-9years that are the low values and I'll make this better soon
-gen_admissions_age_per_quarter %>% 
-  ggplot()+
-  aes(x = quarter, 
-      y = total_admissions_per_quarter, 
-      group = age, colour = age)+
+      y = total_stays_per_quarter_age, 
+      group = age, colour = age) +
+  geom_point()+
   geom_line() + 
   labs(x = "Yearly Quarter", 
-       y = "Total Admissions", 
-       title = "Total Emergency Inpatient Admissions",
-       subtitle = "Q3 2016 to Q3 2021", 
-       colour = "Age Group") +
+       y = "Total Stays", 
+       title = "Total Emergency Inpatient Stays Across Scotland by Age Group",
+       subtitle = "Q3, 2016 - Q3, 2021", 
+       colour = "Age") +
   theme_bw()+
   theme(axis.text.x = element_text(angle=45, hjust=0.9))
+
 ```
+
+## SIMD - deprivation level data 
 
 <br>
 
-Total Emergency Inpatient Admissions split by age group (messy just now...): 
+### Total stays per SIMD
 ```{r}
-gen_admissions_age_per_quarter %>% 
+acute_activity_simd %>%
+     mutate(simd = fct_relevel(as.character(simd, 
+                                  "1", "2", "3", "4", "5"))) %>%
   ggplot()+
   aes(x = quarter, 
-      y = total_admissions_per_quarter, 
-      fill = age)+
-  geom_col() + 
-  facet_wrap(~age)+
+      y = total_stays_per_quarter_simd, 
+      group = simd, colour = simd) +
+  geom_point()+
+  geom_line() + 
   labs(x = "Yearly Quarter", 
-       y = "Total Admissions", 
-       title = "JUST MADE THIS TO SEE THE DIFFERENCE - AWARE IT'S MESSY - 
-       Total Emergency Inpatient Admissions",
-       subtitle = "Q3 2016 to Q3 2021", 
-       fill = "Age Group") +
+       y = "Total Stays", 
+       title = "Total Emergency Inpatient Stays Across Scotland by SIMD Level",
+       subtitle = "Q3, 2016 - Q3, 2021", 
+       colour = "SIMD Level:
+       1 = Most Deprived
+       5 = Least Deprived") +
   theme_bw()+
   theme(axis.text.x = element_text(angle=45, hjust=0.9))
-```
 
-<br> 
-
-#### Average length of stay - general admissions - age 
-
-```{r}
-# as with sex (of course, it's the same data) this has negative numbers in it(?)
-hosp_acute_activity_agesex %>%
-  drop_na(average_length_of_stay) %>%
-  distinct(desc(average_length_of_stay))
 ```
 
 
 
+## Comparing total EPISODES with stays(above) for SIMD
+
+
 ```{r}
-#Might be best to split into years?
-# Have one of those sliding scales for time
-# Would also like to highlight the winter months 
-hosp_acute_activity_agesex %>% 
-  group_by(age) %>% 
-  drop_na(average_length_of_stay) %>%  
+acute_activity_simd %>%
+     mutate(simd = fct_relevel(as.character(simd, 
+                                  "1", "2", "3", "4", "5"))) %>%
   ggplot()+
   aes(x = quarter, 
-      y = average_length_of_stay, 
-      group = age)+
-  geom_line() +  
-  labs(x = "Quarter of each year", 
-       y = "Average Length of stay (days)", 
-       title = "Average Length of Stay for Emergency Inpatient Admissions By 
-       Age Group",
-       subtitle = "Q3 2016 to Q3 2021", 
-       group = "Age Group") +
+      y = total_episodes_per_quarter_simd, 
+      group = simd, colour = simd) +
+  geom_point()+
+  geom_line() + 
+  labs(x = "Yearly Quarter", 
+       y = "Total Stays", 
+       title = "Total Emergency Inpatient Episodes Across Scotland by SIMD Level",
+       subtitle = "Q3, 2016 - Q3, 2021", 
+       colour = "SIMD Level:
+       1 = Most Deprived
+       5 = Least Deprived") +
   theme_bw()+
   theme(axis.text.x = element_text(angle=45, hjust=0.9))
 
 ```
-
-
-well, that didn't work so hereare some bar graphs (Winter vs Summer below):
-
-```{r}
-#Might be best to split into years?
-# Have one of those sliding scales for time
-# Would also like to highlight the winter months 
-hosp_acute_activity_agesex %>% 
-  drop_na(average_length_of_stay) %>%  
-  ggplot()+
-  aes(x = quarter, 
-      y = average_length_of_stay, 
-      fill = age)+
-  geom_col(position = "dodge") +  
-  facet_wrap(~age)+
-  labs(x = "Quarter of each year", 
-       y = "Average Length of stay (days)", 
-       title = "Average Length of Stay for Emergency Inpatient Admissions By 
-       Age Group",
-       subtitle = "Q3 2016 to Q3 2021", 
-       colour = "Age Group") +
-  theme_bw()+
-  theme(axis.text.x = element_text(angle=45, hjust=0.9))
-
-```
-
-<br>
-
-As above but separated into WINTER vs SUMMER:
-```{r}
-highlight_winter_acute_agesex %>% 
-  drop_na(average_length_of_stay) %>%  
-  ggplot()+
-  aes(x = quarter, 
-      y = average_length_of_stay, 
-      fill = age)+
-  geom_col(position = "dodge") +  
-  facet_wrap(~age)+
-  labs(x = "Quarter of each year", 
-       y = "Average Length of stay (days)", 
-       title = "Average Length of Stay for Emergency Inpatient Admissions IN 
-       WINTER QUARTERS by Age Group",
-       subtitle = "Q4 2016 to Q1 2021", 
-       fill = "Age Group") +
-  theme_bw()+
-  theme(axis.text.x = element_text(angle=45, hjust=0.9))
-```
-
-```{r}
-highlight_summer_acute_agesex %>% 
-  drop_na(average_length_of_stay) %>%  
-  ggplot()+
-  aes(x = quarter, 
-      y = average_length_of_stay, 
-      fill = age)+
-  geom_col(position = "dodge") +
-  facet_wrap(~age) +
-  labs(x = "Quarter of each year", 
-       y = "Average Length of stay (days)", 
-       title = "Average Length of Stay for Emergency Inpatient Admissions IN 
-       SUMMER QUARTERS by Age Group",
-       subtitle = "Q4 2016 to Q1 2021", 
-       fill = "Age Group") +
-  theme_bw()+
-  theme(axis.text.x = element_text(angle=45, hjust=0.9))
-```
-
 <hr>
 
-<br>
+# STATISTICS SIMD ALL TIMES - TOTAL STAYS 
 
-### Graphs of general admissions and SIMD
+* Looking at all times - acute admissions - by SIMD
 
-SIMD (**Scottish Index of Multiple Deprivation**)
-
-* This is a quintile scale (1 = "Most Deprived", 5 = "Least Deprived").
-* The most appropriate SIMD released for each year is used. 
-* REMEMBER: In the simd level column, there are 962 NAs and ~1000 of levels 
-  1:5. Remember to tidy this in analysis. There are codes in the simdqf column 
-  as to why they are NA - sometimes it's just a general geographical groupings. 
-
-<br>
-
-#### SIMD against time and admissions
-
-<br>
-
-Drop NAs
+I need the mean of total admissions for each simd quintile:
 ```{r}
-gen_admissions_simd_per_quarter <- hosp_acute_activity_simd %>% 
-  group_by(quarter, simd) %>% 
-  drop_na(simd) %>% 
-  summarise(total_admission_per_quarter = n())
-gen_admissions_simd_per_quarter
-```
-
-*Tried a line graph (2 below) but it was very messy so here is a bar graph.*
-
-This did not separate the columns by simd level... so there is a facet wrap 
-version below as well. AND should maybe do a winter vs summer like with age/sex
-
-```{r}
-gen_admissions_simd_per_quarter %>% 
-  ggplot() + 
-  aes(x = quarter, 
-      y = total_admission_per_quarter, 
-      fill = simd) + 
-  geom_col(position = "dodge") + #why won' it dodge? Not enough space?? 
-  #also ignoring bin width
-  scale_color_brewer("Diamond\nclarity") + #this didn't work either...
-  labs(x = "Yearly Quarter", 
-       y = "Total Admissions", 
-       title = "Total Emergency Inpatient Admissions by Deprivation Level",
-       subtitle = "Q3 2016 to Q3 2021",
-       fill = "SIMD Level: (1 = Most Deprived : 5 = Least Deprived")+
-  theme_bw()+
-  theme(axis.text.x = element_text(angle = 45, hjust = 0.9))
-```
-
-Facet wrap version of above
-```{r}
-# here they are facet wraped by SIMD
-gen_admissions_simd_per_quarter %>% 
-  ggplot() + 
-  aes(x = quarter, 
-      y = total_admission_per_quarter, 
-      fill = simd) + 
-  geom_col(position = "dodge") + 
-  facet_wrap(~simd)+
-  labs(x = "Yearly Quarter", 
-       y = "Total Admissions", 
-       title = "Total Emergency Inpatient Admissions by Deprivation Level",
-       subtitle = "Q3 2016 to Q3 2021",
-       fill = "SIMD Level: (1 = Most Deprived : 5 = Least Deprived")+ 
-  theme_bw()+
-  theme(axis.text.x = element_text(angle = 45, hjust = 0.9))
-```
-
-```{r}
-
-# hmmm, that's not a very nice line graph:
-gen_admissions_simd_per_quarter %>% 
-  ggplot() + 
-  aes(x = quarter, 
-      y = total_admission_per_quarter, 
-      group = simd, 
-      colour = simd) + 
-  geom_point() +
-  geom_line() + 
-  labs(x = "Yearly Quarter", 
-       y = "Total Admissions", 
-       title = "Total Emergency Inpatient Admissions by Deprivation Level",
-        subtitle = "Q3 2016 to Q3 2021")+#, 
-       #colour = "SIMD Level: (1 = Most Deprived : 5 = Least Deprived")+
-  theme_bw()+
-  theme(axis.text.x = element_text(angle = 45, hjust = 0.9))
+acute_activity_simd %>% 
+  group_by(simd) %>% 
+  summarise(mean_total_stays = mean(total_stays_per_quarter_simd))
 ```
 
 
-**SIMD level vs general admission for summer vs winter (2 graphs)**
+## SIMD 1 (most deprived) and SIMD 3 (mid deprivation)
+
+$$H0 : μ_{SIMD\ 1:\ (most\ deprived)} - μ_{SIMD\ 3\ (mid\ deprived)} = 0$$
+$$Ha : μ_{SIMD\ 1:\ (most\ deprived)} - μ_{SIMD\ 3\ (mid\ deprived)} > 0$$
 
 ```{r}
-highlight_winter_acute_simd <- hosp_acute_activity_simd %>% 
-  filter(str_detect(quarter, "Q1|Q4"))
-
-highlight_summer_acute_simd <- hosp_acute_activity_simd %>% 
-  filter(str_detect(quarter, "Q2|Q3"))
+library(infer)
 ```
 
-**SUMMER** 
 
 ```{r}
-gen_admissions_simd_per_SUMMERquarter <- highlight_summer_acute_simd %>% 
-  group_by(quarter, simd) %>% 
-  drop_na(simd) %>% 
-  summarise(total_admission_per_quarter = n())
-gen_admissions_simd_per_SUMMERquarter
-
-gen_admissions_simd_per_SUMMERquarter %>% 
-  ggplot() + 
-  aes(x = quarter, 
-      y = total_admission_per_quarter, 
-      fill = simd) + 
-  geom_col(position = "dodge") + #why won' it dodge? Not enough space?? 
-  #also ignoring bin width
-  facet_wrap(~simd)+
-  scale_color_brewer("Diamond\nclarity") + #this didn't work either...
-  labs(x = "Yearly Quarter", 
-       y = "Total Admissions", 
-       title = "Total Emergency Inpatient SUMMER Admissions by Deprivation Level",
-       subtitle = "Q3 2016 to Q3 2021",
-       fill = "SIMD Level: (1 = Most Deprived : 5 = Least Deprived")+
-  theme_bw()+
-  theme(axis.text.x = element_text(angle = 45, hjust = 0.9))
+acute_activity_simd %>% 
+  ggplot(aes(x = simd, 
+             y = total_stays_per_quarter_simd, 
+             group = simd))+
+  geom_boxplot() +
+  labs(x = "SIMD Quintile
+       1 = Most Deprived : 5 = Least Deprived", 
+       y = "Total stays per month")
 ```
 
-**WINTER**
 
+permutation to generate the null distribution
+NOTE - we only want SIMD 1 and 3 just now
 ```{r}
-gen_admissions_simd_per_WINTERquarter <- highlight_winter_acute_simd %>% 
-  group_by(quarter, simd) %>% 
-  drop_na(simd) %>% 
-  summarise(total_admission_per_quarter = n())
-gen_admissions_simd_per_SUMMERquarter
+stays_simd_one_three <- acute_activity_simd %>% 
+  filter(simd == "1" | simd == "3") %>% 
+  mutate(simd = as.character(simd)) 
 
-gen_admissions_simd_per_WINTERquarter %>% 
-  ggplot() + 
-  aes(x = quarter, 
-      y = total_admission_per_quarter, 
-      fill = simd) + 
-  geom_col(position = "dodge") + #why won' it dodge? Not enough space?? 
-  #also ignoring bin width
-  facet_wrap(~simd) +
-  scale_color_brewer("Diamond\nclarity") + #this didn't work either...
-  labs(x = "Yearly Quarter", 
-       y = "Total Admissions", 
-       title = "Total Emergency Inpatient WINTER Admissions by Deprivation Level",
-       subtitle = "Q3 2016 to Q3 2021",
-       fill = "SIMD Level: (1 = Most Deprived : 5 = Least Deprived")+
-  theme_bw()+
-  theme(axis.text.x = element_text(angle = 45, hjust = 0.9))
+null_distribution_most_mid <- stays_simd_one_three %>% 
+  specify(total_stays_per_quarter_simd ~ simd) %>% 
+  hypothesise(null = "independence") %>% 
+  generate(reps = 1000, type = "permute") %>% 
+  calculate(stat = "diff in means", order = c("1", "3"))
+head(null_distribution_most_mid)
+
 ```
 
 
 
-<br>
-
-#### SIMD against time and average length of stay 
-
+observed stat:
 ```{r}
-# as with age/sex this has negative numbers in it(?)
-hosp_acute_activity_simd %>%
-  drop_na(average_length_of_stay) %>%
-  distinct(desc(average_length_of_stay))
+observed_stat_one_three <- stays_simd_one_three %>% 
+  specify(total_stays_per_quarter_simd ~ simd) %>% 
+  calculate(stat = "diff in means", order = c("1", "3"))
+observed_stat_one_three
 ```
 
-```{r}
-#Might be best to split into years?
-# Have one of those sliding scales for time
-# Would also like to highlight the winter months 
-hosp_acute_activity_simd %>% 
-  drop_na(average_length_of_stay) %>%  
-  ggplot()+
-  aes(x = quarter, 
-      y = average_length_of_stay, 
-      fill = simd)+
-  geom_col(position = "dodge") +  
-  facet_wrap(~simd)+
-  labs(x = "Quarter of each year", 
-       y = "Average Length of stay (days)", 
-       title = "Average Length of Stay for Emergency Inpatient Admissions By 
-       SIMD Level",
-       subtitle = "Q3 2016 to Q3 2021", 
-       colour = "SIMD") +
-  theme_bw()+
-  theme(axis.text.x = element_text(angle=45, hjust=0.9))
 
+
+
+```{r}
+null_distribution_most_mid %>% 
+  visualise()+
+  shade_p_value(obs_stat = observed_stat_one_three, direction = "right")
 ```
 
-**WINTER vs SUMMER** 
+
+
 
 ```{r}
-highlight_winter_acute_simd %>% 
-  drop_na(average_length_of_stay) %>%  
-  ggplot()+
-  aes(x = quarter, 
-      y = average_length_of_stay, 
-      fill = simd)+
-  geom_col(position = "dodge") +  
-  facet_wrap(~simd)+
-  labs(x = "Quarter of each year", 
-       y = "Average Length of stay (days)", 
-       title = "Average Length of Stay for Emergency Inpatient Admissions IN 
-       WINTER QUARTERS by SIMD",
-       subtitle = "Q4, 2016 - Q1, 2021", 
-       fill = "SIMD") +
-  theme_bw()+
-  theme(axis.text.x = element_text(angle=45, hjust=0.9))
+p_value <- null_distribution_most_mid %>% 
+  get_p_value(obs_stat = observed_stat_one_three, direction = "right")
+p_value
+
+format.pval(p_value)
 ```
 
-```{r}
-highlight_summer_acute_simd %>% 
-  drop_na(average_length_of_stay) %>%  
-  ggplot()+
-  aes(x = quarter, 
-      y = average_length_of_stay, 
-      fill = simd)+
-  geom_col(position = "dodge") +  
-  facet_wrap(~simd)+
-  labs(x = "Quarter of each year", 
-       y = "Average Length of stay (days)", 
-       title = "Average Length of Stay for Emergency Inpatient Admissions IN 
-       SUMMER QUARTERS by SIMD",
-       subtitle = "Q3, 2016 - Q3, 2021", 
-       fill = "SIMD") +
-  theme_bw()+
-  theme(axis.text.x = element_text(angle=45, hjust=0.9))
-```
+
+< 2.22e-16
+
+p = 2.22e-16 So very close to 0. 
+Therefore as p < 0.05 we can reject our null hypothesis in favour of the 
+alternative hypothesis.
+The mean for total stays for SIMD 1 (Most Deprived) is significantly 
+greater than that of SIMD 3 (mid level deprivation area) so suggests that those
+in more deprived areas are more likely to be admitted to hospital across all 
+time periods pre and during covid. 
+
+
+## SIMD 3 (mid deprived) and SIMD 5 (least deprivation)
+
+$$H0 : μ_{SIMD\ 3:\ (mid\ deprived)} - μ_{SIMD\ 5\ (least\ deprived)} = 0$$
+$$Ha : μ_{SIMD\ 3:\ (mid\ deprived)} - μ_{SIMD\ 5\ (least\ deprived)} > 0$$
+
 
 ```{r}
-hosp_acute_activity_simd %>% 
-  drop_na(average_length_of_stay) %>%  
-  ggplot()+
-  aes(x = quarter, 
-      y = average_length_of_stay, 
-      group = simd)+
-  geom_point() + 
-  geom_line()+
-  labs(x = "Quarter of each year", 
-       y = "Average Length of stay (days)", 
-       title = "Average Length of Stay for Emergency Inpatient Admissions By 
-       SIMD Level",
-       subtitle = "Q3 2016 to Q3 2021", 
-       group = "SIMD") +
-  theme_bw()+
-  theme(axis.text.x = element_text(angle=45, hjust=0.9))
+acute_activity_simd %>% 
+  ggplot(aes(x = simd, 
+             y = total_stays_per_quarter_simd, 
+             group = simd))+
+  geom_boxplot() +
+  labs(x = "SIMD Quintile
+       1 = Most Deprived : 5 = Least Deprived", 
+       y = "Total stays per month")
+```
+
+
+
+
+
+permutation to generate the null distribution
+NOTE - we only want SIMD 1 and 3 just now
+```{r}
+stays_simd_three_five <- acute_activity_simd %>% 
+  filter(simd == "3" | simd == "5") %>% 
+  mutate(simd = as.character(simd)) 
+
+null_distribution_mid_least <- stays_simd_three_five %>% 
+  specify(total_stays_per_quarter_simd ~ simd) %>% 
+  hypothesise(null = "independence") %>% 
+  generate(reps = 1000, type = "permute") %>% 
+  calculate(stat = "diff in means", order = c("3", "5"))
+head(null_distribution_mid_least)
 
 ```
 
+
+observed stat:
+```{r}
+observed_stat_three_five <- stays_simd_three_five %>% 
+  specify(total_stays_per_quarter_simd ~ simd) %>% 
+  calculate(stat = "diff in means", order = c("3", "5"))
+observed_stat_three_five
+```
+
+
+
+
+```{r}
+null_distribution_mid_least %>% 
+  visualise()+
+  shade_p_value(obs_stat = observed_stat_three_five, direction = "right")
+```
+
+
+
+
+```{r}
+p_value <- null_distribution_mid_least %>% 
+  get_p_value(obs_stat = observed_stat_three_five, direction = "right")
+p_value
+
+format.pval(p_value)
+```
+
+
+< 2.22e-16
+
+p = 2.22e-16 So very close to 0. 
+Therefore as p < 0.05 we can reject our null hypothesis in favour of the 
+alternative hypothesis.
+The mean for total stays for SIMD 3 (Mid) Deprived areas) is significantly 
+greater than that of SIMD 5 (Least deprived areas) so suggests that those
+in more deprived areas are more likely to be admitted to hospital across all 
+time periods pre and during covid. 
 

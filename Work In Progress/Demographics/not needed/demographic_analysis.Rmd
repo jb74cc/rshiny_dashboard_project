@@ -1,0 +1,589 @@
+---
+title: "Demographic Analysis"
+subtitle: rshiny group project
+output:
+  html_document:
+    df_print: paged
+---
+a
+```{r}
+library(tidyverse)
+library(here)
+library(readxl)
+library(janitor)
+library(ggplot2)
+```
+
+
+```{r}
+# hosp_activity_page <- read_csv(here("data/hospital_activity_page.csv"))
+# hosp_activity_by_speciality <- 
+#   read_csv(here("data/Hospital Activity by Speciality.csv"))
+
+hosp_activity_and_demographics <- 
+  read_csv(here("data/Hospital Activity and Patient Demographics.csv"))
+hosp_activity_and_deprivation <- 
+  read_csv(here("data/Hospital Activity and Deprivation.csv"))
+# 
+# aAndE_waiting_times <- 
+#   read_excel(here("data/monthly_ae_waitingtimes_A&E attendances and performance data_202201.xlsx"))
+```
+
+
+```{r}
+covid_ads_HB_deprivation <- 
+  read_excel(here("data/Hospitalisations due to Covid 19/Admissions By Health Board and Deprivation_20220302.xlsx"))
+
+# covid_ads_HB_and_speciality <- 
+#   read_excel(here("data/Hospitalisations due to Covid 19/Admissions By Health Board and Specialty_20220302.xlsx"))
+covid_ads_HB_age_sex <- 
+  read_excel(here("data/Hospitalisations due to Covid 19/Admissions By Health Board, Age and Sex_20220302.xlsx"))
+covid_ads_HSCP_deprivation <- 
+   read_excel(here("data/Hospitalisations due to Covid 19/Admissions By HSCP and Deprivation_20220302.xlsx"))
+# covid_ads_HSCP_speciality <- 
+#   read_excel(here("data/Hospitalisations due to Covid 19/Admissions By HSCP and Specialty_20220302.xlsx"))
+covid_ads_HSCP_age_sex <- 
+  read_excel(here("data/Hospitalisations due to Covid 19/Admissions By HSCP, Age and Sex_20220302.xlsx"))
+```
+
+
+Clean names
+```{r}
+hosp_activity_and_demographics <- 
+  janitor::clean_names(hosp_activity_and_demographics)
+hosp_activity_and_deprivation <- 
+  janitor::clean_names(hosp_activity_and_deprivation)
+covid_ads_HB_deprivation <- 
+  janitor::clean_names(covid_ads_HB_deprivation)
+covid_ads_HB_age_sex <- 
+  janitor::clean_names(covid_ads_HB_age_sex)
+covid_ads_HSCP_deprivation <- 
+  janitor::clean_names(covid_ads_HSCP_deprivation)
+covid_ads_HSCP_age_sex <- 
+  janitor::clean_names(covid_ads_HSCP_age_sex)
+```
+
+
+
+```{r}
+names(hosp_activity_and_demographics)
+names(hosp_activity_and_deprivation)
+names(covid_ads_HB_deprivation)
+names(covid_ads_HB_age_sex)
+names(covid_ads_HSCP_deprivation)
+names(covid_ads_HSCP_age_sex)
+```
+
+```{r}
+hosp_activity_and_demographics %>% 
+  distinct(age)
+# 10 year increments i.e. 0-9, 10-19... 80-89, 90 years and over
+# No NA values
+hosp_activity_and_demographics %>% 
+  mutate(age = is.na(age)) %>% 
+  filter(age == TRUE)
+```
+
+```{r}
+# 7 General hosp admission types for both demographics and deprivation:
+# Elective Inpatients
+# Emergency Inpatients,  (THIS IS THE ONLY DEFINITELY ACUTE ONE)
+# Transfers
+# All Day cases
+# All Inpatients
+# All inpatients and Day Cases
+# Not Specified 
+# No NAs.
+hosp_activity_and_demographics %>% 
+  distinct(admission_type)
+hosp_activity_and_deprivation %>% 
+  distinct(admission_type)
+
+# 3 COVID ADMISSION TYPES for HB and HSCP - deprivation and age/sex: 
+# All - Emergency - Planned
+covid_ads_HB_deprivation %>% 
+  distinct(admission_type)
+covid_ads_HB_age_sex %>% 
+  distinct(admission_type)
+covid_ads_HSCP_deprivation %>% 
+  distinct(admission_type)
+covid_ads_HSCP_age_sex %>% 
+  distinct(admission_type)  
+
+
+# tried them all for NA and there are none
+# hosp_activity_and_demographics %>% 
+#   mutate(admission_type = is.na(admission_type)) %>% 
+#   filter(admission_type == TRUE)
+```
+
+<br>
+
+<hr>
+
+## General Hospital Admissions 
+
+### November 14th 2019 - February 22nd 2020
+
+* **This data is by QUARTER (COVID admissions is by week ending from May 2020 to** 
+**March 2022**
+* **SEX here is "Male", "Female", COVID data also has Male, Female, and All**
+* **AGE groups are in 10 year increments with (from "0-10 to "90 and over")**
+  **COVID data is a lot dirtier**
+* **These are general hospital admissions - not by health board etc**
+
+<br>
+
+#### Sex 
+
+<br>
+```{r}
+# 2 sex = Female, Male 
+hosp_activity_and_demographics %>% 
+  distinct(sex)
+
+hosp_activity_and_demographics %>% 
+  mutate(sex = is.na(sex)) %>% 
+  filter(sex == TRUE)
+# No NAs
+```
+<br> 
+
+**Sex against time and admissions**
+
+Filter for acute services: 
+
+```{r}
+# might want to make use of this if we're not sure about admission types
+# acute_target <- c("Emergency Inpatients", "Not Specified")
+# Others = Elective Inpatients, Transfers, All Day cases, All Inpatients, All 
+# Inpatients and Day cases, Not Specified
+
+general_admissions_acute_age_sex <- hosp_activity_and_demographics %>% 
+  filter(admission_type == "Emergency Inpatients")
+general_admissions_acute_age_sex
+```
+
+
+Now group by and create graphs over time: 
+
+```{r}
+
+gen_admissions_sex_per_quarter <- general_admissions_acute_age_sex %>% 
+  group_by(quarter, sex) %>% 
+  summarise(total_admissions_per_quarter = n())
+  
+gen_admissions_sex_per_quarter %>% 
+  ggplot()+
+  aes(x = quarter, 
+      y = total_admissions_per_quarter, 
+      group = sex, colour = sex)+
+  geom_line() + 
+  labs(x = "Quarter", 
+       y = "Total Admissions", 
+       title = "Total Emergency Inpatient Admissions",
+       subtitle = "Q3 2016 to Q3 2021", 
+       colour = "Sex") +
+  theme_bw()+
+  theme(axis.text.x = element_text(angle=45, hjust=0.9))
+
+```
+
+<br>
+
+#### Average length of stay by sex - general admissions
+
+```{r}
+
+#this has negative numbers in it (?)
+# general_admissions_acute_age_sex %>% 
+#   drop_na(average_length_of_stay) %>% 
+#   distinct(desc(average_length_of_stay))
+
+# highlight_winter <- general_admissions_acute_age_sex %in% c("2016Q4", 
+# "2017Q1", "2017Q4", "2018Q1", "2018Q4", "2019Q1", "2019Q4", "2020Q1", 
+# "2020Q4", "2021Q1")
+# 
+# library(gghighlight)
+
+#Might be best to split into quarters? Have one of those sliding scales for time
+# Would also like to highlight the winter months 
+general_admissions_acute_age_sex %>% 
+  drop_na(average_length_of_stay) %>% 
+  group_by(quarter, sex, average_length_of_stay) %>% 
+  ggplot()+
+  aes(x = quarter, 
+      y = average_length_of_stay, 
+      fill = sex)+
+  geom_col(position = "dodge")+ 
+  labs(x = "Quarter of each year", 
+       y = "Average Length of stay (days)", 
+       title = "Average Length of Stay for Emergency Inpatient Admissions By 
+       Gender",
+       subtitle = "Q3 2016 to Q3 2021", 
+       colour = "Sex") +
+  theme_bw()+
+  theme(axis.text.x = element_text(angle=45, hjust=0.9))
+
+```
+
+
+
+
+<br>
+
+#### Age
+
+```{r}
+
+hosp_activity_and_demographics %>% 
+  distinct(age) # 10 year increments i.e. 0-9, 10-19... 80-89, 90 years and over
+# No NA values 
+
+hosp_activity_and_demographics %>% 
+  mutate(age = is.na(age)) %>% 
+  filter(age == TRUE) # no NAs
+```
+
+```{r}
+gen_admissions_age_per_quarter <- general_admissions_acute_age_sex %>% 
+  # remember this is only looking at Emergency Inpatients but there are 7 groups
+  group_by(quarter, age) %>% 
+  summarise(total_admissions_per_quarter = n())
+  
+# Note that it's 0-9years that are the low values and I'll make this better soon
+gen_admissions_age_per_quarter %>% 
+  ggplot()+
+  aes(x = quarter, 
+      y = total_admissions_per_quarter, 
+      group = age, colour = age)+
+  geom_line() + 
+  labs(x = "Yearly Quarter", 
+       y = "Total Admissions", 
+       title = "Total Emergency Inpatient Admissions",
+       subtitle = "Q3 2016 to Q3 2021", 
+       colour = "Age Group") +
+  theme_bw()+
+  theme(axis.text.x = element_text(angle=45, hjust=0.9))
+
+gen_admissions_age_per_quarter %>% 
+  ggplot()+
+  aes(x = quarter, 
+      y = total_admissions_per_quarter, 
+      group = age)+
+  geom_col() + 
+  facet_wrap(~age)+
+  labs(x = "Yearly Quarter", 
+       y = "Total Admissions", 
+       title = "JUST MADE THIS TO SEE THE DIFFERENCE - AWARE IT'S MESSY - 
+       Total Emergency Inpatient Admissions",
+       subtitle = "Q3 2016 to Q3 2021") +
+  theme_bw()+
+  theme(axis.text.x = element_text(angle=45, hjust=0.9))
+```
+<br> 
+#### average length of stay - general admissions - age 
+
+```{r}
+
+# as before, this has negative numbers in it (?)
+# general_admissions_acute_age_sex %>% 
+#   drop_na(average_length_of_stay) %>% 
+#   distinct(desc(average_length_of_stay))
+
+
+#Might be best to split into years?
+# Have one of those sliding scales for time
+# Would also like to highlight the winter months 
+general_admissions_acute_age_sex %>% 
+  drop_na(average_length_of_stay) %>% 
+  group_by(quarter, age, average_length_of_stay) %>% 
+  ggplot()+
+  aes(x = quarter, 
+      y = average_length_of_stay, 
+      fill = age)+
+  geom_col(position = "dodge") +  
+  facet_wrap(~age)+
+  labs(x = "Quarter of each year", 
+       y = "Average Length of stay (days)", 
+       title = "Average Length of Stay for Emergency Inpatient Admissions By 
+       Age Group",
+       subtitle = "Q3 2016 to Q3 2021", 
+       colour = "Age Group") +
+  theme_bw()+
+  theme(axis.text.x = element_text(angle=45, hjust=0.9))
+
+```
+
+
+<hr> 
+#### SIMD (Scottish Index of Multiple Deprivation)
+
+* This is a quintile scale (1 = "Most Deprived", 5 = "Least Deprived")
+* The most appropriate SIMD released for each year is used. 
+
+<br>
+
+```{r}
+# We have the same admission types here as above so I'll do the same - i.e. only
+# include the Emergency Inpatients though there are 7 groups
+hosp_activity_and_deprivation %>% 
+  distinct(admission_type)
+
+
+general_admissions_acute_deprivation <- hosp_activity_and_deprivation %>% 
+  filter(admission_type == "Emergency Inpatients")
+general_admissions_acute_deprivation
+
+```
+
+SIMD Types
+* note there are 962 NAs: there are codes in the simdqf column as to why 
+* sometimes it's just a general geographical groupings 
+```{r}
+general_admissions_acute_deprivation %>% 
+  group_by(simd) %>% 
+  summarise(total_for_each_simd = n())
+```
+<br>
+
+Drop NAs
+
+```{r}
+gen_admissions_simd_per_quarter <- general_admissions_acute_deprivation %>% 
+  group_by(quarter, simd) %>% 
+  drop_na(simd) %>% 
+  summarise(total_admission_per_quarter = n())
+gen_admissions_simd_per_quarter
+```
+
+**PLOTS total general admissions (emergency inpatient only) & deprivation**
+
+```{r}
+gen_admissions_simd_per_quarter %>% 
+  ggplot() + 
+  aes(x = quarter, 
+      y = total_admission_per_quarter, 
+      fill = simd) + 
+  geom_col(position = "dodge") + #why won' it dodge? Not enough space?? 
+  #also ignoring bin width
+  scale_color_brewer("Diamond\nclarity") + #this didn't work either...
+  labs(x = "Yearly Quarter", 
+       y = "Total Admissions", 
+       title = "Total Emergency Inpatient Admissions by Deprivation Level",
+       subtitle = "Q3 2016 to Q3 2021",
+       colour = "SIMD Level: (1 = Most Deprived : 5 = Least Deprived")+# where is this!?
+  theme_bw()+
+  theme(axis.text.x = element_text(angle = 45, hjust = 0.9))
+
+# here they are facet wraped by SIMD
+gen_admissions_simd_per_quarter %>% 
+  ggplot() + 
+  aes(x = quarter, 
+      y = total_admission_per_quarter, 
+      fill = simd) + 
+  geom_col(position = "dodge") + 
+  facet_wrap(~simd)+
+  labs(x = "Yearly Quarter", 
+       y = "Total Admissions", 
+       title = "Total Emergency Inpatient Admissions by Deprivation Level",
+       subtitle = "Q3 2016 to Q3 2021",
+       colour = "SIMD Level: (1 = Most Deprived : 5 = Least Deprived")+ #where is this?!
+  theme_bw()+
+  theme(axis.text.x = element_text(angle = 45, hjust = 0.9))
+
+
+# hmmm, that's not a very nice line graph:
+gen_admissions_simd_per_quarter %>% 
+  ggplot() + 
+  aes(x = quarter, 
+      y = total_admission_per_quarter, 
+      group = simd, 
+      colour = simd) + 
+  geom_line() +
+  labs(x = "Yearly Quarter", 
+       y = "Total Admissions", 
+       title = "Total Emergency Inpatient Admissions by Deprivation Level",
+        subtitle = "Q3 2016 to Q3 2021")+#, 
+       #colour = "SIMD Level: (1 = Most Deprived : 5 = Least Deprived")+
+  theme_bw()+
+  theme(axis.text.x = element_text(angle = 45, hjust = 0.9))
+```
+
+
+
+
+<hr>
+<br>
+## COVID ADMISSIONS 
+
+### May 21st 2020 - March 2nd, 2022
+
+```{r}
+library(lubridate)
+```
+
+
+Changing the week ending column to a date column and pulling out the day, month 
+and year:
+```{r}
+covid_ads_HB_age_sex <- covid_ads_HB_age_sex %>%
+  mutate(week_ending = ymd(week_ending))
+
+covid_ads_HB_age_sex <- covid_ads_HB_age_sex %>%
+  mutate(
+    wk_ending_day = day(week_ending),
+    wk_ending_month = month(week_ending, label = TRUE, abbr = FALSE),
+    wk_ending_year = year(week_ending)
+  )
+covid_ads_HB_age_sex
+```
+
+
+#### Sex and gender by healthboard
+
+<br>
+
+NOTE 
+Sex: "All" = 33951 rows, Female = 4782, Male = 4783 
+
+<br> 
+
+```{r}
+# by healthboard
+
+# admission types are either emergency or planned - that's good news for us
+covid_ads_HB_age_sex %>% 
+  distinct(admission_type)
+
+covid_acute_HB_age_sex <- covid_ads_HB_age_sex %>% 
+  filter(admission_type == "Emergency")
+
+# this is not neatly divided and there is an age group "41760" hmm
+covid_acute_HB_age_sex %>% 
+  group_by(age_group) %>% 
+  summarise(count_in_age_group = n())
+```
+
+<br>
+
+
+
+**Weekly COVID admissions per age group against the average weekly admissions**
+**in previous years**
+**NOTE: by healthboard data**
+<br>
+```{r}
+# Take out age group = all ages... still not sure about 41760
+covid_acute_HB_age_sex %>% 
+  filter(age_group != "All ages") %>% 
+  group_by(age_group) %>% 
+  ggplot()+
+  aes(x = number_admissions, 
+      y = average20182019, 
+      colour = age_group)+
+  geom_point() +
+  labs(x = "Weekly number of COVID admissions",
+       y = "Average weekly admissions to hospital in 2018-2019",
+       title = "Weekly COVID admissions per age group against the average weekly 
+       admissions in previous years",
+       subtitle = "COVID: January, 2020 to February, 2022 / Previous years: 2018 - 2019",
+       colour = "Age Group") +
+  theme_bw()+
+  theme(axis.text.x = element_text(angle = 45, hjust = 0.9))
+  
+```
+
+**The above just looking to see if there are differences in months**
+
+```{r}
+
+# Take out age group = all ages... still not sure about 41760
+covid_acute_HB_age_sex %>% 
+  filter(age_group != "All ages") %>% 
+  group_by(age_group) %>% 
+  ggplot()+
+  aes(x = number_admissions, 
+      y = average20182019, 
+      colour = age_group)+
+  geom_point() +
+  facet_wrap(~wk_ending_month) +
+  labs(x = "Weekly number of COVID admissions",
+       y = "Average weekly admissions to hospital in 2018-2019",
+       title = "Weekly COVID admissions per age group against the average weekly 
+       admissions in previous years",
+       subtitle = "COVID: January, 2020 to February, 2022 / Previous years: 2018 - 2019",
+       colour = "Age Group") +
+  theme_bw()+
+  theme(axis.text.x = element_text(angle = 45, hjust = 0.9))
+```
+
+
+
+```{r}
+covid_acute_HB_age_sex %>% 
+  group_by(sex) %>% 
+  summarise(total_of_each_sex = n())
+```
+
+```{r}
+covid_acute_ads_HB_demographics_sex <- covid_acute_HB_age_sex %>% 
+  #filter(sex != "All") %>% 
+  group_by(week_ending, sex) %>% 
+  summarise(total_admissions_for_week_ending = n())
+covid_ads_HB_demographics_sex
+
+
+covid_acute_ads_HB_demographics_sex %>% 
+  ggplot()+
+  aes(x = week_ending, 
+      y = total_admissions_for_week_ending,
+      colour = sex)+
+  geom_line()+
+  labs(title = "I AM AWARE THIS IS AWFUL")
+```
+
+```{r}
+covid_acute_HB_age_sex %>% 
+  filter(sex != "All") %>% 
+  group_by(sex) %>% 
+  ggplot()+
+  aes(x = number_admissions, 
+      y = average20182019, 
+      colour = sex)+
+  geom_point()+
+  labs(x = "Weekly number of COVID admissions",
+       y = "Average weekly admissions to hospital in 2018-2019",
+       title = "Weekly COVID admissions per sex against the average weekly 
+       admissions in previous years",
+       subtitle = "COVID: January, 2020 to February, 2022 / Previous years: 2018 - 2019",
+       colour = "Sex") +
+  theme_bw()+
+  theme(axis.text.x = element_text(angle = 45, hjust = 0.9))
+  
+
+```
+
+
+
+
+
+
+```{r}
+covid_ads_HB_deprivation %>% 
+  group_by(simd_quintile) %>% 
+  summarise(total = n())
+
+covid_ads_HSCP_deprivation  %>% 
+  group_by(simd_quintile) %>% 
+  summarise(total = n())
+
+covid_ads_HSCP_age_sex %>% 
+  group_by(age_group) %>% 
+  summarise(total = n())
+
+covid_ads_HSCP_age_sex %>% 
+  group_by(sex) %>% 
+  summarise(total = n())
+```
+
