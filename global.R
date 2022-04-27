@@ -14,6 +14,18 @@ beds_by_hb_trim <- read_csv(here('clean_data/bed_occupancy_by_health_board_clean
 
 hb_locations <- read_csv(here('raw_data/health_board_geo.csv'))
 
+
+# data for demographics (age, sex, simd)
+# * Total stays from 2016 - 2021
+acute_activity_agesex <- read_csv(here("clean_data/acute_activity_by_board_of_treatment_age_sex_clean.csv"))
+acute_activity_simd <- 
+  read_csv(here("clean_data/acute_activity_by_board_of_treatment_simd_clean.csv"))
+# * Total admissions during covid months
+covid_admissions_HB_agesex <- read_csv(here("clean_data/covid_hosp_admissions_hb_agesex_clean.csv"))
+
+covid_admissions_HB_simd <- read_csv(here("clean_data/covid_hosp_admissions_hb_simd_clean.csv"))
+
+
 #sco_hb <- st_read('SG_NHS_HealthBoards_2019/SG_NHS_HealthBoards_2019.shp', "SG_NHS_HealthBoards_2019")
 
 # data for map

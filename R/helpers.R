@@ -47,3 +47,9 @@ new_map_function <- function(locations = HBName) {
       popup = ~HBName
     )
 }
+
+# function to produce the sex/age data 
+
+
+
+# function to produce the simd data 
