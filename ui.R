@@ -42,13 +42,15 @@ ui <- fluidPage(
                                     
               checkboxGroupInput("hb_input", label = h4("Select Health Board"), 
                                  choices = sort(unique(beds_by_hb_trim$hb_name)),
-                                 selected = c("NHS Highland", "NHS Lanarkshire", "NHS Lothian"))),
+                                 selected = c("NHS Highland", "NHS Lothian"))),
                                 #selected = sort(unique(beds_by_hb_trim$hb_name)))),
                              
               column(7, 
                         br(), 
                         br(),
-                        plotlyOutput("plot")))),
+                        plotlyOutput("plot"),
+                     h3("Statistical analysis conclusion / interpretation in here",
+                        style = "color:white")))),
                   
                   
         # Demographics Tab -----------------
