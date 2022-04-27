@@ -69,10 +69,10 @@ library(infer)
 #### Read In Cleaned Data
 
 ```{r}
-acute_activity_agesex <- read_csv(here("../../clean_data/acute_activity_by_board_of_treatment_age_sex_clean.csv"))
+acute_activity_agesex <- read_csv(here("../clean_data/acute_activity_by_board_of_treatment_age_sex_clean.csv"))
 
 acute_activity_simd <- 
-  read_csv(here("../../clean_data/acute_activity_by_board_of_treatment_simd_clean.csv"))
+  read_csv(here("../clean_data/acute_activity_by_board_of_treatment_simd_clean.csv"))
 ```
 
 #### Seeing what we're working with:
