@@ -113,7 +113,8 @@ new_map_function <- function(locations = HBName) {
       color = ~pal(HBName),
       fillOpacity = 0.6,
       weight = 1, 
-      popup = ~HBName
+      popup = ~paste0("Health Board: ", HBName, 
+              "<br>All Covid Cases to date: ", TotalCases)
     )
 }
 
