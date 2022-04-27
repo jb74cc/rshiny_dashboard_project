@@ -164,7 +164,7 @@ ui <- fluidPage(
                              column(8,
                                     br(), 
                                     br(),
-                                    plotOutput("waiting_plot"),
+                                    plotlyOutput("waiting_plot"),
                                     h3("Text", 
                                        style = "color:white"),
                                     h4("Text",

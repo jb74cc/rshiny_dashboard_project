@@ -66,7 +66,7 @@ server <- function(input, output, session) {
   })  
   
   # Generate a plot of a&e waiting time function
-  output$waiting_plot <- renderPlot({
+  output$waiting_plot <- renderPlotly({
     waiting_time_function(filter_waiting_time_all_range())
   })  
   

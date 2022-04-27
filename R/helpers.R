@@ -47,8 +47,9 @@ age_function_all_times <- function(acute_activity_agesex) {
          title = "Total Emergency Inpatient Stays Across Scotland by Age Group",
          subtitle = "Q3, 2016 - Q3, 2021", 
          colour = "Age") +
+      scale_color_manual(values = nhs_colours_2) +
     theme_bw()+
-    theme(axis.text.x = element_text(angle=45, hjust=0.9))) %>% 
+    theme(axis.text.x = element_text(angle = 270, vjust = 0.25))) %>% 
   style(hoverlabel = list, marker.color = "white")  
 }
 
@@ -65,8 +66,9 @@ sex_function_all_times <- function(acute_activity_agesex) {
          title = "Total Emergency Inpatient Stays Across Scotland by Sex",
          subtitle = "Q3, 2016 - Q3, 2021", 
          colour = "Sex") +
-    theme_bw()+
-    theme(axis.text.x = element_text(angle=45, hjust=0.9))) %>% 
+      scale_color_manual(values = nhs_colours_2) +
+      theme_bw()+
+    theme(axis.text.x = element_text(angle = 270, vjust = 0.25))) %>% 
   style(hoverlabel = list, marker.color = "white")  
 }
 
@@ -89,8 +91,9 @@ simd_function_all_times <- function(acute_activity_simd){
        colour = "SIMD Level:
        1 = Most Deprived
        5 = Least Deprived") +
+    scale_color_manual(values = nhs_colours_2) +
   theme_bw()+
-  theme(axis.text.x = element_text(angle=45, hjust=0.9))) %>% 
+  theme(axis.text.x = element_text(angle = 270, vjust = 0.25))) %>% 
   style(hoverlabel = list, marker.color = "white")  
 }
 
@@ -117,14 +120,21 @@ new_map_function <- function(locations = HBName) {
 
 waiting_time_function <- function(waiting_time_all_range) {
   
-waiting_time_all_range %>% 
+  ggplotly(waiting_time_all_range %>% 
   group_by(year_quarter) %>% 
   ggplot()+
   aes(x = year_quarter, y = log10(total_attendances), group = time_waiting, colour = time_waiting)+
   geom_point()+
   geom_line()+
-  xlab("Year(Quarter)")+ylab("Number of Attendances (log 10)")+
-  theme(axis.text.x = element_text(angle = 90, size = 5, vjust = 0.5, hjust=1))+
-  labs(color="Time Waiting", size = 5)+
-  ggtitle("Number of People in Waiting Time Range")
-}
+  scale_color_manual(values = nhs_colours_2) +
+  #xlab("Year(Quarter)")+
+  #ylab("Number of Attendances (log 10)")+
+  labs(title = "Number of People in Waiting Time Range",
+       x = "\nYear(Quarter)",
+       y = "Number of Attendances (log 10)") +
+  theme_bw()+
+  theme(axis.text.x = element_text(angle = 270, vjust = 0.25)))
+  #labs(color="Time Waiting", size = 5)+
+  #ggtitle("Number of People in Waiting Time Range")
+  
+  }
