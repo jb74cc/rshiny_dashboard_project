@@ -29,7 +29,7 @@ ui <- fluidPage(
                   tabPanel("Bed Occupancy", 
                            fluidRow(
                              column(1),
-                             column(4,
+                             column(3,
                                     
                                     # drop down select dates
                                     selectInput("select_start", label = h4("Select start date"), 
@@ -45,7 +45,7 @@ ui <- fluidPage(
                                                        selected = c("NHS Highland", "NHS Lothian"))),
                              #selected = sort(unique(beds_by_hb_trim$hb_name)))),
                              
-                             column(7, 
+                             column(8, 
                                     br(), 
                                     br(),
                                     plotlyOutput("plot"),
@@ -151,7 +151,7 @@ ui <- fluidPage(
                   tabPanel("A&E",
                            fluidRow(
                              column(1),
-                             column(4,
+                             column(3,
                                     
                                     # drop down select dates
                                     selectInput("select_start_ae", label = h4("Select start date"),
@@ -161,7 +161,7 @@ ui <- fluidPage(
                                                 choices = sort(unique(waiting_time_all_range$year_quarter)), 
                                                 selected = max(waiting_time_all_range$year_quarter)),
                              ),
-                             column(7,
+                             column(8,
                                     br(), 
                                     br(),
                                     plotOutput("waiting_plot"),
