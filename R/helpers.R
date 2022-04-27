@@ -17,12 +17,13 @@ bed_plot_function <- function(beds_by_hb_trim) {
              geom_line() +
              geom_point(size = 0.75) +
              theme_bw() +
-             labs(title = "% Bed Occupancy by Health Board, Scotland, Q3|2016 - Q3|2021",
+             labs(title = "Health Board % Bed Occupancy, Q3|2016 - Q3|2021",
                   x = "\nQuarter",
                   y = "% Bed Occupancy") +
              #scale_color_discrete(name = NULL) +
              scale_color_manual(values = nhs_colours_2) +
-             theme(legend.title = element_blank(), 
+             theme(legend.title = element_blank(),
+                   plot.title.position = "left",
                    axis.text.x = element_text(angle = 270, vjust = 0.25),
                    title = element_text(face = "bold")),
            tooltip = "text") %>%  
