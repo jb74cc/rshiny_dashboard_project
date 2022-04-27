@@ -1,10 +1,10 @@
-# function to produce the location map
-map_function <- function(locations = hb_locations) {
-  leaflet(locations) %>% 
-    addProviderTiles(providers$CartoDB.Positron) %>% 
-    addTiles(providers$CartoDB.Positron) %>% 
-    addCircleMarkers(lat = ~latitude, lng = ~longitude, popup = ~paste(health_board))
-}
+# # function to produce the location map
+# map_function <- function(locations = hb_locations) {
+#   leaflet(locations) %>% 
+#     addProviderTiles(providers$CartoDB.Positron) %>% 
+#     addTiles(providers$CartoDB.Positron) %>% 
+#     addCircleMarkers(lat = ~latitude, lng = ~longitude, popup = ~paste(health_board))
+# }
 
 # function to produce plot on first tab
 bed_plot_function <- function(beds_by_hb_trim) {
@@ -39,8 +39,10 @@ new_map_function <- function(locations = HBName) {
     addProviderTiles(providers$CartoDB.Positron) %>% 
     addTiles(providers$CartoDB.Positron) %>%
     addPolygons(
-      fillColor = ~colorQuantile(nhs_colours, sco_hb_simplified$Shape_Area)(Shape_Area),
+      color = ~nhs_colours(HBName),
+      #fillColor = ~colorQuantile(nhs_colours, sco_hb_simplified$Shape_Area)(Shape_Area),
       fillOpacity = 0.6,
-      weight = 1
+      weight = 1, 
+      popup = ~HBName
     )
 }

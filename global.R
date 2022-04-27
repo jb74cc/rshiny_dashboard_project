@@ -16,8 +16,10 @@ hb_locations <- read_csv(here('raw_data/health_board_geo.csv'))
 
 #sco_hb <- st_read('SG_NHS_HealthBoards_2019/SG_NHS_HealthBoards_2019.shp', "SG_NHS_HealthBoards_2019")
 
+# data for map
 sco_hb <- st_read('raw_data/SG_NHS_HealthBoards_2019/SG_NHS_HealthBoards_2019.shp', "SG_NHS_HealthBoards_2019")
 
+# simplify polygons on map
 sco_hb_simplified <-  st_simplify(sco_hb, preserveTopology = TRUE,
                                   dTolerance = 1000)
 
