@@ -14,6 +14,9 @@ beds_by_hb_trim <- read_csv(here('clean_data/bed_occupancy_by_health_board_clean
 
 hb_locations <- read_csv(here('raw_data/health_board_geo.csv'))
 
+waiting_time_all_range <- read_csv(here('clean_data/waiting_time_all_range.csv'))
+
+
 
 # data for demographics (age, sex, simd)
 # * Total stays from 2016 - 2021

@@ -112,3 +112,17 @@ new_map_function <- function(locations = HBName) {
       popup = ~HBName
     )
 }
+
+waiting_time_function <- function(waiting_time_all_range) {
+  
+waiting_time_all_range %>% 
+  group_by(year_quarter) %>% 
+  ggplot()+
+  aes(x = year_quarter, y = log10(total_attendances), group = time_waiting, colour = time_waiting)+
+  geom_point()+
+  geom_line()+
+  xlab("Year(Quarter)")+ylab("Number of Attendances (log 10)")+
+  theme(axis.text.x = element_text(angle = 90, size = 5, vjust = 0.5, hjust=1))+
+  labs(color="Time Waiting", size = 5)+
+  ggtitle("Number of People in Waiting Time Range")
+}

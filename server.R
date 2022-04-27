@@ -59,6 +59,10 @@ server <- function(input, output, session) {
     simd_function_all_times(filter_all_time_simd())
   })  
   
+  # Generate a plot of a&e waiting time function
+  output$waiting_plot <- renderPlotly({
+    waiting_time_function(waiting_time_all_range())
+  })  
   
   
   
