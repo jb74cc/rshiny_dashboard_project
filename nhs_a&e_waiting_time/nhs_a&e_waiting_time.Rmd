@@ -192,22 +192,23 @@ write_csv(waiting_time_all_range, file = here::here("data/waiting_time_all_range
   
 ```
 _Insights_
-<<<<<<< Updated upstream
-=======
-4hrs 6837978
-8hrs 126149	
-12 hrs 30660
+
+The total number of attendances of each quarter from 2016Q3 to 2022Q1 of different waiting time range:
+4_hrs: 6837978, average 297303
+8_hrs: 126149, average 5484
+12_hrs: 30660, average 1333
+It shows that for the 8_hrs and 12_hrs waiting time, peaks existed sharply from Q4 to Q1 before Covid(2019Q3). However, a massive downturn was record in 2020Q2, which may resulted in the measurement of lock-down. After the Covid, there was another peak exitsed
 ```{r}
 
 waiting_time_all_range %>% 
-  filter(time_waiting == "12hrs") %>% 
-  summarise(sum(total_attendances))
+  filter(time_waiting == "8hrs") %>% 
+  summarise(mean(total_attendances))
 
 
 
 ```
 
->>>>>>> Stashed changes
+
 
 
 __ready to go__
@@ -229,7 +230,9 @@ ae_waiting_time_clean_long_p %>%
 
 
 ```
+__Insight__
 
+The graph shows that the number of A&E attendances before Covid and during the breakout of Covid did not have big differences. However, there were two minor downturns at the period of 2020Q2(230K) and 2021Q1(224K), while at 2022Q1(224K) a siginificant drop was recorded
 
 __Statistics__
 
@@ -345,4 +348,4 @@ The datasets in this report is the open data authorized by NHS Scotland and is u
 
 The datasets recorded and collected the information of every episodes accessing the hospital services from the year of 2007 to 2022, which may not consent by patients. The data is anonymous. It contains without sensitive personal details such as address, occupancy and the reasons for accessing hospital services. However, there is a concern that the third party accessing the data for business usage. 
 
-The data may have bias since it is not standardized some health board are not able to provide a full record of episodes due to the limitation of resources, which may cause difference to the result.
+The data may have bias since it is not standardized. Some health board are not able to provide a full record of episodes due to the limitation of resources, which may cause difference to the result.
