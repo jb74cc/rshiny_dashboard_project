@@ -192,6 +192,22 @@ write_csv(waiting_time_all_range, file = here::here("data/waiting_time_all_range
   
 ```
 _Insights_
+<<<<<<< Updated upstream
+=======
+4hrs 6837978
+8hrs 126149	
+12 hrs 30660
+```{r}
+
+waiting_time_all_range %>% 
+  filter(time_waiting == "12hrs") %>% 
+  summarise(sum(total_attendances))
+
+
+
+```
+
+>>>>>>> Stashed changes
 
 
 __ready to go__
