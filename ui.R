@@ -70,7 +70,7 @@ ui <- fluidPage(
 
                   
         # Deprivation Tab -----------------
-        tabPanel("Demographics", 
+        tabPanel("Deprivation", 
                  fluidRow(
                  column(1),
                  column(4,
@@ -103,21 +103,21 @@ ui <- fluidPage(
                            
                     ))),
                   
-                  # Map Tab ----------------- 
-                  tabPanel("Map", 
-                           column(1),
-                           column(8,
-                                  leafletOutput("new_map_function"),
-                                  br(),
-                                  p("NHS Scotland Healthboard Map", style = "color:white"))),
+          # Map Tab ----------------- 
+          tabPanel("Map", 
+                   column(1),
+                   column(8,
+                   leafletOutput("new_map_function"),
+                   br(),
+                   p("NHS Scotland Healthboard Map", style = "color:white"))),
                   
-                  # Map Tab ----------------- 
-                  tabPanel("Resources", p("Data sourced from PHS Open Data Platform.
-                                          Contains public sector information licensed under 
-                                          the Open Government Licence v3.0.", style = "color:white"))
+                  # Map Text ----------------- 
+                  tabPanel("Resources", 
+                           p("Data sourced from PHS Open Data Platform.
+                              Contains public sector information licensed under 
+                              the Open Government Licence v3.0.", style = "color:white"))
                   
       )
     )
   )
-  
 )
