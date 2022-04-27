@@ -17,7 +17,7 @@ bed_plot_function <- function(beds_by_hb_trim) {
              geom_line() +
              geom_point(size = 0.75) +
              theme_bw() +
-             labs(title = "Health Board % Bed Occupancy, Q3|2016 - Q3|2021",
+             labs(title = "Health Board % Bed Occupancy, 2016 - 2021",
                   x = "\nQuarter",
                   y = "% Bed Occupancy") +
              #scale_color_discrete(name = NULL) +
