@@ -117,11 +117,11 @@ ui <- fluidPage(
                    column(8,
                    leafletOutput("new_map_function"),
                    br(),
-                   p("NHS Scotland Healthboard Map", style = "color:white"))),
+                   h4("NHS Scotland Healthboard Map", style = "color:white"))),
                   
           # Resources Tab ----------------- 
           tabPanel("Resources", 
-                   p("Data sourced from PHS Open Data Platform.
+                   h4("Data sourced from PHS Open Data Platform.
                       Contains public sector information licensed under 
                       the Open Government Licence v3.0.", style = "color:white"))
                   
