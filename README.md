@@ -12,6 +12,7 @@ Colin Scotland, Mahri Stewart, Kahlen Cheung, Jerry Balloch
 ### Roles & responsibilities of each member
 
 *Colin*
+<br>
 Colin worked on viewing the percentage of beds occupied by acute care patients
 across the 14 Health Boards in Scotland both before and during COVID times. 
 Statistical analysis of this data was also calculated.He also drew up a 
@@ -20,6 +21,7 @@ dashboard wireframe and worked on creating the dashboard itself.
 <br>
 
 *Mahri*
+<br>
 Mahri worked on demographic data both before and during COVID times. Whilst 
 considering Scotland as a whole, the differences in total monthly/ quarterly 
 admissions/ stays for acute care patients was observed between:
@@ -27,26 +29,30 @@ admissions/ stays for acute care patients was observed between:
 * sex (Male/Female)
 * and SIMD quintlies (Scottish Index of Multiple Deprivation quintiles: 
 1(Most Deprived) - 5(Least Deprived)). 
+<br>
 Statistical analysis of SIMD quintiles was also calculated. 
 Creating and updating a Trello project board with to-do tasks and scheduled 
 meetings, and working on the README file. 
-
+<br>
 
 *Kahlen*
+<br>
 Kahlen worked A&E admissions both before and during COVID times across Scotland
 as a whole. She also considered the differences in waiting times (up to 4 hours, 
 4-8 hours, and 8+ hours) in A&E across Scotland and this the same time frame.
 Statistical analysis of this data was also calculated.
-
+<br>
 
 *Jerry*
+<br>
 Jerry worked on the dashboard skeleton, appearance, and input of relevant data
 and widgets. Creating a colour palette from the PHS logo helped in keeping the
 overall aesthetics of individual visualisations uniform. And geographical 
 information was shown on maps created with... 
-
+<br>
 
 *Everyone*
+<br>
 Everyone worked together with regards to coming up with a direction for this 
 project. Though we had our individual roles, we regularly presented what we had 
 each achieved and our next steps were decided upon in group discussions. 
