@@ -39,6 +39,7 @@ sco_hb <- st_read('raw_data/SG_NHS_HealthBoards_2019/SG_NHS_HealthBoards_2019.sh
 sco_hb_simplified <-  st_simplify(sco_hb, preserveTopology = TRUE,
                                   dTolerance = 1000)
 
+
 # colour palette by Health Board
 nhs_colours <-  c("Ayrshire and Arran" = "#45214A", 
                   "Borders" = "#323050", 
