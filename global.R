@@ -14,6 +14,9 @@ beds_by_hb_trim <- read_csv(here('clean_data/bed_occupancy_by_health_board_clean
 
 hb_locations <- read_csv(here('raw_data/health_board_geo.csv'))
 
+waiting_time_all_range <- read_csv(here('clean_data/waiting_time_all_range.csv'))
+
+
 
 # data for demographics (age, sex, simd)
 # * Total stays from 2016 - 2021
@@ -35,6 +38,11 @@ sco_hb <- st_read('raw_data/SG_NHS_HealthBoards_2019/SG_NHS_HealthBoards_2019.sh
 # simplify polygons on map
 sco_hb_simplified <-  st_simplify(sco_hb, preserveTopology = TRUE,
                                   dTolerance = 1000)
+# read in total covid cases data
+total_covid <- read_csv(here('clean_data/total_covid_cases.csv'))
+
+# join total covid cases to sco_hb_simplified 
+sco_hb_simplified <- left_join(sco_hb_simplified, total_covid, by = c("HBCode" = "HB"))
 
 # colour palette by Health Board
 nhs_colours <-  c("Ayrshire and Arran" = "#45214A", 
