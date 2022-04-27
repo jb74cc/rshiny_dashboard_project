@@ -14,13 +14,53 @@ server <- function(input, output, session) {
   })
   
   
+  filter_all_time_age <- reactive({
+    acute_activity_agesex %>% 
+      filter(quarter >= input$select_start_age) %>% 
+      filter(quarter <= input$select_end_age)
+    })
+  
+  
+  filter_all_time_sex <- reactive({
+    acute_activity_agesex %>% 
+      filter(quarter >= input$select_start_sex) %>% 
+      filter(quarter <= input$select_end_sex)
+  })
+  
+  
+  
+  filter_all_time_simd <- reactive({
+    acute_activity_simd %>% 
+      filter(quarter >= input$select_start_simd) %>% 
+      filter(quarter <= input$select_end_simd)
+  })
+  
+  
   
   # Generate a plot of the bed occupancy data ----
   output$plot <- renderPlotly({
     bed_plot_function(filtered_hb())
     
-    
   })
+  
+  
+  # Generate a plot of all times data for age
+  output$plot1 <- renderPlotly({
+    age_function_all_times(filter_all_time_age())
+  })
+ 
+   # Generate a plot of all times data for sex
+  output$plot2 <- renderPlotly({
+    sex_function_all_times(filter_all_time_sex())
+  })
+  
+  # Generate a plot of all times data for simd
+  output$plot3 <- renderPlotly({
+    simd_function_all_times(filter_all_time_simd())
+  })  
+  
+  
+  
   
   # Generate a summary of the data ----
   output$summary <- renderPrint({

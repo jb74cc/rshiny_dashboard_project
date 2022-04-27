@@ -18,6 +18,7 @@ hb_locations <- read_csv(here('raw_data/health_board_geo.csv'))
 # data for demographics (age, sex, simd)
 # * Total stays from 2016 - 2021
 acute_activity_agesex <- read_csv(here("clean_data/acute_activity_by_board_of_treatment_age_sex_clean.csv"))
+
 acute_activity_simd <- 
   read_csv(here("clean_data/acute_activity_by_board_of_treatment_simd_clean.csv"))
 # * Total admissions during covid months
