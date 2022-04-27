@@ -14,33 +14,28 @@ Colin Scotland, Mahri Stewart, Kahlen Cheung, Jerry Balloch
 *Colin*
 Colin worked on viewing the percentage of beds occupied by acute care patients
 across the 14 Health Boards in Scotland both before and during COVID times. 
-Statistical analysis of this data was also calculated.
-
-He also drew up a dashboard wireframe and worked on creating the dashboard 
-itself. 
-
+Statistical analysis of this data was also calculated.He also drew up a 
+dashboard wireframe and worked on creating the dashboard itself. 
 *Colin was a great "rubber duck" for the whole group.*
-
+<br>
 
 *Mahri*
 Mahri worked on demographic data both before and during COVID times. Whilst 
-considering Scotland as a whole, the differences in total monthly and quarterly 
+considering Scotland as a whole, the differences in total monthly/ quarterly 
 admissions/ stays for acute care patients was observed between:
 * age groups
 * sex (Male/Female)
 * and SIMD quintlies (Scottish Index of Multiple Deprivation quintiles: 
 1(Most Deprived) - 5(Least Deprived)). 
-
 Statistical analysis of SIMD quintiles was also calculated. 
-
-Creating and updating a Trello project with "to-do" tasks and scheduled meetings
-and working on the README file and presentation. 
+Creating and updating a Trello project board with to-do tasks and scheduled 
+meetings, and working on the README file. 
 
 
 *Kahlen*
 Kahlen worked A&E admissions both before and during COVID times across Scotland
 as a whole. She also considered the differences in waiting times (up to 4 hours, 
-4 - 8 hours, and 8+ hours) in A&E across Scotland and this the same time frame.
+4-8 hours, and 8+ hours) in A&E across Scotland and this the same time frame.
 Statistical analysis of this data was also calculated.
 
 
@@ -56,7 +51,9 @@ Everyone worked together with regards to coming up with a direction for this
 project. Though we had our individual roles, we regularly presented what we had 
 each achieved and our next steps were decided upon in group discussions. 
 Combining the individual analyses into the dashboard so that it had a uniform 
-aesthetic and an outline for our presentation was also decided upon as a group. 
+aesthetic and an outline for our presentation was also decided upon as a group.
+Group meetings were attended by all and Trello was updated regularly with how
+everyone was getting on/ our to do list.
 
 ___ 
 
@@ -92,7 +89,6 @@ investigation
 * Rstudio - cleaning and analysis of data
 * Excalidraw - creating and editing dashboard wirefame
 
-
 ### How did you gather and synthesise requirements for the project?
 
 We synthesised the information given in the brief by …
@@ -105,7 +101,8 @@ We used the dataset on … to answer … and because it was …
 
 ### Data quality and potential bias, including a brief summary of data cleaning and transformations
 
-According to the About tab on the dataset page/dedicated page online, the data quality …
+According to the About tab on the dataset page/dedicated page online, the data 
+quality …
 
 The dataset may/may not be biased because …
 
@@ -123,7 +120,8 @@ Benefits of storing the data like this are …
 
 ### Ethical and legal considerations of the data
 
-[Hint: this page contains information on the Open Government License which covers most datasets on statistics.gov.scot: http://www.nationalarchives.gov.uk/doc/open-government-licence/version/3/]
+[Hint: this page contains information on the Open Government License which 
+covers most datasets on statistics.gov.scot: http://www.nationalarchives.gov.uk/doc/open-government-licence/version/3/]
 
 There are no/There may be ethical considerations, because …
 
