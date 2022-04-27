@@ -111,11 +111,11 @@ ui <- fluidPage(
                    br(),
                    p("NHS Scotland Healthboard Map", style = "color:white"))),
                   
-                  # Map Text ----------------- 
-                  tabPanel("Resources", 
-                           p("Data sourced from PHS Open Data Platform.
-                              Contains public sector information licensed under 
-                              the Open Government Licence v3.0.", style = "color:white"))
+          # Resources Tab ----------------- 
+          tabPanel("Resources", 
+                   p("Data sourced from PHS Open Data Platform.
+                      Contains public sector information licensed under 
+                      the Open Government Licence v3.0.", style = "color:white"))
                   
       )
     )
