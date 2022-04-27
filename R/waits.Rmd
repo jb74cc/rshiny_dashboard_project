@@ -1,0 +1,91 @@
+---
+title: "AE Waiting Times Analysis"
+output: html_notebook
+---
+
+
+```{r}
+library(tidyverse)
+library(janitor)
+library(here)
+
+
+
+here::here()
+```
+
+```{r}
+waits <- read_csv(here("raw_data/ae_activity_waiting_times_apr2022-data.csv")) %>% 
+  clean_names()
+```
+
+```{r}
+waits <- waits %>% 
+  separate(data_month_date, c("month", "year"), sep = "-") 
+
+waits <- waits %>% 
+  select(month, year, hb_treatment_description, ed_miu, number_of_attendances_agg) %>% 
+  mutate(year = as.integer(year),
+         year = year + 2000) %>% 
+  filter(ed_miu == "ED") %>% 
+  filter(year >= 2016) %>% 
+  filter(!(year == 2016 & month %in% c("Jan", "Feb", "Mar", "Apr", "May", "Jun")))
+```
+
+
+```{r}
+waits <- waits %>% 
+  mutate(quarter = if_else(month == "Jan" | month == "Feb" | month == "Mar", 1, 
+                           if_else(month == "Apr" | month == "May" | month == "Jun", 2,
+                           if_else(month == "Jul" | month == "Aug" | month == "Sep", 3,
+                           4))), .before = "year")
+```
+
+
+```{r}
+waits <- waits %>% 
+  mutate(quarter = paste0("Q", quarter)) %>% 
+  relocate(quarter, .after = "year") %>% 
+  unite("quarter", year:quarter, sep = "")
+```
+
+```{r}
+waits %>% 
+  group_by(quarter) %>% 
+  summarise(total_attendances = sum(number_of_attendances_agg)) %>% 
+  ggplot() +
+  aes(x = quarter, y = total_attendances) +
+  geom_line(colour = "#433685", group = 1) +
+  geom_point(colour = "#433685", size = 1) +
+  theme_bw() +
+  labs(title = "Hospital Emergency Admissions Scotland, Q3|2016 - Q1|2022",
+       x = "\nQuarter",
+       y = "Total Emergency Admissions Count") +
+  theme(axis.text.x = element_text(angle = 270, vjust = 0.25),
+        title = element_text(face = "bold"))
+```
+
+
+Splitting the above out by area means the legend takes up too much space!!  Need
+to separate by health board regions instead.
+```{r}
+waits %>% 
+  group_by(quarter, hb_treatment_description) %>% 
+  summarise(total_attendances = sum(number_of_attendances_agg)) %>% 
+  ggplot() +
+  aes(x = quarter, y = total_attendances, 
+      colour = hb_treatment_description, group = hb_treatment_description) +
+  geom_line() +
+  geom_point() +
+  theme_bw() +
+  labs(title = "Hospital Emergency Admissions Scotland, Q3|2016 - Q1|2022",
+       x = "\nQuarter",
+       y = "Total Emergency Admissions Count") +
+  theme(axis.text.x = element_text(angle = 270, vjust = 0.25),
+        title = element_text(face = "bold"),
+        legend.title = element_blank(),
+        legend.position = "top",
+        legend.direction = "horizontal") +
+  guides(fill = guide_legend(nrow = 4, byrow = TRUE))
+```
+
