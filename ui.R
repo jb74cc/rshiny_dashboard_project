@@ -183,9 +183,9 @@ ui <- fluidPage(
   
   # Resources Tab ----------------- 
   tabPanel("Resources", 
-           h3("Data sourced from PHS Open Data Platform.
-                      Contains public sector information licensed under 
-                      the Open Government Licence v3.0.", style = "color:white"),
+           h3("Data sourced from PHS Open Data Platform.", style = "color:white"),
+           h3("Contains public sector information licensed under the Open 
+              Government Licence v3.0.", style = "color:white"),
            HTML("<br>", "<br>"),
            tags$h4("Data Sets Used", style = "color:white"),
            HTML("<br>"),
