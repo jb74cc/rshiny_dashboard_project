@@ -113,6 +113,8 @@ new_map_function <- function(locations = HBName) {
     )
 }
 
+# function to produce waiting time plot
+
 waiting_time_function <- function(waiting_time_all_range) {
   
 waiting_time_all_range %>% 

@@ -36,6 +36,12 @@ server <- function(input, output, session) {
   })
   
   
+  filter_waiting_time_all_range <- reactive({
+    waiting_time_all_range %>% 
+      filter(year_quarter >= input$select_start_ae) %>% 
+      filter(year_quarter <= input$select_end_ae)
+  })
+  
   
   # Generate a plot of the bed occupancy data ----
   output$plot <- renderPlotly({
@@ -60,8 +66,8 @@ server <- function(input, output, session) {
   })  
   
   # Generate a plot of a&e waiting time function
-  output$waiting_plot <- renderPlotly({
-    waiting_time_function(waiting_time_all_range())
+  output$waiting_plot <- renderPlot({
+    waiting_time_function(filter_waiting_time_all_range())
   })  
   
   

@@ -77,14 +77,14 @@ ui <- fluidPage(
                                                 selected = max(acute_activity_agesex$quarter)),
                                     
                              ),
-                           column(8, 
-                                  br(), 
-                                  br(),
-                                  plotlyOutput("plot1"),
-                                  h3("Text", 
-                                     style = "color:white"),
-                                  h4("Text",
-                                     style = "color:white")))),
+                             column(8, 
+                                    br(), 
+                                    br(),
+                                    plotlyOutput("plot1"),
+                                    h3("Text", 
+                                       style = "color:white"),
+                                    h4("Text",
+                                       style = "color:white")))),
                   
                   
                   # Sex Demographics Tab -----------------
@@ -113,71 +113,78 @@ ui <- fluidPage(
                                        style = "color:white"),
                                     h4("Text",
                                        style = "color:white")))),
-    
-    
-    
-    # Deprivation Tab -----------------
-    tabPanel("Deprivation", 
-             fluidRow(
-               column(1),
-               column(3,
-                      
-                      # drop down select dates
-                      selectInput("select_start_simd", 
-                                  label = h4("Select start date"), 
-                                  choices = sort(unique(acute_activity_simd$quarter)), 
-                                  selected = min(acute_activity_simd$quarter)),
-                      
-                      selectInput("select_end_simd", 
-                                  label = h4("Select end date"), 
-                                  choices = sort(unique(acute_activity_simd$quarter)), 
-                                  selected = max(acute_activity_simd$quarter)),
-                      
-               ),
-               column(8, 
-                      br(), 
-                      br(),
-                      plotlyOutput("plot3"),
-                      h3("Text", 
-                         style = "color:white"),
-                      h4("Text",
-                         style = "color:white")))),
-
-
-
-
-
-# A&E Tab -----------------            
-tabPanel("A&E",
-         fluidRow(
+                  
+                  
+                  
+                  # Deprivation Tab -----------------
+                  tabPanel("Deprivation", 
+                           fluidRow(
+                             column(1),
+                             column(3,
+                                    
+                                    # drop down select dates
+                                    selectInput("select_start_simd", 
+                                                label = h4("Select start date"), 
+                                                choices = sort(unique(acute_activity_simd$quarter)), 
+                                                selected = min(acute_activity_simd$quarter)),
+                                    
+                                    selectInput("select_end_simd", 
+                                                label = h4("Select end date"), 
+                                                choices = sort(unique(acute_activity_simd$quarter)), 
+                                                selected = max(acute_activity_simd$quarter)),
+                                    
+                             ),
+                             column(8, 
+                                    br(), 
+                                    br(),
+                                    plotlyOutput("plot3"),
+                                    h3("Text", 
+                                       style = "color:white"),
+                                    h4("Text",
+                                       style = "color:white")))),
+                  
+                  
+                  
+                  
+                  
+                  # A&E Tab -----------------            
+                  tabPanel("A&E",
+                           fluidRow(
+                             column(1),
+                             column(4,
+                                    
+                                    # drop down select dates
+                                    selectInput("select_start_ae", label = h4("Select start date"),
+                                                choices = sort(unique(waiting_time_all_range$year_quarter)), 
+                                                selected = min(waiting_time_all_range$year_quarter)),
+                                    selectInput("select_end_ae", label = h4("Select end date"), 
+                                                choices = sort(unique(waiting_time_all_range$year_quarter)), 
+                                                selected = max(waiting_time_all_range$year_quarter)),
+                             ),
+                             column(7,
+                                    br(), 
+                                    br(),
+                                    plotOutput("waiting_plot"),
+                                    h3("Text", 
+                                       style = "color:white"),
+                                    h4("Text",
+                                       style = "color:white")))),
+                  
+  
+  # Map Tab ----------------- 
+  tabPanel("Map", 
            column(1),
-           column(4,
-                  
-                  # drop down select dates
-                  selectInput("select_start", label = h4("Select start date"), 
-                              choices = sort(unique(beds_by_hb_trim$quarter)), 
-                              selected = min(beds_by_hb_trim$quarter)),
-                  
-                  selectInput("select_end", label = h4("Select end date"), 
-                              choices = sort(unique(beds_by_hb_trim$quarter)), 
-                              selected = max(beds_by_hb_trim$quarter)),
-                  
-           ))),
-
-# Map Tab ----------------- 
-tabPanel("Map", 
-         column(1),
-         column(8,
-                leafletOutput("new_map_function"),
-                br(),
-                p("NHS Scotland Healthboard Map", style = "color:white"))),
-
-# Resources Tab ----------------- 
-tabPanel("Resources", 
-         p("Data sourced from PHS Open Data Platform.
+           column(8,
+                  leafletOutput("new_map_function"),
+                  br(),
+                  p("NHS Scotland Healthboard Map", style = "color:white"))),
+  
+  # Resources Tab ----------------- 
+  tabPanel("Resources", 
+           p("Data sourced from PHS Open Data Platform.
                       Contains public sector information licensed under 
                       the Open Government Licence v3.0.", style = "color:white"))
-
+  
 )
 )
 )
