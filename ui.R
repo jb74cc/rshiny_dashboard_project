@@ -177,7 +177,9 @@ ui <- fluidPage(
            column(8,
                   leafletOutput("new_map_function"),
                   br(),
-                  p("NHS Scotland Healthboard Map", style = "color:white"))),
+                  h3("NHS Scotland Healthboard Map", style = "color:white"),
+                  h4("Please click on a Health Board region on the map above to find 
+                     out the total number of Covid 19 cases to date.", style = "color:white"))),
   
   # Resources Tab ----------------- 
   tabPanel("Resources", 
