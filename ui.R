@@ -197,9 +197,10 @@ ui <- fluidPage(
                                     br(), 
                                     br(),
                                     plotlyOutput("waiting_plot"),
-                                    h3("Text", 
+                                    h3("A review on the A&E Attendances", 
                                        style = "color:white"),
-                                    h4("Text",
+                                    h4("Peaks existed at Q1 and Q4. A massive downturn was recorded in 2020Q2, which may resulted from the measurement of lock-down.", style = "color:white"),
+                                h4("A right-sided statistics hypothesis tested on the difference of mean between number of attendance post-Covid and pre-Covid. The assumption of both means equal to each other is rejected (pv. 0.013). It is confirmed that the mean attendances of post-COVID is greater than the mean attendances of pre-COVID.",
                                        style = "color:white")))),
                   
   
