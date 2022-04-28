@@ -184,20 +184,9 @@ ui <- fluidPage(
                                     plotlyOutput("plot3"),
                                     h3("Is there a difference in number of 
                                        emergency inpatient 
-                         stays between SIMD levels across Scotland?", 
+                         stays between SIMD (Scottish Index of Multiple Deprivation) levels across Scotland?", 
                          style = "color:white"),
-                         h4("The SIMD (Scottish Index of Multiple Deprivation) 
-                            is a quintile scale:", 
-                            style = "color:white"),
-                         h5("1 = \'Most Deprived\', 5 = \'Least Deprived\'", 
-                            style = "color:white"),
-                         p("It uses a wide range of information for small areas 
-                           (~7000 data zones) to identify concentrations of 
-                           multiple deprivation across Scotland. Further 
-                           information can be found here:", 
-                           style = "color:white"), 
-                         tags$a("www.gov.scot", href = "https://www.gov.scot/collections/scottish-index-of-multiple-deprivation-2020/", 
-                                style = "color:white"),
+                         
                          h4("Several independent samples (one tailed) hypothesis 
                             tests were carried out for both pre-COVID and during 
                             COVID times considering the mean stays of:",
@@ -260,6 +249,19 @@ ui <- fluidPage(
            h3("Data sourced from PHS Open Data Platform.", style = "color:white"),
            h3("Contains public sector information licensed under the Open 
               Government Licence v3.0.", style = "color:white"),
+           HTML("<br>", "<br>"),
+           h4("The SIMD (Scottish Index of Multiple Deprivation) 
+                            is a quintile scale:", 
+              style = "color:white"),
+           h5("1 = \'Most Deprived\', 5 = \'Least Deprived\'", 
+              style = "color:white"),
+           p("It uses a wide range of information for small areas 
+                           (~7000 data zones) to identify concentrations of 
+                           multiple deprivation across Scotland. Further 
+                           information can be found here:", 
+             style = "color:white"), 
+           tags$a("www.gov.scot", href = "https://www.gov.scot/collections/scottish-index-of-multiple-deprivation-2020/", 
+                  style = "color:white"),
            HTML("<br>", "<br>"),
            tags$h4("Data Sets Used", style = "color:white"),
            HTML("<br>"),
