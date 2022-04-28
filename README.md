@@ -105,6 +105,7 @@ investigation
 * Git/GitHub - collaboration & version control
 * Rstudio - cleaning and analysis of data
 * Excalidraw - creating and editing dashboard wirefame
+* Slack for communication 
 
 ### How did you gather and synthesise requirements for the project?
 
