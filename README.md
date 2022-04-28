@@ -6,6 +6,7 @@ ___
 ## Project Description Outline
 
 ### Group Members:
+
 Colin Scotland, Mahri Stewart, Kahlen Cheung, Jerry Balloch
 
 
@@ -15,9 +16,9 @@ Colin Scotland, Mahri Stewart, Kahlen Cheung, Jerry Balloch
 <br>
 Colin worked on viewing the percentage of beds occupied by acute care patients
 across the 14 Health Boards in Scotland both before and during COVID times. 
-Statistical analysis of this data was also calculated.He also drew up a 
-dashboard wireframe and worked on creating the dashboard itself. 
-*Colin was a great "rubber duck" for the whole group.*
+Statistical analysis of this data was also calculated. He also drew up a 
+dashboard wireframe, worked on creating the dashboard itself, and regularly 
+updated Trello. 
 <br>
 
 *Mahri*
@@ -30,17 +31,19 @@ admissions/ stays for acute care patients was observed between:
 * and SIMD quintlies (Scottish Index of Multiple Deprivation quintiles: 
 1(Most Deprived) - 5(Least Deprived)). 
 <br>
-Statistical analysis of SIMD quintiles was also calculated. 
+Statistical analysis of the three were also calculated for both pre-COVID and 
+during COVID times. 
+<br>
 Creating and updating a Trello project board with to-do tasks and scheduled 
-meetings, and working on the README file. 
+meetings, and working on the presentation and README file. 
 <br>
 
 *Kahlen*
 <br>
-Kahlen worked A&E admissions both before and during COVID times across Scotland
-as a whole. She also considered the differences in waiting times (up to 4 hours, 
-4-8 hours, and 8+ hours) in A&E across Scotland and this the same time frame.
-Statistical analysis of this data was also calculated.
+Kahlen worked on A&E admissions both before and during COVID times across 
+Scotland as a whole. She also considered the differences in waiting times (4 
+hours, 8 hours, and 8+ hours) in A&E across Scotland and this the same time 
+frame. Statistical analysis of this data was also calculated.
 <br>
 
 *Jerry*
@@ -48,7 +51,7 @@ Statistical analysis of this data was also calculated.
 Jerry worked on the dashboard skeleton, appearance, and input of relevant data
 and widgets. Creating a colour palette from the PHS logo helped in keeping the
 overall aesthetics of individual visualisations uniform. And geographical 
-information was shown on maps created with... 
+information for total COVID cases was shown on maps created with... 
 <br>
 
 *Everyone*
@@ -65,11 +68,19 @@ ___
 
 ### Brief description of dashboard topic
 
-Our dashboard contains …
+We were interested in considering whether there is a "Winter Crisis" as 
+portrayed by the media by comparing data from before the pandemic (2016-2019) 
+with the data for COVID times (2020 to 2021).
 
-Our topic is …
+<br>
 
-The dashboard outlines our topic in terms of …
+Our dashboard contains information on bed occupancy across Scottish Health 
+Boards, demographics (age, sex, and deprivation scores), and A&E admissions and 
+waiting times from Summer 2016 to Summer 2021. As a user, you are able to change
+the dates (yearly quarters) so as to zoom in on a time period of your choice.
+A map of Scotland's Health Boards is also available with a note of the total 
+COVID cases to date for each.
+<br>
 
 ### Stages of the project
 
@@ -97,20 +108,39 @@ investigation
 
 ### How did you gather and synthesise requirements for the project?
 
-We synthesised the information given in the brief by …
+Investigation of open data provided by Public Health Scotland was undertaken by
+each group member individually with the project questions in mind. 
+Group discussions were had with regards to which data sets could be condsidered
+and after cleaning and analysis, the project was brought together with clean 
+data that provided a story to answer our question. 
+<br>
+We prioritised having a working process. Whislt data was being cleaned and 
+analysed, the dashboard skeleton was being created so that everything could be
+brought together quickly and efficiently.
 
-We prioritised …
 
 ### Motivations for using the data you have chosen
 
 We used the dataset on … to answer … and because it was …
 
-### Data quality and potential bias, including a brief summary of data cleaning and transformations
+### Data quality and potential bias, including a brief summary of data cleaning 
+### and transformations
 
-According to the About tab on the dataset page/dedicated page online, the data 
-quality …
-
-The dataset may/may not be biased because …
+According to the About tab on the dataset page/dedicated page online, the data
+hosted on the Scottish Health and Social Care Open Data platform follows the 
+open data standards set out by Public Health Scotland, ensuring consistency 
+across the platform.
+<br> (https://www.opendata.nhs.scot/about)
+<br>
+**The dataset may/may not be biased because ...**
+All NHSScotland organisations can use 
+this platform to publish and share their open datasets that meet the 
+requirements set out in the Scottish Government Open Data Strategy (2015). 
+<br>
+Further, feedback is requested from users as to which data they wish to see in 
+the future and how their experiences of using the available data, and before 
+data is released on the open data platform it is first assessed for statistical 
+disclosure.
 
 To clean the datasets we …
 
@@ -126,9 +156,15 @@ Benefits of storing the data like this are …
 
 ### Ethical and legal considerations of the data
 
-[Hint: this page contains information on the Open Government License which 
-covers most datasets on statistics.gov.scot: http://www.nationalarchives.gov.uk/doc/open-government-licence/version/3/]
+**There are no/There may be ethical considerations, because …**
+This is an open source
 
-There are no/There may be ethical considerations, because …
-
-The datasets are covered by the Open Government License, which means …
+<br>
+The datasets are covered by the Open Government License, which means you are 
+encouraged to use and adapt, combine, explore, distribute, and publish in your 
+own project the information that is available under this licence freely and 
+flexibly. You must, however, acknowledge the source of the Information in your 
+product or application by including or linking to any attribution statement 
+specified by the Information Provider(s) and, where possible, provide a link to 
+this licence: 
+https://www.nationalarchives.gov.uk/doc/open-government-licence/version/3/
