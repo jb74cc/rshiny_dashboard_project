@@ -121,7 +121,7 @@ each group member individually with the project questions in mind.
 Group discussions were had with regards to which data sets could be condsidered
 and after cleaning and analysis, the project was brought together with clean
 data that provided a story to answer our question.
-<br>.  
+<br> 
 We prioritised having a working process. Whilst data was being cleaned and
 analysed, the dashboard skeleton was being created so that everything could be
 brought together quickly and efficiently.
