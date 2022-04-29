@@ -43,8 +43,8 @@ meetings, and working on the presentation and README file.
 <br>
 Kahlen worked on A&E admissions both before and during COVID times across 
 Scotland as a whole. She also considered the differences in waiting times (4 
-hours, 8 hours, and 8+ hours) in A&E across Scotland and this the same time 
-frame. Statistical analysis of this data was also calculated.
+hours, 8+ hours, and 12+ hours) in A&E across Scotland and the same time 
+frame. Statistical analysis on the differences between the mean of total A&E admissions _before_ COVID, and the mean of total A&E admissions _after_ COVID of this data was also calculated.
 <br>
 
 *Jerry*
@@ -164,14 +164,8 @@ Benefits of storing the data like this are …
 ### Ethical and legal considerations of the data
 
 **There are no/There may be ethical considerations, because …**
-This is an open source
 
 <br>
-The datasets are covered by the Open Government License, which means you are 
-encouraged to use and adapt, combine, explore, distribute, and publish in your 
-own project the information that is available under this licence freely and 
-flexibly. You must, however, acknowledge the source of the Information in your 
-product or application by including or linking to any attribution statement 
-specified by the Information Provider(s) and, where possible, provide a link to 
+The datasets are covered by the Open Government License (provided by Public Health Scotland), which means you are encouraged to use and adapt, combine, explore, distribute, and publish in your own project the information that is available under this licence freely and flexibly. There is not any personal information and id documents included in the datasets. You must, however, acknowledge the source of the Information in your product or application by including or linking to any attribution statement specified by the Information Provider(s) and, where possible, provide a link to 
 this licence: 
 https://www.nationalarchives.gov.uk/doc/open-government-licence/version/3/
