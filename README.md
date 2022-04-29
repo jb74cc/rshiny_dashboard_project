@@ -38,7 +38,7 @@ during COVID times.
 Creating and updating a Trello project board with to-do tasks and scheduled
 meetings, and working on the presentation and README file.
 <br>
-
+     
 *Kahlen*
 <br>
 Kahlen worked on A&E admissions both before and during COVID times across 
@@ -121,8 +121,8 @@ each group member individually with the project questions in mind.
 Group discussions were had with regards to which data sets could be condsidered
 and after cleaning and analysis, the project was brought together with clean
 data that provided a story to answer our question.
-<br>
-We prioritised having a working process. Whislt data was being cleaned and
+<br>.  
+We prioritised having a working process. Whilst data was being cleaned and
 analysed, the dashboard skeleton was being created so that everything could be
 brought together quickly and efficiently.
 
@@ -144,7 +144,7 @@ open data standards set out by Public Health Scotland, ensuring consistency
 across the platform.
 <br> (https://www.opendata.nhs.scot/about)
 <br>
-All NHSScotland organisations can use
+All NHS Scotland organisations can use
 this platform to publish and share their open datasets that meet the
 requirements set out in the Scottish Government Open Data Strategy (2015).
 <br>
