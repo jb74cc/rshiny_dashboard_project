@@ -44,15 +44,21 @@ meetings, and working on the presentation and README file.
 Kahlen worked on A&E admissions both before and during COVID times across 
 Scotland as a whole. She also considered the differences in waiting times (4 
 hours, 8+ hours, and 12+ hours) in A&E across Scotland and the same time 
-frame. Statistical analysis on the differences between the mean of total A&E admissions _before_ COVID, and the mean of total A&E admissions _after_ COVID of this data was also calculated.
+frame. Statistical analysis on the differences between the mean of total A&E 
+admissions _before_ COVID, and the mean of total A&E admissions _after_ COVID of 
+this data was also calculated.
 <br>
 
 *Jerry*
 <br>
-Jerry worked on the dashboard skeleton, appearance, and input of relevant data
-and widgets. Creating a colour palette from the PHS logo helped in keeping the
-overall aesthetics of individual visualisations uniform. And geographical 
-information for total COVID cases was shown on maps created with... 
+Jerry worked on the dashboard skeleton, appearance, and input of relevant data 
+and widgets. Creating a colour palette from the PHS logo and Scotland as a whole, 
+helped in keeping the overall aesthetics of individual visualisations uniform. 
+Geographical information for total COVID cases was shown on maps created using 
+the leaflet() function in RShiny. It involved merging shapefile data, containing 
+the Polygon data of the different health board regions, with another data set 
+containing COVID case counts across each region. The data was able to be joined 
+using the health board reference id across both data sets.
 <br>
 
 *Everyone*
@@ -132,9 +138,15 @@ regardless of their total overall bed count.
 <br>
 Demographics
 <br>
-The dataset `A&E attendances and performance data` has record the waiting time of patients being discharged to the health board from the year of 2007 and 2022. It reviews the number of attendances of each separated time range: the standard 4hrs, more than 8hrs and more than 12 hrs. We are able to discover the trend and performance of A&E waiting time, which allow us to answer the question- "if winter crisis exists", by comparing the performance differences of the pre-COVID and post-COVID period.
+The dataset `A&E attendances and performance data` has recorded the waiting time 
+of patients being discharged to the health board from the year of 2007 and 2022. 
+It reviews the number of attendances of each separated time range: the standard 
+4hrs, more than 8hrs and more than 12 hrs. We are able to discover the trend and 
+performance of A&E waiting time, which allow us to answer the question- "if winter 
+crisis exists", by comparing the performance differences of the pre-COVID and 
+post-COVID period.
 
-### Data quality and potential bias, including a brief summary of data cleaning 
+## Data quality and potential bias, including a brief summary of data cleaning 
 ### and transformations
 
 According to the About tab on the dataset page/dedicated page online, the data
@@ -143,33 +155,58 @@ open data standards set out by Public Health Scotland, ensuring consistency
 across the platform.
 <br> (https://www.opendata.nhs.scot/about)
 <br>
-**The dataset may/may not be biased because ...**
-All NHSScotland organisations can use 
-this platform to publish and share their open datasets that meet the 
-requirements set out in the Scottish Government Open Data Strategy (2015). 
+The dataset may not be biased because all NHSScotland organisations can use this 
+platform to publish and share their open datasets that meet the requirements set 
+out in the Scottish Government Open Data Strategy (2015). 
 <br>
 Further, feedback is requested from users as to which data they wish to see in 
 the future and how their experiences of using the available data, and before 
 data is released on the open data platform it is first assessed for statistical 
 disclosure.
 
-To clean the datasets we …
+To clean the datasets we;
+
+* Determined as a group what questions we wanted to answer
+* Worked individually on separate datasets to remove unnecessary data and to 
+transform the remaining data into relevant, usable objects that could provide an
+insight into the questions we were asking.  Specifically;
+  
+  * Dates and timelines were adjusted between months/quarters/seasons as 
+  appropriate to facilitate comparisons between different datasets.
+  * Common variables were used to allow data to be joined (e.g. health board 
+  codes, health board names, etc) to give a better overall idea of what was
+  happening in the bigger picture.
+
+Cleaning and transformation was all
+done in RStudio, predominantly using the `tidyverse` and `janitor` packages.
 
 ### How is the data stored and structured
 
 [Hint: This page offers a good starting point for understanding the data structure: https://guides.statistics.gov.scot/article/34-understanding-the-data-structure]
 
-The data is in the form of …
+The data is in the form of cleaned .csv files saved into a `clean_data` folder
+within the Github repository.  Each data set contains a time reference of some 
+kind (month or quarter) or a reference to a health board.
 
-This means …
+This means that the data can be linked by month/quarter or by health board 
+information to allow for further analysis and interpretation.
 
-Benefits of storing the data like this are …
+Benefits of storing the data like this are;
+
+ * The data is already clean
+ * Further analysis can be performed simply by reading in the .csv
+ * By maintaining date and location data the datasets can be added to in future
+ to look for developing trends in different locations over longer periods.
 
 ### Ethical and legal considerations of the data
 
-**There are no/There may be ethical considerations, because …**
-
-<br>
-The datasets are covered by the Open Government License (provided by Public Health Scotland), which means you are encouraged to use and adapt, combine, explore, distribute, and publish in your own project the information that is available under this licence freely and flexibly. There is not any personal information and id documents included in the datasets. You must, however, acknowledge the source of the Information in your product or application by including or linking to any attribution statement specified by the Information Provider(s) and, where possible, provide a link to 
+There are no ethical concerns, because the datasets are covered by the Open 
+Government License (provided by Public Health Scotland), which means you are 
+encouraged to use and adapt, combine, explore, distribute, and publish in your 
+own project the information that is available under this licence freely and 
+flexibly. There are no personal information or identifiers included in the 
+datasets. You must, however, acknowledge the source of the Information in your 
+product or application by including or linking to any attribution statement 
+specified by the Information Provider(s) and, where possible, provide a link to 
 this licence: 
 https://www.nationalarchives.gov.uk/doc/open-government-licence/version/3/
