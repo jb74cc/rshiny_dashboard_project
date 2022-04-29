@@ -16,7 +16,8 @@ Colin Scotland, Mahri Stewart, Kahlen Cheung, Jerry Balloch
 <br>
 Colin worked on viewing the percentage of beds occupied by acute care patients
 across the 14 Health Boards in Scotland both before and during COVID times. 
-Statistical analysis of this data was also calculated. He also drew up a 
+Statistical analysis of this data was also calculated using a two independent 
+means test with permutation to generate a null distribution. He also drew up a 
 dashboard wireframe, worked on creating the dashboard itself, and regularly 
 updated Trello. 
 <br>
@@ -122,7 +123,12 @@ brought together quickly and efficiently.
 
 ### Motivations for using the data you have chosen
 
-We used the dataset on … to answer … and because it was …
+We used the dataset on bed occupancy to answer the question of how genuine
+the so-called "winter crisis" is and because it was a simple and clear metric 
+with which to compare the demand on hospital beds depending on time of year.
+The bed occupancy was also given as a *percentage* of total available beds which 
+meant that it was already normalised and comparable between different health boards
+regardless of their total overall bed count.
 
 ### Data quality and potential bias, including a brief summary of data cleaning 
 ### and transformations
