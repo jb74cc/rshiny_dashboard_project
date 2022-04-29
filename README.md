@@ -49,7 +49,7 @@ frame. Statistical analysis of this data was also calculated.
 
 *Jerry*
 <br>
-Jerry worked on the dashboard skeleton, appearance, and input of relevant data and widgets. Creating a colour palette from the PHS logo and Scotland as a whole, helped in keeping the overall aesthetics of individual visualisations uniform. Geographical information for total COVID cases was shown on maps created using the leaflet() function in RShiny. It involved merging shapefile data, containing the Polygon data of the different health board regions, with another data set containing COVID case counts across each region. The data was able to be joined using the health board reference id across both data sets. 
+Jerry worked on the dashboard skeleton, appearance, and input of relevant data and widgets. Creating a colour palette from the PHS logo and Scotland as a whole, helped in keeping the overall aesthetics of individual visualisations uniform. Geographical information for total COVID cases was shown on maps created using the leaflet() function in RShiny. It involved merging shapefile data, containing the Polygon data of the different health board regions, with another data set containing COVID case counts across each region. The data was able to be joined using the health board reference id across both data sets.
 <br>
 
 *Everyone*
@@ -127,8 +127,7 @@ The bed occupancy was also given as a *percentage* of total available beds which
 meant that it was already normalised and comparable between different health boards
 regardless of their total overall bed count.
 
-### Data quality and potential bias, including a brief summary of data cleaning
-### and transformations
+### Data quality and potential bias, including a brief summary of data cleaning and transformations
 
 According to the About tab on the dataset page/dedicated page online, the data
 hosted on the Scottish Health and Social Care Open Data platform follows the
