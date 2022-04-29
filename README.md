@@ -122,7 +122,7 @@ Group discussions were had with regards to which data sets could be condsidered
 and after cleaning and analysis, the project was brought together with clean 
 data that provided a story to answer our question. 
 <br>
-We prioritised having a working process. Whislt data was being cleaned and 
+We prioritised having a working process. Whilst data was being cleaned and 
 analysed, the dashboard skeleton was being created so that everything could be
 brought together quickly and efficiently.
 
@@ -146,8 +146,7 @@ performance of A&E waiting time, which allow us to answer the question- "if wint
 crisis exists", by comparing the performance differences of the pre-COVID and 
 post-COVID period.
 
-## Data quality and potential bias, including a brief summary of data cleaning 
-### and transformations
+### Data quality and potential bias, including a brief summary of data cleaning and transformations
 
 According to the About tab on the dataset page/dedicated page online, the data
 hosted on the Scottish Health and Social Care Open Data platform follows the 
@@ -155,7 +154,7 @@ open data standards set out by Public Health Scotland, ensuring consistency
 across the platform.
 <br> (https://www.opendata.nhs.scot/about)
 <br>
-The dataset may not be biased because all NHSScotland organisations can use this 
+The dataset may not be biased because all NHS Scotland organisations can use this 
 platform to publish and share their open datasets that meet the requirements set 
 out in the Scottish Government Open Data Strategy (2015). 
 <br>
