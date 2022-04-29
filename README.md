@@ -135,6 +135,10 @@ with which to compare the demand on hospital beds depending on time of year.
 The bed occupancy was also given as a *percentage* of total available beds which
 meant that it was already normalised and comparable between different health boards
 regardless of their total overall bed count.
+<br>
+Demographics
+<br>
+The dataset `A&E attendances and performance data` has record the waiting time of patients being discharged to the health board from the year of 2007 and 2022. It reviews the number of attendances of each separated time range: the standard 4hrs, more than 8hrs and more than 12 hrs. We are able to discover the trend and performance of A&E waiting time, which allow us to answer the question- "if winter crisis exists", by comparing the performance differences of the pre-COVID and post-COVID period.
 
 ### Data quality and potential bias, including a brief summary of data cleaning and transformations
 
