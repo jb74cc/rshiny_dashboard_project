@@ -135,9 +135,7 @@ with which to compare the demand on hospital beds depending on time of year.
 The bed occupancy was also given as a *percentage* of total available beds which 
 meant that it was already normalised and comparable between different health boards
 regardless of their total overall bed count.
-<br>
-Demographics
-<br>
+<br>  
 The dataset `A&E attendances and performance data` has recorded the waiting time 
 of patients being discharged to the health board from the year of 2007 and 2022. 
 It reviews the number of attendances of each separated time range: the standard 
