@@ -18,7 +18,7 @@ Colin worked on viewing the percentage of beds occupied by acute care patients
 across the 14 Health Boards in Scotland both before and during COVID times. 
 Statistical analysis of this data was also calculated using a two independent 
 means test with permutation to generate a null distribution. He also drew up a 
-dashboard wireframe, worked on creating the dashboard itself, and regularly 
+dashboard wire frame, worked on creating the dashboard itself, and regularly 
 updated Trello. 
 <br>
 
@@ -29,7 +29,7 @@ considering Scotland as a whole, the differences in total monthly/ quarterly
 admissions/ stays for acute care patients was observed between:
 * age groups
 * sex (Male/Female)
-* and SIMD quintlies (Scottish Index of Multiple Deprivation quintiles: 
+* and SIMD quintiles (Scottish Index of Multiple Deprivation quintiles: 
 1(Most Deprived) - 5(Least Deprived)). 
 <br>
 Statistical analysis of the three were also calculated for both pre-COVID and 
