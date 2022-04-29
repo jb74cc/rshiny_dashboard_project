@@ -16,8 +16,8 @@ Colin Scotland, Mahri Stewart, Kahlen Cheung, Jerry Balloch
 <br>
 Colin worked on viewing the percentage of beds occupied by acute care patients
 across the 14 Health Boards in Scotland both before and during COVID times.
-Statistical analysis of this data was also calculated using a two independent
-means test with permutation to generate a null distribution. He also drew up a
+Statistical analysis of this data was also calculated using independent
+means tests with permutation to generate null distributions. He also drew up a
 dashboard wireframe, worked on creating the dashboard itself, and regularly
 updated Trello.
 <br>
@@ -41,15 +41,24 @@ meetings, and working on the presentation and README file.
 
 *Kahlen*
 <br>
-Kahlen worked on A&E admissions both before and during COVID times across
-Scotland as a whole. She also considered the differences in waiting times (4
-hours, 8 hours, and 8+ hours) in A&E across Scotland and this the same time
-frame. Statistical analysis of this data was also calculated.
+Kahlen worked on A&E admissions both before and during COVID times across 
+Scotland as a whole. She also considered the differences in waiting times (4 
+hours, 8+ hours, and 12+ hours) in A&E across Scotland and the same time 
+frame. Statistical analysis on the differences between the mean of total A&E 
+admissions _before_ COVID, and the mean of total A&E admissions _after_ COVID of 
+this data was also calculated.
 <br>
 
 *Jerry*
 <br>
-Jerry worked on the dashboard skeleton, appearance, and input of relevant data and widgets. Creating a colour palette from the PHS logo and Scotland as a whole, helped in keeping the overall aesthetics of individual visualisations uniform. Geographical information for total COVID cases was shown on maps created using the leaflet() function in RShiny. It involved merging shapefile data, containing the Polygon data of the different health board regions, with another data set containing COVID case counts across each region. The data was able to be joined using the health board reference id across both data sets.
+Jerry worked on the dashboard skeleton, appearance, and input of relevant data 
+and widgets. Creating a colour palette from the PHS logo and Scotland as a whole, 
+helped in keeping the overall aesthetics of individual visualisations uniform. 
+Geographical information for total COVID cases was shown on maps created using 
+the leaflet() function in RShiny. It involved merging shapefile data, containing 
+the Polygon data of the different health board regions, with another data set 
+containing COVID case counts across each region. The data was able to be joined 
+using the health board reference id across both data sets.
 <br>
 
 *Everyone*
@@ -135,7 +144,6 @@ open data standards set out by Public Health Scotland, ensuring consistency
 across the platform.
 <br> (https://www.opendata.nhs.scot/about)
 <br>
-**The dataset may/may not be biased because ...**
 All NHSScotland organisations can use
 this platform to publish and share their open datasets that meet the
 requirements set out in the Scottish Government Open Data Strategy (2015).
@@ -145,29 +153,48 @@ the future and how their experiences of using the available data, and before
 data is released on the open data platform it is first assessed for statistical
 disclosure.
 
-To clean the datasets we …
+To clean the datasets we;
+
+* Determined as a group what questions we wanted to answer
+* Worked individually on separate datasets to remove unnecessary data and to 
+transform the remaining data into relevant, usable objects that could provide an
+insight into the questions we were asking.  Specifically;
+  
+  * Dates and timelines were adjusted between months/quarters/seasons as 
+  appropriate to facilitate comparisons between different datasets.
+  * Common variables were used to allow data to be joined (e.g. health board 
+  codes, health board names, etc) to give a better overall idea of what was
+  happening in the bigger picture.
+
+Cleaning and transformation was all
+done in RStudio, predominantly using the `tidyverse` and `janitor` packages.
 
 ### How is the data stored and structured
 
-[Hint: This page offers a good starting point for understanding the data structure: https://guides.statistics.gov.scot/article/34-understanding-the-data-structure]
+The data is in the form of cleaned .csv files saved into a `clean_data` folder
+within the Github repository.  Each data set contains a time reference of some 
+kind (month or quarter) or a reference to a health board.
 
-The data is in the form of …
+This means that the data can be linked by month/quarter or by health board 
+information to allow for further analysis and interpretation.
 
-This means …
+Benefits of storing the data like this are;
 
-Benefits of storing the data like this are …
+ * The data is already clean
+ * Further analysis can be initiated simply by reading in the .csv
+ * By maintaining date and location data the datasets can be added to in future
+ to look for developing trends in different locations over longer periods.
 
 ### Ethical and legal considerations of the data
 
-**There are no/There may be ethical considerations, because …**
-This is an open source
-
-<br>
-The datasets are covered by the Open Government License, which means you are
-encouraged to use and adapt, combine, explore, distribute, and publish in your
-own project the information that is available under this licence freely and
-flexibly. You must, however, acknowledge the source of the Information in your
-product or application by including or linking to any attribution statement
-specified by the Information Provider(s) and, where possible, provide a link to
-this licence:
+There are no ethical considerations, because the datasets are covered by the 
+Open Government License (provided by Public Health Scotland), which means you are 
+encouraged to use and adapt, combine, explore, distribute, and publish in your 
+own project the information that is available under this licence freely and 
+flexibly. Data is anonymised at Public Health Scotland before being made 
+available as open source, there is no personal information or id documents included 
+in the datasets. You must, however, acknowledge the source of the information in 
+your product or application by including or linking to any attribution statement 
+specified by the Information Provider(s) and, where possible, provide a link to 
+this licence: 
 https://www.nationalarchives.gov.uk/doc/open-government-licence/version/3/
