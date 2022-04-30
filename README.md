@@ -1,3 +1,8 @@
+---
+output:
+  html_document: default
+  pdf_document: default
+---
 # CodeClan - PHS RShiny Dashboard Group Project
 ## April 2022
 
