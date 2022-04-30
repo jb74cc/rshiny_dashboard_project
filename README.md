@@ -9,7 +9,6 @@ ___
 
 Colin Scotland, Mahri Stewart, Kahlen Cheung, Jerry Balloch
 
-
 ### Roles & responsibilities of each member
 
 *Colin*
@@ -26,17 +25,17 @@ updated Trello.
 <br>
 Mahri worked on demographic data both before and during COVID times. Whilst 
 considering Scotland as a whole, the differences in total monthly/ quarterly 
-admissions/ stays for acute care patients was observed between:
+admissions/ stays for acute care patients were observed between:
 * age groups
 * sex (Male/Female)
 * and SIMD quintiles (Scottish Index of Multiple Deprivation quintiles: 
 1(Most Deprived) - 5(Least Deprived)). 
 <br>
-Statistical analysis of the three were also calculated for both pre-COVID and 
-during COVID times. 
-<br>
-Creating and updating a Trello project board with to-do tasks and scheduled 
-meetings, and working on the presentation and README file. 
+Geographical differences between health boards were considered and statistical 
+analysis of each group were also calculated for both pre-COVID and during COVID 
+times. She also created and updated a Trello project board with to-do tasks and 
+scheduled meetings, and worked on the presentation and Project Description 
+Outline content. 
 <br>
 
 *Kahlen*
@@ -67,9 +66,9 @@ Everyone worked together with regards to coming up with a direction for this
 project. Though we had our individual roles, we regularly presented what we had 
 each achieved and our next steps were decided upon in group discussions. 
 Combining the individual analyses into the dashboard so that it had a uniform 
-aesthetic and an outline for our presentation was also decided upon as a group.
-Group meetings were attended by all and Trello was updated regularly with how
-everyone was getting on/ our to do list.
+aesthetic and an outline for our presentation was also discussed and actioned as 
+a group. Group meetings were attended by all and Trello was updated regularly 
+with how everyone was getting on/ our to do list.
 
 ___ 
 
@@ -126,16 +125,25 @@ We prioritised having a working process. Whilst data was being cleaned and
 analysed, the dashboard skeleton was being created so that everything could be
 brought together quickly and efficiently.
 
-
 ### Motivations for using the data you have chosen
 
-We used the dataset on bed occupancy to answer the question of how genuine
+We used the dataset on `bed occupancy` to answer the question of how genuine
 the so-called "winter crisis" is and because it was a simple and clear metric 
 with which to compare the demand on hospital beds depending on time of year.
 The bed occupancy was also given as a *percentage* of total available beds which 
 meant that it was already normalised and comparable between different health boards
 regardless of their total overall bed count.
-<br>  
+<br>
+Whilst considering Scotland as a whole and *who* might be most affected by the 
+COVID pandemic, or by winter months, analysis of `demographic groups` included 
+age groups, sex, and 'deprivation' levels. Analysis did not show off consistent 
+increases in hospital attendance in winter months when comparing between the 
+variables of each area of focus. However, they did show clear differences between 
+the demographic groups in all three analyses and patient levels appear to be (or 
+are rising towards being) in line with those recorded before the start of the 
+pandemic. This may contribute towards insights for the future on where best to 
+focus the promotion of healthy/ improved living and care. 
+<br>
 The dataset `A&E attendances and performance data` has recorded the waiting time 
 of patients being discharged to the health board from the year of 2007 and 2022. 
 It reviews the number of attendances of each separated time range: the standard 
@@ -173,13 +181,16 @@ insight into the questions we were asking.  Specifically;
   * Common variables were used to allow data to be joined (e.g. health board 
   codes, health board names, etc) to give a better overall idea of what was
   happening in the bigger picture.
+  * Data sets were filtered so that we only included those services which were
+  considered "acute".
+  * Where the date column was arranged by "week ending" or "month", this was 
+  transformed into "yearly quarters" so that there was consistency across the
+  board. 
 
 Cleaning and transformation was all
 done in RStudio, predominantly using the `tidyverse` and `janitor` packages.
 
 ### How is the data stored and structured
-
-[Hint: This page offers a good starting point for understanding the data structure: https://guides.statistics.gov.scot/article/34-understanding-the-data-structure]
 
 The data is in the form of cleaned .csv files saved into a `clean_data` folder
 within the Github repository.  Each data set contains a time reference of some 

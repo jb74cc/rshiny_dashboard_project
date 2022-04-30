@@ -389,13 +389,14 @@ worked on creating the dashboard itself, and regularly updated Trello.
 <p><em>Mahri</em> <br> Mahri worked on demographic data both before and
 during COVID times. Whilst considering Scotland as a whole, the
 differences in total monthly/ quarterly admissions/ stays for acute care
-patients was observed between: * age groups * sex (Male/Female) * and
+patients were observed between: * age groups * sex (Male/Female) * and
 SIMD quintiles (Scottish Index of Multiple Deprivation quintiles: 1(Most
-Deprived) - 5(Least Deprived)). <br> Statistical analysis of the three
-were also calculated for both pre-COVID and during COVID times. <br>
-Creating and updating a Trello project board with to-do tasks and
-scheduled meetings, and working on the presentation and README file.
-<br></p>
+Deprived) - 5(Least Deprived)). <br> Geographical differences between
+health boards were considered and statistical analysis of each group
+were also calculated for both pre-COVID and during COVID times. She also
+created and updated a Trello project board with to-do tasks and
+scheduled meetings, and worked on the presentation and Project
+Description Outline content. <br></p>
 <p><em>Kahlen</em> <br> Kahlen worked on A&amp;E admissions both before
 and during COVID times across Scotland as a whole. She also considered
 the differences in waiting times (4 hours, 8+ hours, and 12+ hours) in
@@ -418,9 +419,9 @@ coming up with a direction for this project. Though we had our
 individual roles, we regularly presented what we had each achieved and
 our next steps were decided upon in group discussions. Combining the
 individual analyses into the dashboard so that it had a uniform
-aesthetic and an outline for our presentation was also decided upon as a
-group. Group meetings were attended by all and Trello was updated
-regularly with how everyone was getting on/ our to do list.</p>
+aesthetic and an outline for our presentation was also discussed and
+actioned as a group. Group meetings were attended by all and Trello was
+updated regularly with how everyone was getting on/ our to do list.</p>
 <hr />
 </div>
 <div id="brief-description-of-dashboard-topic" class="section level3">
@@ -479,21 +480,32 @@ that everything could be brought together quickly and efficiently.</p>
 </div>
 <div id="motivations-for-using-the-data-you-have-chosen" class="section level3">
 <h3>Motivations for using the data you have chosen</h3>
-<p>We used the dataset on bed occupancy to answer the question of how
-genuine the so-called “winter crisis” is and because it was a simple and
-clear metric with which to compare the demand on hospital beds depending
-on time of year. The bed occupancy was also given as a
-<em>percentage</em> of total available beds which meant that it was
-already normalised and comparable between different health boards
-regardless of their total overall bed count. <br><br />
-The dataset <code>A&amp;E attendances and performance data</code> has
-recorded the waiting time of patients being discharged to the health
-board from the year of 2007 and 2022. It reviews the number of
-attendances of each separated time range: the standard 4hrs, more than
-8hrs and more than 12 hrs. We are able to discover the trend and
-performance of A&amp;E waiting time, which allow us to answer the
-question- “if winter crisis exists”, by comparing the performance
-differences of the pre-COVID and post-COVID period.</p>
+<p>We used the dataset on <code>bed occupancy</code> to answer the
+question of how genuine the so-called “winter crisis” is and because it
+was a simple and clear metric with which to compare the demand on
+hospital beds depending on time of year. The bed occupancy was also
+given as a <em>percentage</em> of total available beds which meant that
+it was already normalised and comparable between different health boards
+regardless of their total overall bed count. <br> Whilst considering
+Scotland as a whole and <em>who</em> might be most affected by the COVID
+pandemic, or by winter months, analysis of
+<code>demographic groups</code> included age groups, sex, and
+‘deprivation’ levels. Analysis did not show off consistent increases in
+hospital attendance in winter months when comparing between the
+variables of each area of focus. However, they did show clear
+differences between the demographic groups in all three analyses and
+patient levels appear to be (or are rising towards being) in line with
+those recorded before the start of the pandemic. This may contribute
+towards insights for the future on where best to focus the promotion of
+healthy/ improved living and care. <br> The dataset
+<code>A&amp;E attendances and performance data</code> has recorded the
+waiting time of patients being discharged to the health board from the
+year of 2007 and 2022. It reviews the number of attendances of each
+separated time range: the standard 4hrs, more than 8hrs and more than 12
+hrs. We are able to discover the trend and performance of A&amp;E
+waiting time, which allow us to answer the question- “if winter crisis
+exists”, by comparing the performance differences of the pre-COVID and
+post-COVID period.</p>
 </div>
 <div id="data-quality-and-potential-bias-including-a-brief-summary-of-data-cleaning-and-transformations" class="section level3">
 <h3>Data quality and potential bias, including a brief summary of data
@@ -522,6 +534,11 @@ appropriate to facilitate comparisons between different datasets.</li>
 <li>Common variables were used to allow data to be joined (e.g. health
 board codes, health board names, etc) to give a better overall idea of
 what was happening in the bigger picture.</li>
+<li>Data sets were filtered so that we only included those services
+which were considered “acute”.</li>
+<li>Where the date column was arranged by “week ending” or “month”, this
+was transformed into “yearly quarters” so that there was consistency
+across the board.</li>
 </ul></li>
 </ul>
 <p>Cleaning and transformation was all done in RStudio, predominantly
@@ -529,8 +546,6 @@ using the <code>tidyverse</code> and <code>janitor</code> packages.</p>
 </div>
 <div id="how-is-the-data-stored-and-structured" class="section level3">
 <h3>How is the data stored and structured</h3>
-<p>[Hint: This page offers a good starting point for understanding the
-data structure: <a href="https://guides.statistics.gov.scot/article/34-understanding-the-data-structure" class="uri">https://guides.statistics.gov.scot/article/34-understanding-the-data-structure</a>]</p>
 <p>The data is in the form of cleaned .csv files saved into a
 <code>clean_data</code> folder within the Github repository. Each data
 set contains a time reference of some kind (month or quarter) or a
