@@ -3,6 +3,8 @@
 
 ![](www/phs.png?raw=true "Dashboard")
 
+![Dashboard tabs](www/phs_4.png?raw=true "Dashboard")
+
 ___
 
 ## Project Description Outline
