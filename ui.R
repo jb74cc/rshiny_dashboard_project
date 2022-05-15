@@ -18,7 +18,8 @@ ui <- fluidPage(
     direction = c("bottom", "right")
   ),
   
-  titlePanel(img(src = "phs-logo.png", width = 250)),
+  titlePanel(img(src = "phs-logo.png", width = 250),
+             windowTitle = "PHS Dashboard"),
   
   mainPanel(
     fluidRow(
