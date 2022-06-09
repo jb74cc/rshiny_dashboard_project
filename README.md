@@ -6,6 +6,11 @@
 ![Dashboard tabs](www/phs_4.png?raw=true "Dashboard")
 
 ___
+### Link to working Dashboard
+
+https://jb74cc.shinyapps.io/rshiny_dashboard_project/
+
+___
 
 ## Project Description Outline
 
